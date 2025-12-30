@@ -79,22 +79,22 @@ export const Footer: React.FC = () => {
             </p>
             <div className="flex gap-4">
               <Tooltip content="GitHub">
-                <a href="#" className="hover:text-brand-green hover:-translate-y-1 transition-all duration-300 block" aria-label="Visit our GitHub">
+                <a href="#" className="hover:text-brand-green hover:-translate-y-1 transition-all duration-300 block" aria-label="Visit our GitHub profile">
                   <Github size={20} />
                 </a>
               </Tooltip>
               <Tooltip content="LinkedIn">
-                <a href="#" className="hover:text-brand-green hover:-translate-y-1 transition-all duration-300 block" aria-label="Visit our LinkedIn">
+                <a href="#" className="hover:text-brand-green hover:-translate-y-1 transition-all duration-300 block" aria-label="Visit our LinkedIn profile">
                   <Linkedin size={20} />
                 </a>
               </Tooltip>
               <Tooltip content="Twitter">
-                <a href="#" className="hover:text-brand-green hover:-translate-y-1 transition-all duration-300 block" aria-label="Visit our Twitter">
+                <a href="#" className="hover:text-brand-green hover:-translate-y-1 transition-all duration-300 block" aria-label="Visit our Twitter profile">
                   <Twitter size={20} />
                 </a>
               </Tooltip>
               <Tooltip content="Facebook">
-                <a href="#" className="hover:text-brand-green hover:-translate-y-1 transition-all duration-300 block" aria-label="Visit our Facebook">
+                <a href="#" className="hover:text-brand-green hover:-translate-y-1 transition-all duration-300 block" aria-label="Visit our Facebook page">
                   <Facebook size={20} />
                 </a>
               </Tooltip>

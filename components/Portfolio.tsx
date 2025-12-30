@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowDown, X, ExternalLink, Calendar, Code2, ArrowUpRight } from 'lucide-react';
+import { ArrowDown, X, ExternalLink, Calendar, Code2, ArrowUpRight, Play, Film, Tag } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { SectionId, Project } from '../types';
 import { Button } from './ui/Button';
 
 // --- Types & Constants ---
 const ALL_CATEGORY = 'All';
+const ALL_TAG = 'All Tech';
 
 // --- Modal Component ---
 interface ProjectModalProps {
@@ -18,6 +19,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose, onProject
   const [isVisible, setIsVisible] = useState(false);
   const [activeProject, setActiveProject] = useState<Project | null>(project);
   const [isClosing, setIsClosing] = useState(false);
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,6 +27,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose, onProject
       setActiveProject(project);
       setIsVisible(true);
       setIsClosing(false);
+      setIsPlayingVideo(false);
       document.body.style.overflow = 'hidden';
       // Reset scroll position when project changes
       if (contentRef.current) {
@@ -36,11 +39,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose, onProject
 
   const handleClose = () => {
     setIsClosing(true);
+    // Wait for animation to finish
     setTimeout(() => {
       setIsVisible(false);
       onClose();
       setIsClosing(false);
-    }, 300); // Match animation duration
+      setIsPlayingVideo(false);
+    }, 300);
   };
 
   // Close on Escape key
@@ -58,43 +63,88 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose, onProject
     p => p.category === activeProject.category && p.id !== activeProject.id
   ).slice(0, 3);
 
+  // Animation Classes
+  const backdropClass = `absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity duration-300 ease-out ${isClosing ? 'opacity-0' : 'opacity-100'}`;
+  
+  const modalBaseClass = "relative w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] transform";
+  const animationClass = isClosing 
+    ? 'opacity-0 scale-100 transition-all duration-300 ease-out' 
+    : 'animate-zoom-in';
+
   return (
-    <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 transition-opacity duration-300 ease-in-out ${isClosing ? 'opacity-0' : 'opacity-100'}`}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" 
+        className={backdropClass} 
         onClick={handleClose}
       />
       
       {/* Modal Content */}
-      <div className={`relative w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] transition-all duration-300 ease-in-out ${isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100 animate-zoom-in'}`}>
+      <div 
+        className={`${modalBaseClass} ${animationClass}`}
+      >
         
         {/* Scrollable Container */}
         <div ref={contentRef} className="overflow-y-auto custom-scrollbar scroll-smooth">
           
-          {/* Header Image */}
-          <div className="relative h-64 md:h-96 shrink-0 group">
-            <img 
-              src={activeProject.imageUrl} 
-              alt={activeProject.title} 
-              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
+          {/* Header Media (Image or Video) */}
+          <div className="relative h-64 md:h-96 shrink-0 group bg-slate-900">
+             {isPlayingVideo && activeProject.demoVideoUrl ? (
+               <div className="w-full h-full flex items-center justify-center">
+                 <video 
+                   src={activeProject.demoVideoUrl} 
+                   controls 
+                   autoPlay 
+                   className="w-full h-full object-contain"
+                 />
+                 <button 
+                   onClick={() => setIsPlayingVideo(false)}
+                   className="absolute top-4 left-4 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors z-20"
+                 >
+                   Back to Image
+                 </button>
+               </div>
+             ) : (
+               <>
+                <img 
+                  src={activeProject.imageUrl} 
+                  alt={activeProject.title} 
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
+                
+                {activeProject.demoVideoUrl && (
+                  <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                     <button 
+                       onClick={() => setIsPlayingVideo(true)}
+                       className="pointer-events-auto flex items-center gap-2 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 rounded-full text-white font-bold transition-all hover:scale-105 group/play"
+                     >
+                       <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-brand-blue group-hover/play:scale-110 transition-transform">
+                         <Play size={16} fill="currentColor" />
+                       </div>
+                       Watch Demo
+                     </button>
+                  </div>
+                )}
+               </>
+             )}
             
             <button 
               onClick={handleClose}
-              className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors z-10"
+              className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors z-30"
               aria-label="Close modal"
             >
               <X size={24} />
             </button>
             
-            <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-              <span className="inline-block px-3 py-1 bg-brand-blue rounded-full text-xs font-semibold uppercase tracking-wider mb-3 shadow-sm border border-blue-500/50">
-                {activeProject.category}
-              </span>
-              <h3 className="text-3xl md:text-5xl font-bold mb-2 tracking-tight">{activeProject.title}</h3>
-            </div>
+            {!isPlayingVideo && (
+              <div className="absolute bottom-0 left-0 right-0 p-8 text-white z-20">
+                <span className="inline-block px-3 py-1 bg-brand-blue rounded-full text-xs font-semibold uppercase tracking-wider mb-3 shadow-sm border border-blue-500/50">
+                  {activeProject.category}
+                </span>
+                <h3 className="text-3xl md:text-5xl font-bold mb-2 tracking-tight">{activeProject.title}</h3>
+              </div>
+            )}
           </div>
 
           {/* Body Content */}
@@ -265,15 +315,31 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
           className="absolute inset-0 bg-slate-900/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-10 cursor-pointer backdrop-blur-[2px]" 
           onClick={onClick}
         >
-          <button className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 bg-white text-slate-900 px-6 py-3 rounded-full font-bold text-sm shadow-xl hover:bg-brand-purple hover:text-white flex items-center gap-2 group/btn transition-colors">
-            View Case Study 
-            <ArrowUpRight size={18} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-          </button>
+          {/* Wrapper for entrance transition to avoid conflict with pulse animation */}
+          <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 flex flex-col items-center gap-3">
+            <button className="bg-white text-slate-900 px-6 py-3 rounded-full font-bold text-sm shadow-xl hover:bg-brand-purple hover:text-white flex items-center gap-2 group/btn transition-colors animate-subtle-pulse">
+              View Case Study 
+              <ArrowUpRight size={18} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+            </button>
+            
+            {project.demoVideoUrl && (
+               <span className="inline-flex items-center gap-1 text-white text-xs font-medium bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm">
+                 <Film size={12} />
+                 Video Demo Available
+               </span>
+            )}
+          </div>
         </div>
       </div>
       <div className="p-6 relative z-20 bg-white">
         <div className="flex items-start justify-between mb-3">
            <span className="px-2 py-1 bg-brand-blue/10 text-brand-blue rounded text-[10px] font-bold uppercase tracking-wider">{project.category}</span>
+           {/* Tags Preview */}
+           <div className="flex gap-1">
+             {project.technologies?.slice(0, 2).map(t => (
+               <span key={t} className="w-2 h-2 rounded-full bg-slate-200" title={t}></span>
+             ))}
+           </div>
         </div>
         <h4 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand-purple transition-colors">{project.title}</h4>
         <p className="text-slate-600 text-sm line-clamp-2">{project.description}</p>
@@ -285,11 +351,14 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
 // --- Main Portfolio Component ---
 export const Portfolio: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORY);
+  const [activeTag, setActiveTag] = useState(ALL_TAG);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [visibleCount, setVisibleCount] = useState(6);
 
-  // Derive unique categories
+  // Derive unique categories and tags
   const categories = [ALL_CATEGORY, ...Array.from(new Set(PROJECTS.map(p => p.category)))];
+  
+  const allTags = [ALL_TAG, ...Array.from(new Set(PROJECTS.flatMap(p => p.technologies || []))).sort()];
 
   const getCategoryCount = (cat: string) => {
     if (cat === ALL_CATEGORY) return PROJECTS.length;
@@ -297,9 +366,11 @@ export const Portfolio: React.FC = () => {
   };
 
   // Filter projects
-  const filteredProjects = activeCategory === ALL_CATEGORY 
-    ? PROJECTS 
-    : PROJECTS.filter(p => p.category === activeCategory);
+  const filteredProjects = PROJECTS.filter(p => {
+    const categoryMatch = activeCategory === ALL_CATEGORY || p.category === activeCategory;
+    const tagMatch = activeTag === ALL_TAG || (p.technologies && p.technologies.includes(activeTag));
+    return categoryMatch && tagMatch;
+  });
 
   const displayedProjects = filteredProjects.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProjects.length;
@@ -310,6 +381,11 @@ export const Portfolio: React.FC = () => {
 
   const handleCategoryChange = (cat: string) => {
     setActiveCategory(cat);
+    setVisibleCount(6);
+  };
+
+  const handleTagChange = (tag: string) => {
+    setActiveTag(tag);
     setVisibleCount(6);
   };
 
@@ -326,8 +402,8 @@ export const Portfolio: React.FC = () => {
           </p>
         </div>
 
-        {/* Filter Chips */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16">
+        {/* Category Filters */}
+        <div className="flex flex-wrap justify-center gap-3 mb-8">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -346,8 +422,29 @@ export const Portfolio: React.FC = () => {
           ))}
         </div>
 
+        {/* Tech Tag Filters */}
+        <div className="flex items-center justify-center gap-2 mb-12 overflow-x-auto no-scrollbar py-2 px-4 max-w-5xl mx-auto">
+          <div className="flex items-center gap-2 bg-white/50 p-2 rounded-full border border-slate-200 backdrop-blur-sm">
+             <Tag size={16} className="text-slate-400 ml-2" />
+             <div className="w-px h-4 bg-slate-300 mx-1"></div>
+             {allTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => handleTagChange(tag)}
+                className={`px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 whitespace-nowrap ${
+                  activeTag === tag
+                    ? 'bg-slate-800 text-white shadow-md'
+                    : 'bg-transparent text-slate-500 hover:bg-slate-200 hover:text-slate-800'
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Projects Grid */}
-        <div key={activeCategory} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
           {displayedProjects.map((project) => (
             <ProjectCard 
               key={project.id} 
@@ -361,7 +458,13 @@ export const Portfolio: React.FC = () => {
                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
                   <Code2 className="w-8 h-8 text-slate-300" />
                </div>
-               <p className="font-medium">No projects found in this category.</p>
+               <p className="font-medium">No projects found for these filters.</p>
+               <button 
+                 onClick={() => { setActiveCategory(ALL_CATEGORY); setActiveTag(ALL_TAG); }}
+                 className="mt-4 text-brand-blue text-sm hover:underline"
+               >
+                 Clear all filters
+               </button>
             </div>
           )}
         </div>

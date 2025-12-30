@@ -54,7 +54,8 @@ export const PROJECTS: Project[] = [
     description: 'A comprehensive financial analytics dashboard for a leading banking institution.',
     fullDescription: 'We developed a high-performance financial dashboard that aggregates data from multiple sources to provide real-time insights. The solution features advanced data visualization, secure transaction monitoring, and role-based access control, helping the bank reduce reporting time by 60%.',
     technologies: ['React', 'D3.js', 'Node.js', 'PostgreSQL', 'Redis'],
-    link: '#'
+    link: '#',
+    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
   },
   {
     id: '2',
@@ -64,7 +65,8 @@ export const PROJECTS: Project[] = [
     description: 'Telemedicine platform connecting patients with doctors in real-time.',
     fullDescription: 'HealthCare Connect facilitates secure video consultations between patients and doctors. The app includes prescription management, appointment scheduling, and integration with wearable devices to monitor patient vitals remotely.',
     technologies: ['Flutter', 'WebRTC', 'Firebase', 'Python', 'TensorFlow'],
-    link: '#'
+    link: '#',
+    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
   },
   {
     id: '3',
@@ -156,6 +158,20 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: 'CTO',
     image: 'https://picsum.photos/400/400?random=22',
     bio: 'Tech enthusiast specializing in cloud infrastructure, scalable systems, and AI integration.',
+  },
+  {
+    id: '4',
+    name: 'Elena Rodriguez',
+    role: 'Senior Backend Engineer',
+    image: 'https://picsum.photos/400/400?random=23',
+    bio: 'Expert in microservices and database optimization, ensuring our systems scale seamlessly.',
+  },
+  {
+    id: '5',
+    name: 'James Wilson',
+    role: 'Product Manager',
+    image: 'https://picsum.photos/400/400?random=24',
+    bio: 'Bridging the gap between client needs and technical execution with agile methodologies.',
   },
 ];
 

@@ -38,21 +38,25 @@ export const Header: React.FC = () => {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-2 lg:gap-4">
           {NAV_ITEMS.map((item) => (
             <Link 
               key={item.label} 
               to={item.href}
-              className={`text-sm font-medium transition-colors ${
-                isActive(item.href) ? 'text-brand-blue font-bold' : 'text-slate-600 hover:text-brand-blue'
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                isActive(item.href) 
+                  ? 'bg-brand-blue/10 text-brand-blue font-bold' 
+                  : 'text-slate-600 hover:bg-brand-blue/5 hover:text-brand-blue'
               }`}
             >
               {item.label}
             </Link>
           ))}
-          <Button variant="primary" size="sm" onClick={() => navigate('/contact')}>
-            Get Started
-          </Button>
+          <div className="ml-4">
+            <Button variant="primary" size="sm" onClick={() => navigate('/contact')}>
+              Get Started
+            </Button>
+          </div>
         </nav>
 
         {/* Mobile Toggle */}
@@ -67,13 +71,15 @@ export const Header: React.FC = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 md:hidden p-6 shadow-xl animate-slide-in-top">
-          <nav className="flex flex-col gap-4">
+          <nav className="flex flex-col gap-2">
             {NAV_ITEMS.map((item) => (
               <Link 
                 key={item.label} 
                 to={item.href}
-                className={`text-lg font-medium ${
-                  isActive(item.href) ? 'text-brand-blue' : 'text-slate-800 hover:text-brand-blue'
+                className={`px-4 py-3 rounded-lg text-lg font-medium transition-colors ${
+                  isActive(item.href) 
+                    ? 'bg-brand-blue/10 text-brand-blue' 
+                    : 'text-slate-800 hover:bg-slate-50 hover:text-brand-blue'
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >

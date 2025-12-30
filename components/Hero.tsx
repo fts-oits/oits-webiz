@@ -16,14 +16,14 @@ export const Hero: React.FC = () => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
       if (blob1Ref.current) {
-        blob1Ref.current.style.transform = `translateY(${scrolled * 0.3}px) rotate(${scrolled * 0.05}deg)`;
+        blob1Ref.current.style.transform = `translateY(${scrolled * 0.3}px)`;
       }
       if (blob2Ref.current) {
-        blob2Ref.current.style.transform = `translateY(${scrolled * -0.2}px) rotate(${scrolled * -0.05}deg)`;
+        blob2Ref.current.style.transform = `translateY(${scrolled * 0.2}px)`;
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll);
 
     // Entrance Animation Observer
     const observer = new IntersectionObserver(
@@ -49,18 +49,15 @@ export const Hero: React.FC = () => {
   return (
     <section ref={heroRef} id="home" className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden min-h-[90vh] flex items-center">
       {/* Background Elements with Parallax */}
-      <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+      <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
         <div 
           ref={blob1Ref}
-          className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[100px] opacity-60 will-change-transform origin-center" 
+          className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[100px] opacity-60 will-change-transform" 
         />
         <div 
           ref={blob2Ref}
-          className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-brand-purple/10 rounded-full blur-[120px] opacity-60 will-change-transform origin-center" 
+          className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-brand-purple/10 rounded-full blur-[120px] opacity-60 will-change-transform" 
         />
-        
-        {/* Additional Grid Pattern for depth */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black,transparent)] opacity-20"></div>
       </div>
 
       <div className="container mx-auto px-6">
@@ -82,7 +79,12 @@ export const Hero: React.FC = () => {
             </p>
 
             <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <Button variant="primary" size="lg" className="group" onClick={() => navigate('/contact')}>
+              <Button 
+                variant="primary" 
+                size="lg" 
+                className="group shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300"
+                onClick={() => navigate('/contact')}
+              >
                 Get Started
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>

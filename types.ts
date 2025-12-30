@@ -15,6 +15,7 @@ export interface Project {
   fullDescription?: string;
   technologies?: string[];
   link?: string;
+  demoVideoUrl?: string;
 }
 
 export interface Testimonial {

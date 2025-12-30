@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CheckCircle2, Lightbulb, Shield, Award, Users, Target, Eye } from 'lucide-react';
+import { CheckCircle2, Lightbulb, Shield, Award, Users, Target, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SectionId } from '../types';
-import { TEAM_MEMBERS, CORE_VALUES } from '../constants';
+import { TEAM_MEMBERS, CORE_VALUES, COMPANY_NAME } from '../constants';
 
 const valueIconMap: Record<string, React.ReactNode> = {
   Lightbulb: <Lightbulb className="w-8 h-8" />,
@@ -13,8 +13,40 @@ const valueIconMap: Record<string, React.ReactNode> = {
 export const About: React.FC = () => {
   const [isSectionVisible, setIsSectionVisible] = useState(false);
   const [isTeamVisible, setIsTeamVisible] = useState(false);
+  const [currentTeamIndex, setCurrentTeamIndex] = useState(0);
+  const [itemsPerSlide, setItemsPerSlide] = useState(3);
+  
   const sectionRef = useRef<HTMLDivElement>(null);
   const teamRef = useRef<HTMLDivElement>(null);
+
+  // Responsive Carousel Logic
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) setItemsPerSlide(1);
+      else if (window.innerWidth < 1024) setItemsPerSlide(2);
+      else setItemsPerSlide(3);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const totalSlides = Math.ceil(TEAM_MEMBERS.length / itemsPerSlide);
+
+  const nextSlide = () => {
+    setCurrentTeamIndex((prev) => (prev + 1) % (TEAM_MEMBERS.length - itemsPerSlide + 1));
+  };
+
+  const prevSlide = () => {
+    setCurrentTeamIndex((prev) => (prev === 0 ? TEAM_MEMBERS.length - itemsPerSlide : prev - 1));
+  };
+  
+  // Clamping index if window resize makes it invalid
+  useEffect(() => {
+    const maxIndex = Math.max(0, TEAM_MEMBERS.length - itemsPerSlide);
+    if (currentTeamIndex > maxIndex) setCurrentTeamIndex(maxIndex);
+  }, [itemsPerSlide, currentTeamIndex]);
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -59,7 +91,7 @@ export const About: React.FC = () => {
              <div className="relative aspect-square rounded-3xl overflow-hidden bg-slate-100 shadow-2xl">
                 <img 
                   src="https://picsum.photos/800/800?random=15" 
-                  alt="Team collaboration" 
+                  alt={`Team collaboration at ${COMPANY_NAME} office`} 
                   loading="lazy"
                   className="w-full h-full object-cover"
                 />
@@ -155,37 +187,58 @@ export const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Team Section */}
-        <div ref={teamRef}>
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Our Team</h2>
-            <h3 className="text-3xl font-bold text-slate-900">Meet the experts behind our success.</h3>
+        {/* Team Section (Carousel Layout) */}
+        <div ref={teamRef} className="relative">
+          <div className="flex items-end justify-between mb-16 px-4">
+             <div className="max-w-3xl">
+                <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Our Team</h2>
+                <h3 className="text-3xl font-bold text-slate-900">Meet the experts behind our success.</h3>
+             </div>
+             <div className="flex gap-2">
+               <button 
+                 onClick={prevSlide}
+                 className="p-3 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-600 transition-colors"
+                 aria-label="Previous team member"
+               >
+                 <ChevronLeft size={20} />
+               </button>
+               <button 
+                 onClick={nextSlide}
+                 className="p-3 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-600 transition-colors"
+                 aria-label="Next team member"
+               >
+                 <ChevronRight size={20} />
+               </button>
+             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {TEAM_MEMBERS.map((member, index) => (
-              <div 
-                key={member.id} 
-                className={`group text-center transition-all duration-700 ease-out transform ${isTeamVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
-                style={{ transitionDelay: `${index * 200}ms` }}
-              >
-                <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-100 group-hover:border-brand-blue/30 transition-colors shadow-lg">
-                  <img 
-                    src={member.image} 
-                    alt={member.name}
-                    loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  {/* Social Overlay */}
-                  <div className="absolute inset-0 bg-brand-blue/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                     {/* Placeholder Social Icons */}
+          <div className="overflow-hidden">
+             <div 
+               className="flex transition-transform duration-500 ease-in-out"
+               style={{ transform: `translateX(-${currentTeamIndex * (100 / itemsPerSlide)}%)` }}
+             >
+                {TEAM_MEMBERS.map((member, index) => (
+                  <div 
+                    key={member.id} 
+                    className="flex-shrink-0 px-4"
+                    style={{ width: `${100 / itemsPerSlide}%` }}
+                  >
+                    <div className="group text-center p-6 bg-slate-50 border border-slate-100 rounded-3xl hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                      <div className="relative w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                        <img 
+                          src={member.image} 
+                          alt={`${member.name}, ${member.role} at ${COMPANY_NAME}`}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
+                      </div>
+                      <h4 className="text-xl font-bold text-slate-900">{member.name}</h4>
+                      <p className="text-brand-blue font-medium mb-3">{member.role}</p>
+                      <p className="text-slate-600 text-sm max-w-xs mx-auto line-clamp-3">{member.bio}</p>
+                    </div>
                   </div>
-                </div>
-                <h4 className="text-xl font-bold text-slate-900">{member.name}</h4>
-                <p className="text-brand-blue font-medium mb-3">{member.role}</p>
-                <p className="text-slate-600 text-sm max-w-xs mx-auto">{member.bio}</p>
-              </div>
-            ))}
+                ))}
+             </div>
           </div>
         </div>
 

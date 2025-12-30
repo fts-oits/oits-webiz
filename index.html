@@ -39,6 +39,7 @@
               'zoom-in': 'zoomIn 0.5s ease-out forwards',
               'slide-in-top': 'slideInTop 0.5s ease-out forwards',
               'slide-up': 'slideUp 0.7s ease-out forwards',
+              'subtle-pulse': 'subtlePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
               marquee: {
@@ -64,6 +65,10 @@
               slideUp: {
                 '0%': { opacity: '0', transform: 'translateY(20px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              subtlePulse: {
+                '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+                '50%': { transform: 'scale(1.05)', opacity: '0.95' },
               }
             }
           }

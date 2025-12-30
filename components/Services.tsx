@@ -78,7 +78,9 @@ export const Services: React.FC = () => {
 
               <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-900 shadow-sm mb-6 group-hover:bg-brand-blue group-hover:text-white transition-colors cursor-help">
                 <Tooltip content={service.title}>
-                  {iconMap[service.icon]}
+                  <div className="transition-transform duration-300 group-hover:scale-110">
+                    {iconMap[service.icon]}
+                  </div>
                 </Tooltip>
               </div>
 
