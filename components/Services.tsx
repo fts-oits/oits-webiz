@@ -47,13 +47,13 @@ export const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState<keyof typeof TECH_CATEGORIES>('Frontend');
 
   return (
-    <section id={SectionId.SERVICES} className="py-24 bg-white relative">
+    <section id={SectionId.SERVICES} className="py-24 pt-32 bg-white relative min-h-screen">
       <div className="container mx-auto px-6">
         
         {/* Intro */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">Our Expertise</h2>
+            <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Our Expertise</h2>
             <h3 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
               Comprehensive solutions for your <br/>digital transformation.
             </h3>
@@ -68,7 +68,7 @@ export const Services: React.FC = () => {
           {SERVICES.map((service, index) => (
             <div 
               key={service.id} 
-              className={`group relative bg-slate-50 border border-slate-100 rounded-3xl p-8 transition-all duration-300 hover:bg-slate-100 hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] ${
+              className={`group relative bg-slate-50 border border-slate-100 rounded-3xl p-8 transition-all duration-300 hover:bg-slate-100 hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] animate-zoom-in ${
                 index === 0 || index === 3 ? 'lg:col-span-2' : ''
               }`}
             >
@@ -76,7 +76,7 @@ export const Services: React.FC = () => {
                 <ArrowUpRight className="w-6 h-6 text-slate-400" />
               </div>
 
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-900 shadow-sm mb-6 group-hover:bg-slate-900 group-hover:text-white transition-colors cursor-help">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-900 shadow-sm mb-6 group-hover:bg-brand-blue group-hover:text-white transition-colors cursor-help">
                 <Tooltip content={service.title}>
                   {iconMap[service.icon]}
                 </Tooltip>
@@ -99,13 +99,13 @@ export const Services: React.FC = () => {
         {/* Industries Section */}
         <div className="mb-32">
           <div className="text-center mb-12">
-            <h2 className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">Industries</h2>
+            <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Industries</h2>
             <h3 className="text-3xl font-bold text-slate-900">We serve diverse business domains.</h3>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {INDUSTRIES.map((industry) => (
-               <div key={industry.name} className="flex flex-col items-center justify-center p-6 bg-white border border-slate-100 rounded-2xl hover:border-blue-200 hover:shadow-md transition-all group hover:-translate-y-1 hover:scale-105 duration-300">
-                 <div className="text-slate-400 group-hover:text-blue-600 transition-colors mb-3">
+               <div key={industry.name} className="flex flex-col items-center justify-center p-6 bg-white border border-slate-100 rounded-2xl hover:border-brand-blue/30 hover:shadow-md transition-all group hover:-translate-y-1 hover:scale-105 duration-300">
+                 <div className="text-slate-400 group-hover:text-brand-purple transition-colors mb-3">
                     {industryIconMap[industry.icon]}
                  </div>
                  <span className="font-semibold text-slate-900 text-sm">{industry.name}</span>
@@ -133,7 +133,7 @@ export const Services: React.FC = () => {
                      onClick={() => setActiveTab(category)}
                      className={`flex items-center gap-3 px-6 py-4 rounded-xl text-left transition-all duration-200 ${
                        activeTab === category 
-                         ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' 
+                         ? 'bg-brand-blue text-white shadow-lg shadow-blue-900/20 translate-x-2 lg:translate-x-0' 
                          : 'bg-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white'
                      }`}
                    >
@@ -144,7 +144,10 @@ export const Services: React.FC = () => {
                </div>
 
                {/* Content */}
-               <div className="flex-1 bg-slate-800/50 rounded-2xl p-8 border border-slate-700/50">
+               <div 
+                 key={activeTab}
+                 className="flex-1 bg-slate-800/50 rounded-2xl p-8 border border-slate-700/50 animate-fade-in"
+               >
                   <div className="mb-6">
                     <h4 className="text-xl font-bold text-white mb-2">{activeTab}</h4>
                     <p className="text-slate-400 text-sm">{TECH_CATEGORIES[activeTab].description}</p>
@@ -152,7 +155,7 @@ export const Services: React.FC = () => {
                   
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {TECH_CATEGORIES[activeTab].stack.map((tech) => (
-                      <div key={tech} className="bg-slate-900/80 border border-slate-700 rounded-lg p-4 text-center hover:border-blue-500/50 transition-colors">
+                      <div key={tech} className="bg-slate-900/80 border border-slate-700 rounded-lg p-4 text-center hover:border-brand-blue/50 hover:bg-slate-800 transition-all duration-300">
                         <span className="text-slate-200 font-medium text-sm">{tech}</span>
                       </div>
                     ))}
@@ -162,7 +165,7 @@ export const Services: React.FC = () => {
            </div>
 
            {/* Decorative Background */}
-           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
         </div>
 
       </div>

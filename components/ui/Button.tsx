@@ -13,10 +13,10 @@ export const Button: React.FC<ButtonProps> = ({
   children, 
   ...props 
 }) => {
-  const baseStyles = "inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+  const baseStyles = "inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
   
   const variants = {
-    primary: "bg-slate-900 text-white hover:bg-slate-800 shadow-sm",
+    primary: "bg-brand-blue text-white hover:opacity-90 shadow-sm",
     secondary: "bg-slate-100 text-slate-900 hover:bg-slate-200",
     outline: "border border-slate-200 bg-transparent hover:bg-slate-100 text-slate-900",
     ghost: "hover:bg-slate-100 text-slate-700 hover:text-slate-900",

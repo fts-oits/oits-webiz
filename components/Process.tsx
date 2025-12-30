@@ -12,10 +12,10 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export const Process: React.FC = () => {
   return (
-    <section id={SectionId.PROCESS} className="py-24 bg-slate-50 border-t border-slate-200">
+    <section id={SectionId.PROCESS} className="py-24 pt-32 bg-slate-50 border-t border-slate-200 min-h-screen">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">How We Work</h2>
+          <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">How We Work</h2>
           <h3 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
             A proven process for success.
           </h3>
@@ -33,12 +33,12 @@ export const Process: React.FC = () => {
               <div key={step.id} className="group relative">
                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 relative h-full hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
                   {/* Step Number */}
-                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg border-4 border-slate-50 shadow-lg group-hover:bg-slate-900 transition-colors">
+                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-brand-blue text-white rounded-full flex items-center justify-center font-bold text-lg border-4 border-slate-50 shadow-lg group-hover:bg-slate-900 transition-colors">
                     {step.number}
                   </div>
 
                   <div className="mt-8 text-center">
-                    <div className="w-12 h-12 mx-auto bg-slate-100 rounded-full flex items-center justify-center text-blue-600 mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-12 h-12 mx-auto bg-slate-100 rounded-full flex items-center justify-center text-brand-blue mb-4 group-hover:scale-110 transition-transform duration-300">
                       {iconMap[step.icon]}
                     </div>
                     <h4 className="text-xl font-bold text-slate-900 mb-3">{step.title}</h4>

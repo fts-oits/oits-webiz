@@ -6,12 +6,12 @@ export const CONTACT_EMAIL = "info@oitsdhaka.com";
 export const ADDRESS = "House # 42, Road # 2/A, Block # Z, Dhaka 1209, Bangladesh";
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Home', href: `#${SectionId.HOME}` },
-  { label: 'Services', href: `#${SectionId.SERVICES}` },
-  { label: 'About', href: `#${SectionId.ABOUT}` },
-  { label: 'Process', href: `#${SectionId.PROCESS}` },
-  { label: 'Portfolio', href: `#${SectionId.PORTFOLIO}` },
-  { label: 'Contact', href: `#${SectionId.CONTACT}` },
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'About', href: '/about' },
+  { label: 'Process', href: '/process' },
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export const SERVICES: Service[] = [

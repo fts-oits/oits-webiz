@@ -107,14 +107,14 @@ export const Contact: React.FC = () => {
   };
 
   const getAnimationClass = (delay: number) => 
-    `transition-all duration-700 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`;
+    `transition-all duration-700 ease-out transform will-change-transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`;
 
   return (
-    <section id={SectionId.CONTACT} className="py-24 bg-slate-900 text-white relative overflow-hidden" ref={sectionRef}>
+    <section id={SectionId.CONTACT} className="py-24 pt-32 bg-slate-900 text-white relative overflow-hidden min-h-screen" ref={sectionRef}>
       <div className="container mx-auto px-6 relative z-10">
         
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-3">Contact Us</h2>
+          <h2 className="text-sm font-bold text-brand-green uppercase tracking-widest mb-3">Contact Us</h2>
           <h3 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
             Let's Start a Conversation.
           </h3>
@@ -124,31 +124,31 @@ export const Contact: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition-colors">
-            <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-blue-400 mb-6">
+          <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-brand-blue/50 transition-colors">
+            <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-brand-green mb-6">
               <Mail size={24} />
             </div>
             <h4 className="text-xl font-bold mb-2">Email Us</h4>
             <p className="text-slate-400 text-sm mb-4">Our team is here to help.</p>
-            <p className="font-semibold text-blue-400">{CONTACT_EMAIL}</p>
+            <p className="font-semibold text-brand-green">{CONTACT_EMAIL}</p>
           </div>
 
-          <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition-colors">
-            <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-blue-400 mb-6">
+          <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-brand-blue/50 transition-colors">
+            <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-brand-green mb-6">
               <MapPin size={24} />
             </div>
             <h4 className="text-xl font-bold mb-2">Visit Us</h4>
             <p className="text-slate-400 text-sm mb-4">Come say hello at our office.</p>
-            <p className="font-semibold text-blue-400">{ADDRESS}</p>
+            <p className="font-semibold text-brand-green">{ADDRESS}</p>
           </div>
 
-          <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition-colors">
-             <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-blue-400 mb-6">
+          <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-brand-blue/50 transition-colors">
+             <div className="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-brand-green mb-6">
                <Phone size={24} />
              </div>
              <h4 className="text-xl font-bold mb-2">Call Us</h4>
              <p className="text-slate-400 text-sm mb-4">Mon-Fri from 8am to 5pm.</p>
-             <p className="font-semibold text-blue-400">+880 1234 567890</p>
+             <p className="font-semibold text-brand-green">+880 1234 567890</p>
           </div>
         </div>
 
@@ -158,11 +158,11 @@ export const Contact: React.FC = () => {
            <div>
              <h3 className={`text-2xl font-bold mb-6 ${getAnimationClass(0)}`}>Send us a message</h3>
              {status === 'success' && (
-                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-6 flex items-start gap-3 animate-in fade-in slide-in-from-top-2">
-                  <CheckCircle2 className="text-green-500 shrink-0 mt-0.5" size={18} />
+                <div className="bg-brand-green/10 border border-brand-green/20 rounded-lg p-4 mb-6 flex items-start gap-3 animate-slide-in-top">
+                  <CheckCircle2 className="text-brand-green shrink-0 mt-0.5" size={18} />
                   <div>
-                    <h4 className="text-green-500 font-semibold text-sm">Message Sent Successfully!</h4>
-                    <p className="text-green-600/80 text-xs mt-1">We'll get back to you within 24 hours.</p>
+                    <h4 className="text-brand-green font-semibold text-sm">Message Sent Successfully!</h4>
+                    <p className="text-brand-green/80 text-xs mt-1">We'll get back to you within 24 hours.</p>
                   </div>
                 </div>
              )}
@@ -175,7 +175,7 @@ export const Contact: React.FC = () => {
                       type="text" 
                       id="name"
                       disabled={status === 'sending'}
-                      className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${errors.name ? 'border-red-500 focus:border-red-500' : 'border-slate-700 focus:border-blue-500'}`}
+                      className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${errors.name ? 'border-red-500 focus:border-red-500' : 'border-slate-700 focus:border-brand-blue'}`}
                       placeholder="John Doe"
                       value={formData.name}
                       onChange={handleChange}
@@ -188,7 +188,7 @@ export const Contact: React.FC = () => {
                       type="email" 
                       id="email"
                       disabled={status === 'sending'}
-                      className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-slate-700 focus:border-blue-500'}`}
+                      className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-slate-700 focus:border-brand-blue'}`}
                       placeholder="john@example.com"
                       value={formData.email}
                       onChange={handleChange}
@@ -203,7 +203,7 @@ export const Contact: React.FC = () => {
                     type="text" 
                     id="subject"
                     disabled={status === 'sending'}
-                    className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${errors.subject ? 'border-red-500 focus:border-red-500' : 'border-slate-700 focus:border-blue-500'}`}
+                    className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${errors.subject ? 'border-red-500 focus:border-red-500' : 'border-slate-700 focus:border-brand-blue'}`}
                     placeholder="Project Inquiry"
                     value={formData.subject}
                     onChange={handleChange}
@@ -217,7 +217,7 @@ export const Contact: React.FC = () => {
                     id="message"
                     rows={4}
                     disabled={status === 'sending'}
-                    className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed ${errors.message ? 'border-red-500 focus:border-red-500' : 'border-slate-700 focus:border-blue-500'}`}
+                    className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white focus:outline-none transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed ${errors.message ? 'border-red-500 focus:border-red-500' : 'border-slate-700 focus:border-brand-blue'}`}
                     placeholder="Tell us about your project..."
                     value={formData.message}
                     onChange={handleChange}
@@ -230,7 +230,7 @@ export const Contact: React.FC = () => {
                    type="submit" 
                    variant="primary" 
                    size="lg" 
-                   className="w-full bg-blue-600 hover:bg-blue-700 border-none disabled:bg-blue-800 disabled:opacity-70 disabled:cursor-not-allowed"
+                   className="w-full bg-brand-blue hover:bg-brand-blue/90 border-none disabled:bg-blue-800 disabled:opacity-70 disabled:cursor-not-allowed"
                    disabled={status === 'sending'}
                  >
                    {status === 'sending' ? (
@@ -261,7 +261,7 @@ export const Contact: React.FC = () => {
              ></iframe>
              <div className="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur p-4 rounded-lg border border-slate-700">
                <div className="flex items-center gap-2 text-sm font-medium">
-                 <Clock size={16} className="text-blue-500"/>
+                 <Clock size={16} className="text-brand-green"/>
                  <span>9:00 AM - 6:00 PM (Sun-Thu)</span>
                </div>
              </div>
