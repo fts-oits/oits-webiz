@@ -56,8 +56,9 @@ export const Hero: React.FC = () => {
         this.x = Math.random() * (canvas?.width || 0);
         this.y = Math.random() * (canvas?.height || 0);
         this.size = Math.random() * 3 + 1;
-        this.speedX = Math.random() * 0.5 - 0.25;
-        this.speedY = Math.random() * 0.5 - 0.25;
+        // Slower speed for subtle effect
+        this.speedX = Math.random() * 0.3 - 0.15;
+        this.speedY = Math.random() * 0.3 - 0.15;
         // Brand colors: Blue-500 (#3b82f6) and Slate-400 (#94a3b8) with low opacity
         this.color = Math.random() > 0.5 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(148, 163, 184, 0.2)';
       }
@@ -66,7 +67,7 @@ export const Hero: React.FC = () => {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        if (this.size > 0.2) this.size -= 0.01; // subtle pulse or shrink effect optional
+        if (this.size > 0.2) this.size -= 0.005; // Slower decay
         
         // Wrap around screen
         if (canvas) {
@@ -88,7 +89,7 @@ export const Hero: React.FC = () => {
 
     const init = () => {
       particles = [];
-      const numberOfParticles = Math.floor(window.innerWidth / 20); // Optimized Density
+      const numberOfParticles = Math.floor(window.innerWidth / 25); // Slightly fewer particles
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
       }

@@ -7,6 +7,22 @@ interface FooterProps {
   toggleTheme: () => void;
 }
 
+const SocialLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => (
+  <a 
+    href={href} 
+    className="group relative p-2 rounded-lg hover:bg-slate-800 transition-colors"
+    aria-label={label}
+  >
+    <Icon size={20} className="text-slate-400 group-hover:text-white transition-colors" />
+    
+    {/* Tooltip */}
+    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-slate-900 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-slate-700 transform translate-y-2 group-hover:translate-y-0 duration-200">
+      {label}
+      <span className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-4 border-transparent border-t-slate-700"></span>
+    </span>
+  </a>
+);
+
 export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
   return (
     <footer className="bg-slate-950 text-slate-300 py-16 border-t border-slate-800">
@@ -23,11 +39,11 @@ export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
             <p className="text-sm leading-relaxed text-slate-400">
               Empowering businesses through innovative software solutions. Your digital transformation partner.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="hover:text-white transition-colors" aria-label="Github"><Github size={20} /></a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="LinkedIn"><Linkedin size={20} /></a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="Twitter"><Twitter size={20} /></a>
-              <a href="#" className="hover:text-white transition-colors" aria-label="Facebook"><Facebook size={20} /></a>
+            <div className="flex gap-2">
+              <SocialLink href="#" icon={Github} label="GitHub" />
+              <SocialLink href="#" icon={Linkedin} label="LinkedIn" />
+              <SocialLink href="#" icon={Twitter} label="Twitter" />
+              <SocialLink href="#" icon={Facebook} label="Facebook" />
             </div>
             
             <div className="pt-2">
