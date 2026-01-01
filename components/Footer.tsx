@@ -9,7 +9,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
   return (
-    <footer className="bg-slate-950 text-slate-400 py-16 border-t border-slate-800">
+    <footer className="bg-slate-950 text-slate-300 py-16 border-t border-slate-800">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           
@@ -20,7 +20,7 @@ export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
               </div>
               <span className="text-xl font-bold">{COMPANY_NAME}</span>
             </a>
-            <p className="text-sm leading-relaxed">
+            <p className="text-sm leading-relaxed text-slate-400">
               Empowering businesses through innovative software solutions. Your digital transformation partner.
             </p>
             <div className="flex gap-4">
@@ -33,8 +33,8 @@ export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
             <div className="pt-2">
                <button
                   onClick={toggleTheme}
-                  className="flex items-center gap-2 text-sm font-medium hover:text-white transition-colors bg-slate-900 px-3 py-2 rounded-lg border border-slate-800"
-                  aria-label="Toggle theme"
+                  className="flex items-center gap-2 text-sm font-medium hover:text-white transition-colors bg-slate-900 px-3 py-2 rounded-lg border border-slate-800 hover:border-slate-700"
+                  aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
                >
                   {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
                   <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
@@ -47,7 +47,7 @@ export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
             <ul className="space-y-4">
               {NAV_ITEMS.map((item) => (
                 <li key={item.label}>
-                  <a href={item.href} className="hover:text-blue-500 transition-colors">{item.label}</a>
+                  <a href={item.href} className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">{item.label}</a>
                 </li>
               ))}
             </ul>
@@ -56,21 +56,23 @@ export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
           <div>
             <h4 className="text-white font-bold mb-6">Services</h4>
             <ul className="space-y-4">
-              <li><a href="#" className="hover:text-blue-500 transition-colors">Web Development</a></li>
-              <li><a href="#" className="hover:text-blue-500 transition-colors">Mobile Apps</a></li>
-              <li><a href="#" className="hover:text-blue-500 transition-colors">UI/UX Design</a></li>
-              <li><a href="#" className="hover:text-blue-500 transition-colors">Cloud Solutions</a></li>
+              <li><a href="#" className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">Web Development</a></li>
+              <li><a href="#" className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">Mobile Apps</a></li>
+              <li><a href="#" className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">UI/UX Design</a></li>
+              <li><a href="#" className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">Cloud Solutions</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-bold mb-6">Newsletter</h4>
-            <p className="text-sm mb-4">Subscribe to our newsletter for the latest tech news and updates.</p>
+            <p className="text-sm mb-4 text-slate-400">Subscribe to our newsletter for the latest tech news and updates.</p>
             <form className="flex gap-2">
+              <label htmlFor="newsletter-email" className="sr-only">Email address</label>
               <input 
+                id="newsletter-email"
                 type="email" 
                 placeholder="Email address" 
-                className="bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 text-sm w-full focus:outline-none focus:border-blue-600 text-white"
+                className="bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 text-sm w-full focus:outline-none focus:border-blue-600 text-white placeholder-slate-500"
               />
               <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
                 OK
@@ -80,7 +82,7 @@ export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
 
         </div>
         
-        <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+        <div className="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
           <p>&copy; {new Date().getFullYear()} {COMPANY_NAME}. All rights reserved.</p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white">Privacy Policy</a>

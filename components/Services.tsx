@@ -10,6 +10,8 @@ const iconMap: Record<string, React.ReactNode> = {
   Cloud: <Cloud className="w-6 h-6" />,
 };
 
+const TECH_STACK_PREVIEW = ['React', 'Node.js', 'AWS', 'Docker', 'Next.js', 'TypeScript'];
+
 export const Services: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -35,7 +37,7 @@ export const Services: React.FC = () => {
   return (
     <section ref={sectionRef} id={SectionId.SERVICES} className="py-24 bg-white relative">
       <div className="container mx-auto px-6">
-        <div className={`flex flex-col md:flex-row justify-between items-end mb-16 gap-6 transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`flex flex-col md:flex-row justify-between items-end mb-16 gap-6 transition-all duration-700 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <div className="max-w-2xl">
             <h2 className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">Our Expertise</h2>
             <h3 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
@@ -52,9 +54,9 @@ export const Services: React.FC = () => {
           {SERVICES.map((service, index) => (
             <div 
               key={service.id} 
-              className={`group relative bg-slate-50 border border-slate-100 rounded-3xl p-8 hover:shadow-xl transition-all duration-700 ease-out hover:-translate-y-1 ${
+              className={`group relative bg-slate-50 border border-slate-100 rounded-3xl p-8 hover:shadow-xl transition-all duration-500 ease-out hover:-translate-y-1 ${
                 index === 0 || index === 3 ? 'lg:col-span-2' : ''
-              } ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              } ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
               <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -80,7 +82,7 @@ export const Services: React.FC = () => {
 
           {/* Decorative/Info Card */}
           <div 
-            className={`bg-slate-900 rounded-3xl p-8 text-white flex flex-col justify-between overflow-hidden relative transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+            className={`bg-slate-900 rounded-3xl p-8 text-white flex flex-col justify-between overflow-hidden relative transition-all duration-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
             style={{ transitionDelay: '600ms' }}
           >
             <div className="relative z-10">
@@ -89,9 +91,12 @@ export const Services: React.FC = () => {
             </div>
             
             <div className="mt-8 flex flex-wrap gap-2 relative z-10">
-               <div className="p-2 bg-slate-800 rounded-lg"><Code size={16}/></div>
-               <div className="p-2 bg-slate-800 rounded-lg"><Database size={16}/></div>
-               <div className="p-2 bg-slate-800 rounded-lg"><Layout size={16}/></div>
+               {TECH_STACK_PREVIEW.map((tech) => (
+                  <span key={tech} className="px-3 py-1.5 bg-slate-800/80 backdrop-blur-sm border border-slate-700 rounded-lg text-xs font-medium text-slate-300">
+                     {tech}
+                  </span>
+               ))}
+               <span className="px-3 py-1.5 bg-slate-800/50 border border-slate-700/50 rounded-lg text-xs font-medium text-slate-400">+More</span>
             </div>
 
              {/* Background Pattern */}
