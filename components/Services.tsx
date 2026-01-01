@@ -62,7 +62,7 @@ export const Services: React.FC = () => {
           {SERVICES.map((service, index) => (
             <div 
               key={service.id} 
-              className={`group relative bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 hover:shadow-2xl dark:hover:shadow-blue-900/20 transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-200 dark:hover:border-blue-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              className={`group relative bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 hover:shadow-2xl dark:hover:shadow-blue-900/20 transition-all duration-700 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-200 dark:hover:border-blue-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
               <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity">

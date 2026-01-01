@@ -140,6 +140,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     
     switch(e.key) {
       case ' ':
+      case 'Enter':
       case 'k':
       case 'K':
         e.preventDefault();
@@ -178,6 +179,9 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
         setVolume(prev => Math.max(0, prev - 0.1));
         if (videoRef.current) videoRef.current.volume = Math.max(0, videoRef.current.volume - 0.1);
         break;
+      case 'Escape':
+         // Allow escape to bubble up to modal close handler
+         break;
     }
   };
 
@@ -198,13 +202,15 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
       aria-label="Video Player"
     >
       {/* Blurred Background for Ambient Loading */}
+      {/* We keep this visible until video is fully loaded to provide a nice visual cue */}
       <div 
-        className="absolute inset-0 bg-cover bg-center z-0 transition-opacity duration-1000"
+        className={`absolute inset-0 bg-cover bg-center z-0 transition-opacity duration-1000 ${isVideoLoaded ? 'opacity-0' : 'opacity-100'}`}
         style={{ 
           backgroundImage: poster ? `url(${poster})` : 'none',
-          filter: 'blur(40px) brightness(0.5)',
-          transform: 'scale(1.2)' 
+          filter: 'blur(20px) brightness(0.4)',
+          transform: 'scale(1.1)' 
         }}
+        aria-hidden="true"
       />
 
       {/* Loading Spinner */}
@@ -218,7 +224,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
         ref={videoRef}
         src={src}
         poster={poster} // Keeps original poster logic as fallback
-        className={`relative z-10 w-full h-full object-contain transition-opacity duration-500 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`relative z-10 w-full h-full object-contain transition-opacity duration-700 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
         onClick={togglePlay}
         playsInline
         crossOrigin="anonymous"
@@ -303,7 +309,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
             <button
               onClick={onClose}
               className="flex items-center gap-2 px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-sm font-bold transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
-              aria-label="Close video player"
+              aria-label="Exit full screen video"
             >
               <ArrowDown size={18} className="rotate-90" /> <span className="hidden sm:inline">Exit</span>
             </button>
@@ -337,6 +343,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
   const [isClosing, setIsClosing] = useState(false);
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (project) {
@@ -346,12 +353,14 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
       setIsPlayingVideo(autoPlay && !!project.demoVideoUrl);
       document.body.style.overflow = 'hidden';
       if (contentRef.current) contentRef.current.scrollTop = 0;
+      // Focus management would go here in a full app
     }
     return () => { document.body.style.overflow = 'unset'; };
   }, [project, autoPlay]);
 
   const handleClose = () => {
     setIsClosing(true);
+    // Ensure animation plays out before unmounting
     setTimeout(() => {
       setIsVisible(false);
       onClose();
@@ -374,9 +383,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
     p => p.category === activeProject.category && p.id !== activeProject.id
   ).slice(0, 3);
 
+  // Transition classes
   const backdropClass = `fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] transition-opacity duration-300 ease-out ${isClosing ? 'opacity-0' : 'opacity-100'}`;
   const modalContainerClass = `fixed inset-0 z-[101] flex items-center justify-center p-4 sm:p-6 pointer-events-none`;
-  
   const modalContentClass = `relative w-full max-w-5xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pointer-events-auto transform origin-center transition-all duration-300 ease-out ${
     isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
   }`;
@@ -408,6 +417,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
                   
                   <button 
+                    ref={closeButtonRef}
                     onClick={handleClose}
                     className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors z-30 focus:outline-none focus:ring-2 focus:ring-white"
                     aria-label="Close modal"
@@ -426,8 +436,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                     <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
                        <button 
                          onClick={() => setIsPlayingVideo(true)}
-                         className="pointer-events-auto flex items-center gap-2 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 rounded-full text-white font-bold transition-all hover:scale-105 group/play shadow-xl focus:outline-none focus:ring-2 focus:ring-white"
-                         aria-label="Play demo video"
+                         className="pointer-events-auto flex items-center gap-2 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 rounded-full text-white font-bold transition-all hover:scale-105 hover:animate-pulse group/play shadow-xl focus:outline-none focus:ring-2 focus:ring-white"
+                         aria-label="Watch demo video"
                        >
                          <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 group-hover/play:scale-110 transition-transform">
                            <Play size={16} fill="currentColor" />

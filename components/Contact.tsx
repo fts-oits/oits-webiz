@@ -78,8 +78,14 @@ export const Contact: React.FC = () => {
           <div className={`bg-slate-800/50 p-8 md:p-10 rounded-3xl border border-slate-700 transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
              <form onSubmit={handleSubmit} className="space-y-6">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <div className={`space-y-2 transition-all duration-500 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                   <label htmlFor="name" className="text-sm font-medium text-slate-300">Name</label>
+                 
+                 <div className={`group relative transition-all duration-500 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                   <label 
+                      htmlFor="name" 
+                      className="block text-sm font-medium text-slate-300 mb-2 transition-all duration-300 ease-out transform opacity-0 -translate-y-2 group-focus-within:opacity-100 group-focus-within:translate-y-0"
+                   >
+                      Name
+                   </label>
                    <input 
                       type="text" 
                       id="name"
@@ -90,8 +96,14 @@ export const Contact: React.FC = () => {
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
                    />
                  </div>
-                 <div className={`space-y-2 transition-all duration-500 delay-400 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                   <label htmlFor="email" className="text-sm font-medium text-slate-300">Email</label>
+
+                 <div className={`group relative transition-all duration-500 delay-400 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                   <label 
+                      htmlFor="email" 
+                      className="block text-sm font-medium text-slate-300 mb-2 transition-all duration-300 ease-out transform opacity-0 -translate-y-2 group-focus-within:opacity-100 group-focus-within:translate-y-0"
+                   >
+                      Email
+                   </label>
                    <input 
                       type="email" 
                       id="email"
@@ -104,8 +116,13 @@ export const Contact: React.FC = () => {
                  </div>
                </div>
                
-               <div className={`space-y-2 transition-all duration-500 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                 <label htmlFor="message" className="text-sm font-medium text-slate-300">Message</label>
+               <div className={`group relative transition-all duration-500 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                 <label 
+                    htmlFor="message" 
+                    className="block text-sm font-medium text-slate-300 mb-2 transition-all duration-300 ease-out transform opacity-0 -translate-y-2 group-focus-within:opacity-100 group-focus-within:translate-y-0"
+                 >
+                    Message
+                 </label>
                  <textarea 
                     id="message"
                     required

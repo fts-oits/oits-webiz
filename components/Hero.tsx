@@ -55,19 +55,20 @@ export const Hero: React.FC = () => {
       constructor() {
         this.x = Math.random() * (canvas?.width || 0);
         this.y = Math.random() * (canvas?.height || 0);
-        this.size = Math.random() * 3 + 1;
-        // Slower speed for subtle effect
-        this.speedX = Math.random() * 0.3 - 0.15;
-        this.speedY = Math.random() * 0.3 - 0.15;
-        // Brand colors: Blue-500 (#3b82f6) and Slate-400 (#94a3b8) with low opacity
-        this.color = Math.random() > 0.5 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(148, 163, 184, 0.2)';
+        this.size = Math.random() * 2 + 0.5; // Smaller size for subtlety (0.5 to 2.5)
+        // Slower speed for calm, subtle movement
+        this.speedX = Math.random() * 0.2 - 0.1;
+        this.speedY = Math.random() * 0.2 - 0.1;
+        // Strictly Brand colors: Blue-500 (#3b82f6) and Indigo-500 (#6366f1) with low opacity
+        this.color = Math.random() > 0.5 ? 'rgba(59, 130, 246, 0.15)' : 'rgba(99, 102, 241, 0.15)';
       }
 
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        if (this.size > 0.2) this.size -= 0.005; // Slower decay
+        // Very slow decay to keep particles around longer
+        if (this.size > 0.2) this.size -= 0.002;
         
         // Wrap around screen
         if (canvas) {
@@ -89,7 +90,7 @@ export const Hero: React.FC = () => {
 
     const init = () => {
       particles = [];
-      const numberOfParticles = Math.floor(window.innerWidth / 25); // Slightly fewer particles
+      const numberOfParticles = Math.floor(window.innerWidth / 20); // Balanced density
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
       }
@@ -147,7 +148,7 @@ export const Hero: React.FC = () => {
               {TAGLINE}. We build robust software solutions that drive business growth, combining technical expertise with stunning design.
             </p>
 
-            <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-400 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <Button 
                 size="lg" 
                 className="group transform transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/30" 
@@ -163,7 +164,7 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          <div className={`flex-1 w-full max-w-xl lg:max-w-none transition-all duration-1000 delay-200 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+          <div className={`flex-1 w-full max-w-xl lg:max-w-none transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
             <div className="relative">
               {/* Decorative Card Stack Effect */}
               <div className="absolute top-4 -right-4 w-full h-full bg-slate-200 rounded-2xl -rotate-2"></div>
