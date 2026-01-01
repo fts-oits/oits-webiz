@@ -40,9 +40,9 @@ export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
 
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
         isScrolled 
-          ? 'bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 py-3 shadow-sm' 
+          ? 'bg-white/95 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 py-3 shadow-md' 
           : 'bg-transparent py-5'
       }`}
     >
@@ -79,7 +79,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
 
           <div className="ml-2">
             <Button variant="primary" size="sm" onClick={scrollToContact}>
-              Get Started
+              Request Demo
             </Button>
           </div>
         </nav>
@@ -119,7 +119,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
               </a>
             ))}
             <Button className="w-full mt-4" onClick={scrollToContact}>
-              Get Started
+              Request Demo
             </Button>
           </nav>
         </div>

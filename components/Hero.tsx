@@ -68,11 +68,13 @@ export const Hero: React.FC = () => {
       constructor() {
         this.x = Math.random() * (canvas?.width || 0);
         this.y = Math.random() * (canvas?.height || 0);
-        this.size = Math.random() * 2 + 1; 
-        // Refined speed for slower, more subtle movement
-        this.speedX = Math.random() * 0.2 - 0.1;
-        this.speedY = Math.random() * 0.2 - 0.1;
+        // Smaller size for subtlety
+        this.size = Math.random() * 1.5 + 0.5; 
+        // Very slow movement
+        this.speedX = Math.random() * 0.1 - 0.05;
+        this.speedY = Math.random() * 0.1 - 0.05;
         
+        // Brand colors: Blue-500 and Indigo-500
         const isBlue = Math.random() > 0.5;
         this.color = isBlue ? '59, 130, 246' : '99, 102, 241';
         // Lower alpha for subtlety
@@ -85,10 +87,10 @@ export const Hero: React.FC = () => {
         this.y += this.speedY;
 
         // Subtle Pulse effect
-        if (Math.abs(this.alpha - this.targetAlpha) < 0.01) {
+        if (Math.abs(this.alpha - this.targetAlpha) < 0.005) {
              this.targetAlpha = Math.random() * 0.2 + 0.05;
         } else {
-             this.alpha += (this.targetAlpha - this.alpha) * 0.01;
+             this.alpha += (this.targetAlpha - this.alpha) * 0.005;
         }
         
         // Wrap around screen
@@ -111,8 +113,8 @@ export const Hero: React.FC = () => {
 
     const init = () => {
       particles = [];
-      // Reduced density for cleaner look
-      const numberOfParticles = Math.floor(window.innerWidth / 20); 
+      // Reduced density
+      const numberOfParticles = Math.floor(window.innerWidth / 15); 
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
       }
