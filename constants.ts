@@ -51,6 +51,10 @@ export const PROJECTS: Project[] = [
     category: 'Web Application',
     imageUrl: 'https://picsum.photos/800/600?random=1',
     description: 'A comprehensive financial analytics dashboard for a leading banking institution.',
+    fullDescription: 'We built a high-performance financial dashboard that processes millions of transactions in real-time. Features include predictive analytics, customizable reporting widgets, and bank-grade security protocols.',
+    technologies: ['React', 'TypeScript', 'Node.js', 'AWS'],
+    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    link: 'https://example.com/fintech'
   },
   {
     id: '2',
@@ -58,6 +62,10 @@ export const PROJECTS: Project[] = [
     category: 'Mobile App',
     imageUrl: 'https://picsum.photos/800/600?random=2',
     description: 'Telemedicine platform connecting patients with doctors in real-time.',
+    fullDescription: 'A HIPAA-compliant mobile application that facilitates secure video consultations, prescription management, and appointment scheduling. Built with Flutter for a seamless cross-platform experience.',
+    technologies: ['Flutter', 'Firebase', 'WebRTC'],
+    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    link: 'https://example.com/healthcare'
   },
   {
     id: '3',
@@ -65,7 +73,21 @@ export const PROJECTS: Project[] = [
     category: 'E-commerce',
     imageUrl: 'https://picsum.photos/800/600?random=3',
     description: 'Multi-vendor marketplace solution with integrated payment gateways.',
+    fullDescription: 'A robust multi-vendor marketplace supporting thousands of SKUs, real-time inventory tracking, and AI-driven product recommendations to boost sales.',
+    technologies: ['Next.js', 'GraphQL', 'Stripe', 'PostgreSQL'],
+    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    link: 'https://example.com/eshop'
   },
+  {
+    id: '4',
+    title: 'Smart Home Hub',
+    category: 'IoT',
+    imageUrl: 'https://picsum.photos/800/600?random=7',
+    description: 'Centralized control system for smart home devices with voice integration.',
+    fullDescription: 'An IoT dashboard that aggregates control for lights, thermostats, and security systems. Supports custom automation routines and energy usage monitoring.',
+    technologies: ['React Native', 'MQTT', 'Node.js'],
+    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+  }
 ];
 
 export const TESTIMONIALS: Testimonial[] = [

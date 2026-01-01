@@ -16,7 +16,6 @@ export interface Project {
   technologies?: string[];
   link?: string;
   demoVideoUrl?: string;
-  // Fix: Add captionsUrl to interface to resolve type error in Portfolio component
   captionsUrl?: string;
 }
 
