@@ -1,8 +1,13 @@
 import React from 'react';
-import { Terminal, Github, Linkedin, Twitter, Facebook } from 'lucide-react';
+import { Terminal, Github, Linkedin, Twitter, Facebook, Sun, Moon } from 'lucide-react';
 import { COMPANY_NAME, NAV_ITEMS } from '../constants';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
   return (
     <footer className="bg-slate-950 text-slate-400 py-16 border-t border-slate-800">
       <div className="container mx-auto px-6">
@@ -19,10 +24,21 @@ export const Footer: React.FC = () => {
               Empowering businesses through innovative software solutions. Your digital transformation partner.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-white transition-colors"><Github size={20} /></a>
-              <a href="#" className="hover:text-white transition-colors"><Linkedin size={20} /></a>
-              <a href="#" className="hover:text-white transition-colors"><Twitter size={20} /></a>
-              <a href="#" className="hover:text-white transition-colors"><Facebook size={20} /></a>
+              <a href="#" className="hover:text-white transition-colors" aria-label="Github"><Github size={20} /></a>
+              <a href="#" className="hover:text-white transition-colors" aria-label="LinkedIn"><Linkedin size={20} /></a>
+              <a href="#" className="hover:text-white transition-colors" aria-label="Twitter"><Twitter size={20} /></a>
+              <a href="#" className="hover:text-white transition-colors" aria-label="Facebook"><Facebook size={20} /></a>
+            </div>
+            
+            <div className="pt-2">
+               <button
+                  onClick={toggleTheme}
+                  className="flex items-center gap-2 text-sm font-medium hover:text-white transition-colors bg-slate-900 px-3 py-2 rounded-lg border border-slate-800"
+                  aria-label="Toggle theme"
+               >
+                  {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+                  <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+               </button>
             </div>
           </div>
 
@@ -54,7 +70,7 @@ export const Footer: React.FC = () => {
               <input 
                 type="email" 
                 placeholder="Email address" 
-                className="bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 text-sm w-full focus:outline-none focus:border-blue-600"
+                className="bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 text-sm w-full focus:outline-none focus:border-blue-600 text-white"
               />
               <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
                 OK

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { ArrowDown, X, ExternalLink, Calendar, Code2, ArrowUpRight, Play, Film, Tag, Volume2, VolumeX, Pause, Subtitles, MonitorPlay } from 'lucide-react';
 import { PROJECTS } from '../constants';
 import { SectionId, Project } from '../types';
@@ -112,27 +111,35 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
         Your browser does not support the video tag.
       </video>
 
-      {/* Controls Overlay - Visible on Group Hover */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2 z-20 pointer-events-none group-hover:pointer-events-auto">
-        {/* Progress Bar */}
+      {/* Controls Overlay - Smooth transition, large touch targets */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-4 pb-4 pt-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-4 z-20 pointer-events-none group-hover:pointer-events-auto">
+        {/* Progress Bar - Taller for touch */}
         <input
           type="range"
           min="0"
           max={duration || 0}
           value={currentTime}
           onChange={handleSeek}
-          className="w-full h-1 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-brand-blue hover:h-1.5 transition-all"
+          className="w-full h-2 bg-white/30 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:h-2.5 transition-all"
         />
 
-        <div className="flex items-center justify-between text-white mt-1">
-          <div className="flex items-center gap-4">
-            <button onClick={togglePlay} className="hover:text-brand-blue transition-colors focus:outline-none p-1">
-              {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" />}
+        <div className="flex items-center justify-between text-white">
+          <div className="flex items-center gap-6">
+            <button 
+              onClick={togglePlay} 
+              className="p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none"
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
             </button>
 
-            <div className="flex items-center gap-2 group/vol">
-              <button onClick={toggleMute} className="hover:text-brand-blue transition-colors focus:outline-none p-1">
-                {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
+            <div className="flex items-center gap-3 group/vol">
+              <button 
+                onClick={toggleMute} 
+                className="p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none"
+                aria-label={isMuted ? "Unmute" : "Mute"}
+              >
+                {isMuted || volume === 0 ? <VolumeX size={24} /> : <Volume2 size={24} />}
               </button>
               <input
                 type="range"
@@ -141,30 +148,30 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
                 step="0.05"
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
-                className="w-0 overflow-hidden group-hover/vol:w-20 transition-all duration-300 h-1 bg-slate-600 rounded-lg accent-white"
+                className="w-0 overflow-hidden group-hover/vol:w-24 transition-all duration-300 h-1.5 bg-white/30 rounded-lg accent-white"
               />
             </div>
 
-            <span className="text-xs font-mono font-medium opacity-80 select-none">
+            <span className="text-sm font-mono font-medium opacity-80 select-none hidden sm:block">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {captionsUrl && (
               <button
                 onClick={() => setCaptionsEnabled(!captionsEnabled)}
-                className={`transition-colors focus:outline-none p-1 ${captionsEnabled ? 'text-brand-blue' : 'text-white/70 hover:text-white'}`}
+                className={`p-2 rounded-full transition-colors focus:outline-none ${captionsEnabled ? 'text-blue-400 bg-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
                 title={captionsEnabled ? "Disable Captions" : "Enable Captions"}
               >
-                <Subtitles size={20} />
+                <Subtitles size={24} />
               </button>
             )}
             <button
               onClick={onClose}
-              className="flex items-center gap-1.5 px-3 py-1 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-xs font-bold transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-sm font-bold transition-all active:scale-95"
             >
-              <ArrowDown size={14} className="rotate-90" /> Exit Demo
+              <ArrowDown size={16} className="rotate-90" /> Exit
             </button>
           </div>
         </div>
@@ -173,8 +180,8 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
       {/* Big Play Button Overlay (when paused) */}
       {!isPlaying && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-black/20">
-          <div className="w-16 h-16 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white/80 border border-white/20">
-            <Play size={32} fill="currentColor" className="ml-1" />
+          <div className="w-20 h-20 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white/90 border border-white/20 shadow-xl">
+            <Play size={40} fill="currentColor" className="ml-2" />
           </div>
         </div>
       )}
@@ -236,7 +243,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
   const backdropClass = `fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] transition-opacity duration-300 ease-out ${isClosing ? 'opacity-0' : 'opacity-100'}`;
   const modalContainerClass = `fixed inset-0 z-[101] flex items-center justify-center p-4 sm:p-6 pointer-events-none`;
   
-  // Refined entrance and exit animations: Zoom-in on entrance, Smooth fade-out on exit
   const modalContentClass = `relative w-full max-w-5xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pointer-events-auto transform origin-center transition-all duration-300 ease-out ${
     isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
   }`;
@@ -637,7 +643,7 @@ export const Portfolio: React.FC = () => {
     <section ref={sectionRef} id={SectionId.PORTFOLIO} className="py-24 pt-32 bg-slate-50 dark:bg-slate-950 min-h-screen">
       <div className="container mx-auto px-6">
         <div className={`text-center max-w-3xl mx-auto mb-12 ${getFadeInClass(0)}`}>
-          <h2 className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">{isPage ? 'Portfolio' : 'Featured Work'}</h2>
+          <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3">{isPage ? 'Portfolio' : 'Featured Work'}</h2>
           <HeadingTag className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white leading-tight mb-4">
             Showcasing our success stories.
           </HeadingTag>
