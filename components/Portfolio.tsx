@@ -854,7 +854,7 @@ export const Portfolio: React.FC = () => {
               }`}
             >
               {cat} 
-              <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full transition-colors duration-300 ${
+              <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full transition-colors duration-300 tabular-nums ${
                 activeCategory === cat 
                   ? 'bg-white/20 text-white' 
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
@@ -882,7 +882,7 @@ export const Portfolio: React.FC = () => {
                 }`}
               >
                 {tag} 
-                <span className={`text-[10px] opacity-70 transition-colors duration-200 ${getTagCount(tag) === 0 ? 'text-slate-300 dark:text-slate-600' : ''}`}>
+                <span className={`text-[10px] opacity-70 transition-colors duration-200 tabular-nums ${getTagCount(tag) === 0 ? 'text-slate-300 dark:text-slate-600' : ''}`}>
                    {getTagCount(tag)}
                 </span>
               </button>
