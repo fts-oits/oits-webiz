@@ -128,6 +128,12 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     }
   };
 
+  const handleMouseLeave = () => {
+    if (isPlaying) {
+      setShowControls(false);
+    }
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // Reset controls visibility on key press
     handleMouseMove();
@@ -180,6 +186,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
       ref={containerRef}
       className="relative w-full h-full bg-black group overflow-hidden flex flex-col justify-center outline-none"
       onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="region"
@@ -238,19 +245,19 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
           <div className="flex items-center gap-4 sm:gap-6">
             <button 
               onClick={togglePlay} 
-              className="p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+              className="p-3 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
-              {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
+              {isPlaying ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" />}
             </button>
 
             <div className="flex items-center gap-3 group/vol">
               <button 
                 onClick={toggleMute} 
-                className="p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+                className="p-3 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                 aria-label={isMuted ? "Unmute" : "Mute"}
               >
-                {isMuted || volume === 0 ? <VolumeX size={24} /> : <Volume2 size={24} />}
+                {isMuted || volume === 0 ? <VolumeX size={28} /> : <Volume2 size={28} />}
               </button>
               <input
                 type="range"
@@ -276,20 +283,20 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
             {captionsUrl && (
               <button
                 onClick={() => setCaptionsEnabled(!captionsEnabled)}
-                className={`p-2 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${captionsEnabled ? 'text-blue-400 bg-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
+                className={`p-3 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${captionsEnabled ? 'text-blue-400 bg-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
                 title={captionsEnabled ? "Disable Captions" : "Enable Captions"}
                 aria-label={captionsEnabled ? "Disable Captions" : "Enable Captions"}
                 aria-pressed={captionsEnabled}
               >
-                <Subtitles size={24} />
+                <Subtitles size={28} />
               </button>
             )}
             <button
               onClick={onClose}
-              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-sm font-bold transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+              className="flex items-center gap-2 px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-sm font-bold transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
               aria-label="Close video player"
             >
-              <ArrowDown size={16} className="rotate-90" /> <span className="hidden sm:inline">Exit</span>
+              <ArrowDown size={18} className="rotate-90" /> <span className="hidden sm:inline">Exit</span>
             </button>
           </div>
         </div>
