@@ -1,17 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
 import { Globe, Smartphone, PenTool, Cloud, ArrowUpRight, Layout, Server, Database, Cpu, DollarSign, Heart, ShoppingBag, BookOpen, Home, Truck } from 'lucide-react';
 import { SERVICES, INDUSTRIES } from '../constants';
 import { SectionId } from '../types';
 import { Tooltip } from './ui/Tooltip';
-
-// Map specific abstract/modern imagery to service IDs for a unique "generated" look
-const serviceBackgrounds: Record<string, string> = {
-  'web-dev': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80', // Abstract 3D Shapes
-  'mobile-dev': 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80', // Fluid Gradient
-  'ui-ux': 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80', // Neon Abstract
-  'cloud': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80', // Tech/Network
-};
 
 const iconMap: Record<string, React.ReactNode> = {
   Globe: <Globe className="w-6 h-6" />,
@@ -56,11 +47,6 @@ export const Services: React.FC = () => {
   const [activeTab, setActiveTab] = useState<keyof typeof TECH_CATEGORIES>('Frontend');
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const location = useLocation();
-  const isPage = location.pathname === '/services';
-  
-  const HeadingTag = isPage ? 'h1' : 'h3';
-  const sectionLabel = isPage ? 'Services' : 'Our Expertise';
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -84,27 +70,25 @@ export const Services: React.FC = () => {
 
   const getFadeInClass = (delay: number) => 
     `transition-all duration-700 ease-out transform ${
-      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
     }`;
 
   const styleDelay = (index: number) => ({ transitionDelay: `${index}ms` });
 
   return (
-    <section 
-      ref={sectionRef}
-      id={SectionId.SERVICES} 
-      className="py-24 pt-32 bg-white dark:bg-slate-950 relative min-h-screen transition-colors duration-300"
-    >
+    <section ref={sectionRef} id={SectionId.SERVICES} className="py-24 pt-32 bg-white relative min-h-screen">
       <div className="container mx-auto px-6">
         
         {/* Intro */}
-        <div className={`mb-16 max-w-3xl ${getFadeInClass(0)}`}>
-          <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">{sectionLabel}</h2>
-          <HeadingTag className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white leading-tight mb-6">
-            Comprehensive solutions for your <br/>digital transformation.
-          </HeadingTag>
-          <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed border-l-4 border-brand-blue pl-6">
-            We leverage modern architectures and industry best practices to build software that lasts. Our diverse range of services is designed to scale with your business and drive technological advancement.
+        <div className={`flex flex-col md:flex-row justify-between items-end mb-16 gap-6 ${getFadeInClass(0)}`}>
+          <div className="max-w-2xl">
+            <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Our Expertise</h2>
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
+              Comprehensive solutions for your <br/>digital transformation.
+            </h3>
+          </div>
+          <p className="text-slate-600 max-w-md pb-2">
+            We leverage modern architectures and industry best practices to build software that lasts.
           </p>
         </div>
 
@@ -113,75 +97,61 @@ export const Services: React.FC = () => {
           {SERVICES.map((service, index) => (
             <div 
               key={service.id} 
-              className={`group relative rounded-3xl overflow-hidden hover:scale-[1.02] hover:-translate-y-2 hover:shadow-2xl ${
+              className={`group relative bg-slate-50 border border-slate-100 rounded-3xl p-8 transition-all duration-300 hover:bg-slate-100 hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] ${
                 index === 0 || index === 3 ? 'lg:col-span-2' : ''
-              } ${getFadeInClass(0)}`}
-              style={styleDelay(index * 150)}
+              } ${getFadeInClass(100 + (index * 100))}`}
+              style={styleDelay(100 + (index * 100))}
             >
-              {/* Background Image */}
-              <div className="absolute inset-0 z-0">
-                <img 
-                  src={serviceBackgrounds[service.id]} 
-                  alt="" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-0 group-hover:opacity-100"
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-50/95 via-slate-50/90 to-slate-100/90 dark:from-slate-900/95 dark:via-slate-900/90 dark:to-slate-900/80 group-hover:from-slate-50/80 group-hover:to-slate-100/40 dark:group-hover:from-slate-900/90 dark:group-hover:to-slate-900/60 transition-all duration-500" />
+              <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                <ArrowUpRight className="w-6 h-6 text-slate-400" />
               </div>
 
-              {/* Content Overlay */}
-              <div className="relative z-10 p-8 h-full flex flex-col backdrop-blur-[1px] group-hover:backdrop-blur-[2px] transition-all">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-900 dark:text-white shadow-md group-hover:bg-brand-blue group-hover:text-white transition-colors duration-300">
-                    <Tooltip content={service.title}>
-                      <div className="transition-transform duration-300 group-hover:scale-110">
-                        {iconMap[service.icon]}
-                      </div>
-                    </Tooltip>
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-900 shadow-sm mb-6 group-hover:bg-brand-blue group-hover:text-white transition-colors cursor-help">
+                <Tooltip content={service.title}>
+                  <div className="transition-transform duration-300 group-hover:scale-110">
+                    {iconMap[service.icon]}
                   </div>
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0 bg-white/30 dark:bg-black/30 p-2 rounded-full backdrop-blur-md">
-                    <ArrowUpRight className="w-5 h-5 text-slate-900 dark:text-white" />
-                  </div>
-                </div>
+                </Tooltip>
+              </div>
 
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-blue dark:group-hover:text-brand-purple transition-colors">{service.title}</h4>
-                <p className="text-slate-600 dark:text-slate-400 mb-6 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors duration-300">{service.description}</p>
+              <h4 className="text-xl font-bold text-slate-900 mb-3">{service.title}</h4>
+              <p className="text-slate-600 mb-6">{service.description}</p>
 
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {service.features.map((feature, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-full text-xs font-medium text-slate-600 dark:text-slate-300 backdrop-blur-sm shadow-sm">
-                      {feature}
-                    </span>
-                  ))}
-                </div>
+              <div className="flex flex-wrap gap-2">
+                {service.features.map((feature, idx) => (
+                  <span key={idx} className="px-3 py-1 bg-white border border-slate-200 rounded-full text-xs font-medium text-slate-600">
+                    {feature}
+                  </span>
+                ))}
               </div>
             </div>
           ))}
         </div>
 
         {/* Industries Section */}
-        <div className={`mb-32 ${getFadeInClass(0)}`} style={styleDelay(200)}>
+        <div className={`mb-32 ${getFadeInClass(300)}`} style={{ transitionDelay: '300ms' }}>
           <div className="text-center mb-12">
             <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Industries</h2>
-            <h3 className="text-3xl font-bold text-slate-900 dark:text-white">We serve diverse business domains.</h3>
+            <h3 className="text-3xl font-bold text-slate-900">We serve diverse business domains.</h3>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {INDUSTRIES.map((industry, index) => (
                <div 
-                 key={industry.name} 
-                 className={`flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl hover:border-brand-blue/30 hover:shadow-md dark:hover:shadow-blue-900/10 transition-all group hover:-translate-y-1 hover:scale-105 duration-300 cursor-default ${getFadeInClass(0)}`}
-                 style={styleDelay(300 + (index * 50))}
-               >
+                key={industry.name} 
+                className={`flex flex-col items-center justify-center p-6 bg-white border border-slate-100 rounded-2xl hover:border-brand-blue/30 hover:shadow-md transition-all group hover:-translate-y-1 hover:scale-105 duration-300 ${getFadeInClass(400 + (index * 50))}`}
+                style={styleDelay(400 + (index * 50))}
+              >
                  <div className="text-slate-400 group-hover:text-brand-purple transition-colors mb-3">
                     {industryIconMap[industry.icon]}
                  </div>
-                 <span className="font-semibold text-slate-900 dark:text-white text-sm">{industry.name}</span>
+                 <span className="font-semibold text-slate-900 text-sm">{industry.name}</span>
                </div>
             ))}
           </div>
         </div>
 
         {/* Tech Stack Section */}
-        <div className={`bg-slate-900 rounded-3xl p-8 md:p-12 overflow-hidden relative shadow-2xl ${getFadeInClass(0)}`} style={styleDelay(400)}>
+        <div className={`bg-slate-900 rounded-3xl p-8 md:p-12 overflow-hidden relative ${getFadeInClass(600)}`} style={{ transitionDelay: '600ms' }}>
            <div className="relative z-10">
              <div className="mb-10 text-center md:text-left">
                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Our Technology Stack</h3>
@@ -212,7 +182,7 @@ export const Services: React.FC = () => {
                {/* Content */}
                <div 
                  key={activeTab}
-                 className="flex-1 bg-slate-800/50 rounded-2xl p-8 border border-slate-700/50 animate-fade-in backdrop-blur-sm"
+                 className="flex-1 bg-slate-800/50 rounded-2xl p-8 border border-slate-700/50 animate-fade-in"
                >
                   <div className="mb-6">
                     <h4 className="text-xl font-bold text-white mb-2">{activeTab}</h4>
@@ -231,7 +201,7 @@ export const Services: React.FC = () => {
            </div>
 
            {/* Decorative Background */}
-           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
         </div>
 
       </div>

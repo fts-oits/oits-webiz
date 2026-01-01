@@ -1,57 +1,20 @@
-# OITS Dhaka - Corporate Website
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-A modern, high-performance single-page application (SPA) for OITS Dhaka, built with React, TypeScript, and Tailwind CSS.
+# Run and deploy your AI Studio app
 
-## Tech Stack
+This contains everything you need to run your app locally.
 
-*   **Framework**: React 18 + Vite
-*   **Language**: TypeScript
-*   **Styling**: Tailwind CSS (with custom animations and theme)
-*   **Routing**: React Router DOM
-*   **Icons**: Lucide React
+View your app in AI Studio: https://ai.studio/apps/drive/1uZIoIxnQbcKYCnsCjW3iqK-A7seizInD
 
-## Getting Started
+## Run Locally
 
-### Prerequisites
+**Prerequisites:**  Node.js
 
-*   Node.js (v18 or higher)
-*   npm or yarn
 
-### Installation
-
-1.  Install dependencies:
-    ```bash
-    npm install
-    ```
-
-2.  Run the development server:
-    ```bash
-    npm run dev
-    ```
-
-3.  Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-### Building for Production
-
-To create a production build:
-
-```bash
-npm run build
-```
-
-The output will be in the `dist` folder.
-
-## Project Structure
-
-*   `components/`: Reusable UI components (Hero, Services, Contact, etc.)
-*   `ui/`: Generic UI elements (Buttons, Tooltips)
-*   `constants.ts`: Static data for services, projects, and testimonials.
-*   `types.ts`: TypeScript interfaces.
-*   `App.tsx`: Main application layout and routing.
-
-## Features
-
-*   **Responsive Design**: Fully responsive across mobile, tablet, and desktop.
-*   **Animations**: Custom Tailwind animations for smooth transitions.
-*   **Interactive UI**: Modals, tabs, and carousels.
-*   **SEO Friendly**: Clear page structure and semantic HTML.
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

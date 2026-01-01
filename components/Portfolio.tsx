@@ -45,7 +45,6 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     video.addEventListener('loadedmetadata', updateDuration);
     video.addEventListener('ended', onEnded);
 
-    // Initial play attempt
     video.play().catch(err => console.error("Autoplay failed:", err));
 
     return () => {
@@ -55,11 +54,9 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     };
   }, []);
 
-  // Toggle Captions
   useEffect(() => {
     const video = videoRef.current;
     if (video && video.textTracks && video.textTracks.length > 0) {
-      // Assuming the first track is the captions
       video.textTracks[0].mode = captionsEnabled ? 'showing' : 'hidden';
     }
   }, [captionsEnabled]);
@@ -114,10 +111,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
         Your browser does not support the video tag.
       </video>
 
-      {/* Controls Overlay */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2 z-20">
-        
-        {/* Progress Bar */}
         <input
           type="range"
           min="0"
@@ -173,7 +167,6 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
         </div>
       </div>
 
-      {/* Play/Pause Overlay Animation (optional visual feedback) */}
       {!isPlaying && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-black/20">
           <div className="w-16 h-16 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white/80 border border-white/20">
@@ -205,7 +198,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
       setActiveProject(project);
       setIsVisible(true);
       setIsClosing(false);
-      // If autoPlay is true and project has video, start in video mode
       setIsPlayingVideo(autoPlay && !!project.demoVideoUrl);
       document.body.style.overflow = 'hidden';
       if (contentRef.current) contentRef.current.scrollTop = 0;
@@ -240,7 +232,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
   const backdropClass = `fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] transition-opacity duration-300 ease-out ${isClosing ? 'opacity-0' : 'opacity-100'}`;
   const modalContainerClass = `fixed inset-0 z-[101] flex items-center justify-center p-4 sm:p-6 pointer-events-none`;
   
-  // Refined animation: animate-zoom-in for entrance, smooth fade-out (scale 100 -> 100) for exit.
   const modalContentClass = `relative w-full max-w-5xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pointer-events-auto transform origin-center transition-all duration-300 ${
     isClosing ? 'opacity-0 scale-100' : 'opacity-100 scale-100 animate-zoom-in'
   }`;
@@ -253,7 +244,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
           
           <div ref={contentRef} className="overflow-y-auto custom-scrollbar scroll-smooth">
             
-            {/* Header Media Area */}
             <div className={`relative w-full shrink-0 bg-slate-900 ${isPlayingVideo ? 'aspect-video' : 'h-64 md:h-96'}`}>
                {isPlayingVideo && activeProject.demoVideoUrl ? (
                  <CustomVideoPlayer 
@@ -271,7 +261,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
                   
-                  {/* Close Button */}
                   <button 
                     onClick={handleClose}
                     className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors z-30"
@@ -280,7 +269,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                     <X size={24} />
                   </button>
 
-                  {/* Title Overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-8 text-white z-20 pointer-events-none">
                     <span className="inline-block px-3 py-1 bg-brand-blue rounded-full text-xs font-semibold uppercase tracking-wider mb-3 shadow-sm border border-blue-500/50">
                       {activeProject.category}
@@ -288,7 +276,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                     <h3 className="text-3xl md:text-5xl font-bold mb-2 tracking-tight">{activeProject.title}</h3>
                   </div>
 
-                  {/* Watch Demo Button Overlay */}
                   {activeProject.demoVideoUrl && (
                     <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
                        <button 
@@ -306,7 +293,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                )}
             </div>
 
-            {/* Body Content */}
             <div className="p-8 md:p-12">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                 
@@ -461,7 +447,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
           <img src={project.imageUrl} alt={project.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"/>
         </div>
         
-        {/* Lazy Loaded Video Preview */}
         {project.demoVideoUrl && shouldLoadVideo && (
             <video
                 ref={videoRef}
@@ -473,14 +458,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
             />
         )}
         
-        {/* Video Badge */}
         {!isHovered && project.demoVideoUrl && (
           <div className="absolute top-3 right-3 z-10 bg-slate-900/60 backdrop-blur-md p-1.5 rounded-full text-white/90 border border-white/10 shadow-lg animate-fade-in">
              <Film size={14} />
           </div>
         )}
         
-        {/* Mute Control */}
         {project.demoVideoUrl && shouldLoadVideo && isHovered && (
             <button 
                 onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }}
@@ -491,7 +474,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
             </button>
         )}
         
-        {/* Hover Actions Overlay */}
         <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-10 bg-slate-900/60 backdrop-blur-[2px]`}>
           <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 flex flex-col sm:flex-row gap-3 items-center">
             
@@ -543,7 +525,6 @@ export const Portfolio: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState(ALL_CATEGORY);
   const [activeTag, setActiveTag] = useState(ALL_TAG);
   
-  // State handles both the project and whether we want to auto-play the demo
   const [selectedProjectState, setSelectedProjectState] = useState<{ project: Project; autoPlay: boolean } | null>(null);
   
   const [visibleCount, setVisibleCount] = useState(6);
@@ -579,11 +560,8 @@ export const Portfolio: React.FC = () => {
     setIsFilterAnimating(true);
     setTimeout(() => {
       setActiveCategory(cat);
-      // Reset Tag when changing category for cleaner UX (optional but often better)
       setActiveTag(ALL_TAG); 
       setVisibleCount(6);
-      
-      // Short delay before showing again to create smooth sequence
       requestAnimationFrame(() => {
         setIsFilterAnimating(false);
       });
@@ -596,7 +574,6 @@ export const Portfolio: React.FC = () => {
     setTimeout(() => {
       setActiveTag(tag);
       setVisibleCount(6);
-      
       requestAnimationFrame(() => {
         setIsFilterAnimating(false);
       });
@@ -606,11 +583,9 @@ export const Portfolio: React.FC = () => {
   const categories = [ALL_CATEGORY, ...Array.from(new Set(PROJECTS.map(p => p.category)))];
   const allTags = [ALL_TAG, ...Array.from(new Set(PROJECTS.flatMap(p => p.technologies || []))).sort()];
 
-  // --- Dynamic Count Calculation ---
   const getCategoryCount = (cat: string) => cat === ALL_CATEGORY ? PROJECTS.length : PROJECTS.filter(p => p.category === cat).length;
   
   const getTagCount = (tag: string) => {
-    // Counts should be context-aware based on the currently selected category
     const categoryProjects = activeCategory === ALL_CATEGORY 
       ? PROJECTS 
       : PROJECTS.filter(p => p.category === activeCategory);
