@@ -412,8 +412,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                   <img 
                     src={activeProject.imageUrl} 
                     alt={activeProject.title} 
-                    loading="lazy"
-                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-90 group-hover:opacity-100"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
@@ -521,8 +519,6 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                           <img 
                             src={relProject.imageUrl} 
                             alt={relProject.title}
-                            loading="lazy"
-                            decoding="async"
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                           />
                           <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-10 backdrop-blur-[1px]">
@@ -574,69 +570,28 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
-  const [parallaxOffset, setParallaxOffset] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.1 }
     );
-    if (cardRef.current) observer.observe(cardRef.current);
-    return () => { if (cardRef.current) observer.disconnect(); };
-  }, []);
 
-  // Parallax Effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!cardRef.current || !isVisible) return;
-      
-      const rect = cardRef.current.getBoundingClientRect();
-      const viewHeight = window.innerHeight;
-      
-      // Calculate position relative to viewport
-      // 0 = top of viewport, 1 = bottom of viewport
-      const progress = (rect.top + rect.height / 2) / viewHeight;
-      
-      // Adjust speed differential (factor) for more pronounced effect
-      const speed = 40; 
-      const offset = (progress - 0.5) * speed;
-      
-      setParallaxOffset(offset);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial calc
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVisible]);
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-    if (project.demoVideoUrl) {
-      setShouldLoadVideo(true);
-      setTimeout(() => {
-        if (videoRef.current) {
-            videoRef.current.currentTime = 0;
-            videoRef.current.play().catch(() => {});
-        }
-      }, 0);
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
     }
-  };
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    if (project.demoVideoUrl && videoRef.current) videoRef.current.pause();
-  };
+    return () => {
+      if (cardRef.current) observer.disconnect();
+    };
+  }, []);
 
   return (
     <div 
@@ -644,51 +599,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
       className={`group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-2xl dark:hover:shadow-blue-900/10 transition-all duration-700 ease-out transform ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-slate-200 dark:bg-slate-800 cursor-pointer" onClick={onClick}>
-        {/* Parallax Image Container */}
-        <div 
-          className="absolute inset-0 h-[120%] -top-[10%] w-full will-change-transform"
-          style={{ transform: `translateY(${parallaxOffset}px)` }}
-        >
-          <img 
-            src={project.imageUrl} 
-            alt={project.title} 
-            loading="lazy"
-            decoding="async" 
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
-        </div>
+        <img 
+          src={project.imageUrl} 
+          alt={project.title} 
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
         
-        {project.demoVideoUrl && shouldLoadVideo && (
-            <video
-                ref={videoRef}
-                src={project.demoVideoUrl}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'}`}
-                muted={isMuted}
-                loop
-                playsInline
-                poster={project.imageUrl}
-            />
-        )}
-        
-        {!isHovered && project.demoVideoUrl && (
-          <div className="absolute top-3 right-3 z-10 bg-slate-900/60 backdrop-blur-md p-1.5 rounded-full text-white/90 border border-white/10 shadow-lg animate-fade-in">
+        {project.demoVideoUrl && (
+          <div className="absolute top-3 right-3 z-10 bg-slate-900/60 backdrop-blur-md p-1.5 rounded-full text-white/90 border border-white/10 shadow-lg">
              <Film size={14} />
           </div>
-        )}
-        
-        {project.demoVideoUrl && shouldLoadVideo && isHovered && (
-            <button 
-                onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }}
-                className="absolute top-4 right-4 z-20 p-2 bg-black/60 hover:bg-black/80 backdrop-blur-md rounded-full text-white transition-all hover:scale-110 animate-fade-in focus:outline-none focus:ring-2 focus:ring-white"
-                title={isMuted ? "Unmute" : "Mute"}
-                aria-label={isMuted ? "Unmute video preview" : "Mute video preview"}
-            >
-                {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-            </button>
         )}
         
         <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-10 bg-slate-900/50 backdrop-blur-[2px]`}>

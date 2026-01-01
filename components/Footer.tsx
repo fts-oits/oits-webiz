@@ -14,7 +14,9 @@ const SocialLink = ({ href, icon: Icon, label }: { href: string; icon: any; labe
     className="group relative p-2 rounded-lg hover:bg-slate-800 transition-colors"
     aria-label={label}
   >
-    <Icon size={20} className="text-slate-400 group-hover:text-white transition-colors" />
+    <div className="group-hover:animate-subtle-bounce">
+      <Icon size={20} className="text-slate-400 group-hover:text-white transition-colors" />
+    </div>
     
     {/* Tooltip */}
     <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-slate-900 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl border border-slate-700 transform translate-y-2 group-hover:translate-y-0 duration-200">

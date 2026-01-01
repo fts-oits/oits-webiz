@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Globe, Smartphone, PenTool, Cloud, ArrowUpRight, Code2, Server, Database, Layers, Terminal } from 'lucide-react';
+import { Globe, Smartphone, PenTool, Cloud, ArrowUpRight, Code2, Server, Database, Layers, Terminal, CheckCircle2 } from 'lucide-react';
 import { SERVICES, TECH_DOMAINS } from '../constants';
 import { SectionId } from '../types';
 
@@ -75,6 +75,13 @@ export const Services: React.FC = () => {
 
               <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{service.title}</h4>
               <p className="text-slate-600 dark:text-slate-400 mb-6 text-sm leading-relaxed">{service.description}</p>
+
+              <div className="flex items-center gap-2 mb-3">
+                 <h5 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Features</h5>
+                 <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-[10px] font-bold">
+                    {service.features.length}
+                 </span>
+              </div>
 
               <div className="flex flex-wrap gap-2">
                 {service.features.map((feature, idx) => (
