@@ -78,6 +78,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     };
   }, []);
 
+  // Handle Captions Toggle
   useEffect(() => {
     const video = videoRef.current;
     if (video && video.textTracks && video.textTracks.length > 0) {
@@ -142,6 +143,13 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
       case 'M':
         e.preventDefault();
         toggleMute();
+        break;
+      case 'c':
+      case 'C':
+        if(captionsUrl) {
+           e.preventDefault();
+           setCaptionsEnabled(prev => !prev);
+        }
         break;
       case 'ArrowRight':
         e.preventDefault();
@@ -663,6 +671,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
               View Case Study <ArrowUpRight size={16} />
             </button>
 
+            {/* View Demo Button - Visible on Hover */}
             {project.demoVideoUrl && (
               <button 
                 className="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-xl hover:bg-blue-700 flex items-center gap-2 transition-colors border border-white/10 focus:outline-none focus:ring-2 focus:ring-white"

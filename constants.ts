@@ -1,4 +1,4 @@
-import { Service, Project, Testimonial, NavItem, SectionId } from './types';
+import { Service, Project, Testimonial, NavItem, SectionId, TechDomain } from './types';
 
 export const COMPANY_NAME = "OITS Dhaka";
 export const TAGLINE = "Transforming Visions into Digital Reality";
@@ -54,6 +54,7 @@ export const PROJECTS: Project[] = [
     fullDescription: 'We built a high-performance financial dashboard that processes millions of transactions in real-time. Features include predictive analytics, customizable reporting widgets, and bank-grade security protocols.',
     technologies: ['React', 'TypeScript', 'Node.js', 'AWS'],
     demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    captionsUrl: 'https://gist.githubusercontent.com/samdutton/ca37f3adaf4e23679950b80847045b3d/raw/e37bfb9d10e6f530f1d63d6998ff69094f71a47f/subtitle_en.vtt',
     link: 'https://example.com/fintech'
   },
   {
@@ -65,6 +66,7 @@ export const PROJECTS: Project[] = [
     fullDescription: 'A HIPAA-compliant mobile application that facilitates secure video consultations, prescription management, and appointment scheduling. Built with Flutter for a seamless cross-platform experience.',
     technologies: ['Flutter', 'Firebase', 'WebRTC'],
     demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    captionsUrl: 'https://gist.githubusercontent.com/samdutton/ca37f3adaf4e23679950b80847045b3d/raw/e37bfb9d10e6f530f1d63d6998ff69094f71a47f/subtitle_en.vtt',
     link: 'https://example.com/healthcare'
   },
   {
@@ -76,6 +78,7 @@ export const PROJECTS: Project[] = [
     fullDescription: 'A robust multi-vendor marketplace supporting thousands of SKUs, real-time inventory tracking, and AI-driven product recommendations to boost sales.',
     technologies: ['Next.js', 'GraphQL', 'Stripe', 'PostgreSQL'],
     demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    captionsUrl: 'https://gist.githubusercontent.com/samdutton/ca37f3adaf4e23679950b80847045b3d/raw/e37bfb9d10e6f530f1d63d6998ff69094f71a47f/subtitle_en.vtt',
     link: 'https://example.com/eshop'
   },
   {
@@ -87,6 +90,7 @@ export const PROJECTS: Project[] = [
     fullDescription: 'An IoT dashboard that aggregates control for lights, thermostats, and security systems. Supports custom automation routines and energy usage monitoring.',
     technologies: ['React Native', 'MQTT', 'Node.js'],
     demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    captionsUrl: 'https://gist.githubusercontent.com/samdutton/ca37f3adaf4e23679950b80847045b3d/raw/e37bfb9d10e6f530f1d63d6998ff69094f71a47f/subtitle_en.vtt',
   }
 ];
 
@@ -119,4 +123,32 @@ export const TESTIMONIALS: Testimonial[] = [
 
 export const TECH_STACK = [
   "React", "Next.js", "Node.js", "TypeScript", "Python", "AWS", "Docker", "Flutter", "PostgreSQL", "GraphQL", "Tailwind"
+];
+
+export const TECH_DOMAINS: TechDomain[] = [
+  {
+    id: 'frontend',
+    label: 'Frontend',
+    skills: ['React', 'Next.js', 'Vue.js', 'Angular', 'TypeScript', 'Tailwind CSS', 'Redux', 'Framer Motion']
+  },
+  {
+    id: 'backend',
+    label: 'Backend',
+    skills: ['Node.js', 'Python', 'Go', 'Java', 'NestJS', 'Express', 'Django', 'GraphQL']
+  },
+  {
+    id: 'mobile',
+    label: 'Mobile',
+    skills: ['React Native', 'Flutter', 'iOS (Swift)', 'Android (Kotlin)', 'Expo']
+  },
+  {
+    id: 'database',
+    label: 'Database',
+    skills: ['PostgreSQL', 'MongoDB', 'Redis', 'MySQL', 'Firebase', 'DynamoDB', 'Supabase']
+  },
+  {
+    id: 'cloud',
+    label: 'Cloud & DevOps',
+    skills: ['AWS', 'Google Cloud', 'Azure', 'Docker', 'Kubernetes', 'Terraform', 'CI/CD Pipelines']
+  }
 ];

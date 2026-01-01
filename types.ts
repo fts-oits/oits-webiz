@@ -60,6 +60,12 @@ export interface ProcessStep {
   icon: string;
 }
 
+export interface TechDomain {
+  id: string;
+  label: string;
+  skills: string[];
+}
+
 export enum SectionId {
   HOME = 'home',
   SERVICES = 'services',
