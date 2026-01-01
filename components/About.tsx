@@ -1,98 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { CheckCircle2, Lightbulb, Shield, Award, Users, Target, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+import React from 'react';
+import { CheckCircle2 } from 'lucide-react';
 import { SectionId } from '../types';
-import { TEAM_MEMBERS, CORE_VALUES, COMPANY_NAME } from '../constants';
-
-const valueIconMap: Record<string, React.ReactNode> = {
-  Lightbulb: <Lightbulb className="w-8 h-8" />,
-  Shield: <Shield className="w-8 h-8" />,
-  Award: <Award className="w-8 h-8" />,
-  Users: <Users className="w-8 h-8" />,
-};
 
 export const About: React.FC = () => {
-  const [isSectionVisible, setIsSectionVisible] = useState(false);
-  const [isTeamVisible, setIsTeamVisible] = useState(false);
-  const [currentTeamIndex, setCurrentTeamIndex] = useState(0);
-  const [itemsPerSlide, setItemsPerSlide] = useState(3);
-  
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const teamRef = useRef<HTMLDivElement>(null);
-
-  // Responsive Carousel Logic
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) setItemsPerSlide(1);
-      else if (window.innerWidth < 1024) setItemsPerSlide(2);
-      else setItemsPerSlide(3);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const totalSlides = Math.ceil(TEAM_MEMBERS.length / itemsPerSlide);
-
-  const nextSlide = () => {
-    setCurrentTeamIndex((prev) => (prev + 1) % (TEAM_MEMBERS.length - itemsPerSlide + 1));
-  };
-
-  const prevSlide = () => {
-    setCurrentTeamIndex((prev) => (prev === 0 ? TEAM_MEMBERS.length - itemsPerSlide : prev - 1));
-  };
-  
-  // Clamping index if window resize makes it invalid
-  useEffect(() => {
-    const maxIndex = Math.max(0, TEAM_MEMBERS.length - itemsPerSlide);
-    if (currentTeamIndex > maxIndex) setCurrentTeamIndex(maxIndex);
-  }, [itemsPerSlide, currentTeamIndex]);
-
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsSectionVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const teamObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsTeamVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-    
-    if (teamRef.current) {
-      teamObserver.observe(teamRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-      teamObserver.disconnect();
-    };
-  }, []);
-
   return (
-    <section id={SectionId.ABOUT} className="py-24 pt-32 bg-white min-h-screen" ref={sectionRef}>
+    <section id={SectionId.ABOUT} className="py-24 bg-white">
       <div className="container mx-auto px-6">
-        
-        {/* Intro Section */}
-        <div className={`flex flex-col lg:flex-row items-center gap-16 transition-all duration-1000 ease-out transform mb-24 ${isSectionVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        <div className="flex flex-col lg:flex-row items-center gap-16">
+          
           <div className="flex-1 w-full relative">
-             <div className="relative aspect-square rounded-3xl overflow-hidden bg-slate-100 shadow-2xl">
+             <div className="relative aspect-square rounded-3xl overflow-hidden bg-slate-100">
                 <img 
                   src="https://picsum.photos/800/800?random=15" 
-                  alt={`Team collaboration at ${COMPANY_NAME} office`} 
-                  loading="lazy"
+                  alt="Team collaboration" 
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent flex items-end p-8">
@@ -103,15 +23,15 @@ export const About: React.FC = () => {
                 </div>
              </div>
              {/* Floater */}
-             <div className="absolute -bottom-8 -right-8 w-48 bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hidden md:block animate-float">
+             <div className="absolute -bottom-8 -right-8 w-48 bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hidden md:block">
                <p className="text-slate-500 text-xs uppercase font-semibold mb-2">Projects Completed</p>
-               <p className="text-4xl font-bold text-brand-blue">150+</p>
+               <p className="text-4xl font-bold text-blue-600">150+</p>
              </div>
           </div>
 
           <div className="flex-1 space-y-8">
             <div>
-              <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">About OITS Dhaka</h2>
+              <h2 className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">About OITS Dhaka</h2>
               <h3 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
                 Partnering with startups and enterprises to build the future.
               </h3>
@@ -124,7 +44,7 @@ export const About: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {['Agile Methodology', '24/7 Support', 'Dedicated Teams', 'Top-tier Security'].map((item) => (
                 <div key={item} className="flex items-center gap-3">
-                  <CheckCircle2 className="text-brand-green w-5 h-5 flex-shrink-0" />
+                  <CheckCircle2 className="text-green-500 w-5 h-5 flex-shrink-0" />
                   <span className="font-medium text-slate-800">{item}</span>
                 </div>
               ))}
@@ -144,104 +64,8 @@ export const About: React.FC = () => {
                </div>
             </div>
           </div>
+
         </div>
-
-        {/* Mission & Vision */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
-          <div className="bg-slate-50 p-10 rounded-3xl border border-slate-100 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
-             <div className="w-12 h-12 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center mb-6">
-                <Target size={24} />
-             </div>
-             <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
-             <p className="text-slate-600 leading-relaxed">
-               To empower businesses globally by delivering innovative, reliable, and scalable software solutions that drive tangible growth and efficiency.
-             </p>
-          </div>
-          <div className="bg-slate-900 p-10 rounded-3xl text-white transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl shadow-blue-900/20">
-             <div className="w-12 h-12 bg-brand-blue text-white rounded-xl flex items-center justify-center mb-6">
-                <Eye size={24} />
-             </div>
-             <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
-             <p className="text-slate-300 leading-relaxed">
-               To be the most trusted technology partner for organizations seeking to transform their digital presence and operational capabilities.
-             </p>
-          </div>
-        </div>
-
-        {/* Core Values */}
-        <div className="mb-32">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Our Culture</h2>
-            <h3 className="text-3xl font-bold text-slate-900">Core Values that drive us.</h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {CORE_VALUES.map((value, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all text-center hover:-translate-y-2 duration-300">
-                <div className="w-16 h-16 mx-auto bg-slate-50 rounded-full flex items-center justify-center text-brand-blue mb-6 group-hover:bg-brand-blue group-hover:text-white transition-colors">
-                  {valueIconMap[value.icon]}
-                </div>
-                <h4 className="text-lg font-bold text-slate-900 mb-2">{value.title}</h4>
-                <p className="text-sm text-slate-600">{value.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Team Section (Carousel Layout) */}
-        <div ref={teamRef} className="relative">
-          <div className="flex items-end justify-between mb-16 px-4">
-             <div className="max-w-3xl">
-                <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Our Team</h2>
-                <h3 className="text-3xl font-bold text-slate-900">Meet the experts behind our success.</h3>
-             </div>
-             <div className="flex gap-2">
-               <button 
-                 onClick={prevSlide}
-                 className="p-3 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-600 transition-colors"
-                 aria-label="Previous team member"
-               >
-                 <ChevronLeft size={20} />
-               </button>
-               <button 
-                 onClick={nextSlide}
-                 className="p-3 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-600 transition-colors"
-                 aria-label="Next team member"
-               >
-                 <ChevronRight size={20} />
-               </button>
-             </div>
-          </div>
-
-          <div className="overflow-hidden">
-             <div 
-               className="flex transition-transform duration-500 ease-in-out"
-               style={{ transform: `translateX(-${currentTeamIndex * (100 / itemsPerSlide)}%)` }}
-             >
-                {TEAM_MEMBERS.map((member, index) => (
-                  <div 
-                    key={member.id} 
-                    className="flex-shrink-0 px-4"
-                    style={{ width: `${100 / itemsPerSlide}%` }}
-                  >
-                    <div className="group text-center p-6 bg-slate-50 border border-slate-100 rounded-3xl hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-                      <div className="relative w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                        <img 
-                          src={member.image} 
-                          alt={`${member.name}, ${member.role} at ${COMPANY_NAME}`}
-                          loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                      </div>
-                      <h4 className="text-xl font-bold text-slate-900">{member.name}</h4>
-                      <p className="text-brand-blue font-medium mb-3">{member.role}</p>
-                      <p className="text-slate-600 text-sm max-w-xs mx-auto line-clamp-3">{member.bio}</p>
-                    </div>
-                  </div>
-                ))}
-             </div>
-          </div>
-        </div>
-
       </div>
     </section>
   );

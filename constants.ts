@@ -1,21 +1,16 @@
-
-import { Service, Project, Testimonial, TeamMember, NavItem, SectionId, CoreValue, Industry, ProcessStep } from './types';
+import { Service, Project, Testimonial, NavItem, SectionId } from './types';
 
 export const COMPANY_NAME = "OITS Dhaka";
 export const TAGLINE = "Transforming Visions into Digital Reality";
 export const CONTACT_EMAIL = "info@oitsdhaka.com";
 export const ADDRESS = "House # 42, Road # 2/A, Block # Z, Dhaka 1209, Bangladesh";
 
-// Sample VTT content encoded in Base64 for demo purposes
-const SAMPLE_CAPTIONS = "data:text/vtt;base64,V0VCVlRUCgowMDowMDowMS4wMDAgLS0+IDAwOjAwOjA1LjAwMApXZWxjb21lIHRvIHRoZSBwcm9qZWN0IGRlbW8gcHJldmlldy4KCjAwOjAwOjA1LjAwMCAt->IDAwOjAwOjEwLjAwMApIZXJlIHdlIHNob3djYXNlIHRoZSBrZXkgZmVhdHVyZXMgYW5kIGludGVyYWN0aW9ucy4=";
-
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services' },
-  { label: 'About', href: '/about' },
-  { label: 'Process', href: '/process' },
-  { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Home', href: `#${SectionId.HOME}` },
+  { label: 'Services', href: `#${SectionId.SERVICES}` },
+  { label: 'About', href: `#${SectionId.ABOUT}` },
+  { label: 'Portfolio', href: `#${SectionId.PORTFOLIO}` },
+  { label: 'Contact', href: `#${SectionId.CONTACT}` },
 ];
 
 export const SERVICES: Service[] = [
@@ -56,11 +51,6 @@ export const PROJECTS: Project[] = [
     category: 'Web Application',
     imageUrl: 'https://picsum.photos/800/600?random=1',
     description: 'A comprehensive financial analytics dashboard for a leading banking institution.',
-    fullDescription: 'We developed a high-performance financial dashboard that aggregates data from multiple sources to provide real-time insights. The solution features advanced data visualization, secure transaction monitoring, and role-based access control, helping the bank reduce reporting time by 60%.',
-    technologies: ['React', 'D3.js', 'Node.js', 'PostgreSQL', 'Redis'],
-    link: '#',
-    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    captionsUrl: SAMPLE_CAPTIONS
   },
   {
     id: '2',
@@ -68,11 +58,6 @@ export const PROJECTS: Project[] = [
     category: 'Mobile App',
     imageUrl: 'https://picsum.photos/800/600?random=2',
     description: 'Telemedicine platform connecting patients with doctors in real-time.',
-    fullDescription: 'HealthCare Connect facilitates secure video consultations between patients and doctors. The app includes prescription management, appointment scheduling, and integration with wearable devices to monitor patient vitals remotely.',
-    technologies: ['Flutter', 'WebRTC', 'Firebase', 'Python', 'TensorFlow'],
-    link: '#',
-    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    captionsUrl: SAMPLE_CAPTIONS
   },
   {
     id: '3',
@@ -80,39 +65,6 @@ export const PROJECTS: Project[] = [
     category: 'E-commerce',
     imageUrl: 'https://picsum.photos/800/600?random=3',
     description: 'Multi-vendor marketplace solution with integrated payment gateways.',
-    fullDescription: 'A scalable multi-vendor e-commerce platform supporting thousands of products and high concurrent user traffic. Key features include AI-powered product recommendations, dynamic pricing engines, and a seamless checkout experience.',
-    technologies: ['Next.js', 'GraphQL', 'Stripe API', 'MongoDB', 'AWS'],
-    link: '#'
-  },
-  {
-    id: '4',
-    title: 'EduLearn LMS',
-    category: 'Web Application',
-    imageUrl: 'https://picsum.photos/800/600?random=7',
-    description: 'A robust Learning Management System for universities with live class integration.',
-    fullDescription: 'EduLearn is a comprehensive LMS designed for modern education. It supports live streaming classes, automated grading, student progress tracking, and interactive forums. The platform is accessible and fully responsive.',
-    technologies: ['Vue.js', 'Django', 'PostgreSQL', 'Zoom API', 'Celery'],
-    link: '#'
-  },
-  {
-    id: '5',
-    title: 'Urban Eats',
-    category: 'Mobile App',
-    imageUrl: 'https://picsum.photos/800/600?random=8',
-    description: 'Food delivery application with real-time tracking and AI-based recommendations.',
-    fullDescription: 'Urban Eats revolutionizes food delivery with a user-friendly app offering real-time order tracking, personalized meal suggestions based on dietary preferences, and optimized delivery routing for drivers.',
-    technologies: ['React Native', 'Google Maps API', 'Node.js', 'Socket.io', 'MongoDB'],
-    link: '#'
-  },
-  {
-    id: '6',
-    title: 'SecureChain',
-    category: 'Blockchain',
-    imageUrl: 'https://picsum.photos/800/600?random=9',
-    description: 'Supply chain management solution utilizing blockchain for transparency and security.',
-    fullDescription: 'SecureChain leverages blockchain technology to create an immutable record of product journey from manufacturer to consumer. This enhances transparency, prevents counterfeiting, and streamlines inventory management.',
-    technologies: ['Solidity', 'Ethereum', 'React', 'Web3.js', 'IPFS'],
-    link: '#'
   },
 ];
 
@@ -143,107 +95,6 @@ export const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-export const TEAM_MEMBERS: TeamMember[] = [
-  {
-    id: '1',
-    name: 'Alex Morgan',
-    role: 'CEO & Founder',
-    image: 'https://picsum.photos/400/400?random=20',
-    bio: 'Visionary leader with 15+ years in software architecture and business strategy.',
-  },
-  {
-    id: '2',
-    name: 'Sarah Chen',
-    role: 'Lead Designer',
-    image: 'https://picsum.photos/400/400?random=21',
-    bio: 'Award-winning UI/UX designer passionate about user-centric digital experiences.',
-  },
-  {
-    id: '3',
-    name: 'David Kim',
-    role: 'CTO',
-    image: 'https://picsum.photos/400/400?random=22',
-    bio: 'Tech enthusiast specializing in cloud infrastructure, scalable systems, and AI integration.',
-  },
-  {
-    id: '4',
-    name: 'Elena Rodriguez',
-    role: 'Senior Backend Engineer',
-    image: 'https://picsum.photos/400/400?random=23',
-    bio: 'Expert in microservices and database optimization, ensuring our systems scale seamlessly.',
-  },
-  {
-    id: '5',
-    name: 'James Wilson',
-    role: 'Product Manager',
-    image: 'https://picsum.photos/400/400?random=24',
-    bio: 'Bridging the gap between client needs and technical execution with agile methodologies.',
-  },
-];
-
-export const CORE_VALUES: CoreValue[] = [
-  {
-    title: 'Innovation',
-    description: 'We constantly push boundaries to create forward-thinking solutions.',
-    icon: 'Lightbulb'
-  },
-  {
-    title: 'Integrity',
-    description: 'We believe in transparent communication and honest partnerships.',
-    icon: 'Shield'
-  },
-  {
-    title: 'Excellence',
-    description: 'We are committed to delivering the highest quality in every line of code.',
-    icon: 'Award'
-  },
-  {
-    title: 'Client Focus',
-    description: 'Your success is our success. We are dedicated to your growth.',
-    icon: 'Users'
-  }
-];
-
-export const INDUSTRIES: Industry[] = [
-  { name: 'Fintech', icon: 'DollarSign' },
-  { name: 'Healthcare', icon: 'Heart' },
-  { name: 'E-Commerce', icon: 'ShoppingBag' },
-  { name: 'Education', icon: 'BookOpen' },
-  { name: 'Real Estate', icon: 'Home' },
-  { name: 'Logistics', icon: 'Truck' },
-];
-
 export const TECH_STACK = [
   "React", "Next.js", "Node.js", "TypeScript", "Python", "AWS", "Docker", "Flutter", "PostgreSQL", "GraphQL", "Tailwind"
-];
-
-export const PROCESS_STEPS: ProcessStep[] = [
-  {
-    id: 'discovery',
-    number: '01',
-    title: 'Discovery',
-    description: 'We dive deep into your business goals, requirements, and target audience to lay a solid foundation.',
-    icon: 'Search',
-  },
-  {
-    id: 'design',
-    number: '02',
-    title: 'Design',
-    description: 'Our creative team crafts intuitive and visually stunning interfaces that resonate with your users.',
-    icon: 'PenTool',
-  },
-  {
-    id: 'development',
-    number: '03',
-    title: 'Development',
-    description: 'We build robust, scalable, and secure solutions using cutting-edge technologies and best practices.',
-    icon: 'Code',
-  },
-  {
-    id: 'launch',
-    number: '04',
-    title: 'Launch & Scale',
-    description: 'We ensure a smooth deployment and provide ongoing support to help your business grow.',
-    icon: 'Rocket',
-  },
 ];
