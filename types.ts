@@ -1,3 +1,4 @@
+
 export interface Service {
   id: string;
   title: string;
@@ -16,6 +17,7 @@ export interface Project {
   technologies?: string[];
   link?: string;
   demoVideoUrl?: string;
+  captionsUrl?: string;
 }
 
 export interface Testimonial {

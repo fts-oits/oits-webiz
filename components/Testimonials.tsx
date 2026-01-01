@@ -1,12 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Quote } from 'lucide-react';
 import { TESTIMONIALS } from '../constants';
 
 export const Testimonials: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) observer.disconnect();
+    };
+  }, []);
+
+  const getFadeInClass = (delay: number) => 
+    `transition-all duration-700 ease-out transform ${
+      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+    }`;
+
+  const styleDelay = (index: number) => ({ transitionDelay: `${index}ms` });
+
   return (
-    <section className="py-24 bg-white overflow-hidden">
+    <section ref={sectionRef} className="py-24 bg-white overflow-hidden">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+        <div className={`flex flex-col md:flex-row items-end justify-between mb-16 gap-6 ${getFadeInClass(0)}`}>
           <div>
             <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Testimonials</h2>
             <h3 className="text-3xl md:text-4xl font-bold text-slate-900">What our clients say.</h3>
@@ -20,8 +50,12 @@ export const Testimonials: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {TESTIMONIALS.map((t) => (
-            <div key={t.id} className="bg-slate-50 p-8 rounded-3xl relative">
+          {TESTIMONIALS.map((t, index) => (
+            <div 
+              key={t.id} 
+              className={`bg-slate-50 p-8 rounded-3xl relative ${getFadeInClass(0)}`}
+              style={styleDelay(200 + (index * 150))}
+            >
               <Quote className="text-brand-blue/20 w-12 h-12 mb-6" />
               <p className="text-slate-700 italic mb-8 relative z-10 leading-relaxed">"{t.content}"</p>
               

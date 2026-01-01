@@ -1,9 +1,13 @@
+
 import { Service, Project, Testimonial, TeamMember, NavItem, SectionId, CoreValue, Industry, ProcessStep } from './types';
 
 export const COMPANY_NAME = "OITS Dhaka";
 export const TAGLINE = "Transforming Visions into Digital Reality";
 export const CONTACT_EMAIL = "info@oitsdhaka.com";
 export const ADDRESS = "House # 42, Road # 2/A, Block # Z, Dhaka 1209, Bangladesh";
+
+// Sample VTT content encoded in Base64 for demo purposes
+const SAMPLE_CAPTIONS = "data:text/vtt;base64,V0VCVlRUCgowMDowMDowMS4wMDAgLS0+IDAwOjAwOjA1LjAwMApXZWxjb21lIHRvIHRoZSBwcm9qZWN0IGRlbW8gcHJldmlldy4KCjAwOjAwOjA1LjAwMCAt->IDAwOjAwOjEwLjAwMApIZXJlIHdlIHNob3djYXNlIHRoZSBrZXkgZmVhdHVyZXMgYW5kIGludGVyYWN0aW9ucy4=";
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: '/' },
@@ -55,7 +59,8 @@ export const PROJECTS: Project[] = [
     fullDescription: 'We developed a high-performance financial dashboard that aggregates data from multiple sources to provide real-time insights. The solution features advanced data visualization, secure transaction monitoring, and role-based access control, helping the bank reduce reporting time by 60%.',
     technologies: ['React', 'D3.js', 'Node.js', 'PostgreSQL', 'Redis'],
     link: '#',
-    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    captionsUrl: SAMPLE_CAPTIONS
   },
   {
     id: '2',
@@ -66,7 +71,8 @@ export const PROJECTS: Project[] = [
     fullDescription: 'HealthCare Connect facilitates secure video consultations between patients and doctors. The app includes prescription management, appointment scheduling, and integration with wearable devices to monitor patient vitals remotely.',
     technologies: ['Flutter', 'WebRTC', 'Firebase', 'Python', 'TensorFlow'],
     link: '#',
-    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
+    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    captionsUrl: SAMPLE_CAPTIONS
   },
   {
     id: '3',

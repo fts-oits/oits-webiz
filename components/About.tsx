@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { CheckCircle2, Lightbulb, Shield, Award, Users, Target, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SectionId } from '../types';
 import { TEAM_MEMBERS, CORE_VALUES, COMPANY_NAME } from '../constants';
@@ -12,12 +13,21 @@ const valueIconMap: Record<string, React.ReactNode> = {
 
 export const About: React.FC = () => {
   const [isSectionVisible, setIsSectionVisible] = useState(false);
+  const [isMissionVisible, setIsMissionVisible] = useState(false);
+  const [isValuesVisible, setIsValuesVisible] = useState(false);
   const [isTeamVisible, setIsTeamVisible] = useState(false);
+  
   const [currentTeamIndex, setCurrentTeamIndex] = useState(0);
   const [itemsPerSlide, setItemsPerSlide] = useState(3);
   
   const sectionRef = useRef<HTMLDivElement>(null);
+  const missionRef = useRef<HTMLDivElement>(null);
+  const valuesRef = useRef<HTMLDivElement>(null);
   const teamRef = useRef<HTMLDivElement>(null);
+
+  const location = useLocation();
+  const isPage = location.pathname === '/about';
+  const HeadingTag = isPage ? 'h1' : 'h3';
 
   // Responsive Carousel Logic
   useEffect(() => {
@@ -30,8 +40,6 @@ export const About: React.FC = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const totalSlides = Math.ceil(TEAM_MEMBERS.length / itemsPerSlide);
 
   const nextSlide = () => {
     setCurrentTeamIndex((prev) => (prev + 1) % (TEAM_MEMBERS.length - itemsPerSlide + 1));
@@ -47,48 +55,37 @@ export const About: React.FC = () => {
     if (currentTeamIndex > maxIndex) setCurrentTeamIndex(maxIndex);
   }, [itemsPerSlide, currentTeamIndex]);
 
-
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsSectionVisible(true);
-        }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === sectionRef.current) setIsSectionVisible(true);
+            if (entry.target === missionRef.current) setIsMissionVisible(true);
+            if (entry.target === valuesRef.current) setIsValuesVisible(true);
+            if (entry.target === teamRef.current) setIsTeamVisible(true);
+          }
+        });
       },
-      { threshold: 0.1 }
+      { threshold: 0.15 }
     );
 
-    const teamObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsTeamVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    if (missionRef.current) observer.observe(missionRef.current);
+    if (valuesRef.current) observer.observe(valuesRef.current);
+    if (teamRef.current) observer.observe(teamRef.current);
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-    
-    if (teamRef.current) {
-      teamObserver.observe(teamRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-      teamObserver.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section id={SectionId.ABOUT} className="py-24 pt-32 bg-white min-h-screen" ref={sectionRef}>
+    <section id={SectionId.ABOUT} className="py-24 pt-32 bg-white dark:bg-slate-950 min-h-screen transition-colors duration-300">
       <div className="container mx-auto px-6">
         
         {/* Intro Section */}
-        <div className={`flex flex-col lg:flex-row items-center gap-16 transition-all duration-1000 ease-out transform mb-24 ${isSectionVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        <div ref={sectionRef} className={`flex flex-col lg:flex-row items-center gap-16 transition-all duration-1000 ease-out transform mb-24 ${isSectionVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="flex-1 w-full relative">
-             <div className="relative aspect-square rounded-3xl overflow-hidden bg-slate-100 shadow-2xl">
+             <div className="relative aspect-square rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 shadow-2xl">
                 <img 
                   src="https://picsum.photos/800/800?random=15" 
                   alt={`Team collaboration at ${COMPANY_NAME} office`} 
@@ -103,8 +100,8 @@ export const About: React.FC = () => {
                 </div>
              </div>
              {/* Floater */}
-             <div className="absolute -bottom-8 -right-8 w-48 bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hidden md:block animate-float">
-               <p className="text-slate-500 text-xs uppercase font-semibold mb-2">Projects Completed</p>
+             <div className="absolute -bottom-8 -right-8 w-48 bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 hidden md:block animate-float z-10">
+               <p className="text-slate-500 dark:text-slate-400 text-xs uppercase font-semibold mb-2">Projects Completed</p>
                <p className="text-4xl font-bold text-brand-blue">150+</p>
              </div>
           </div>
@@ -112,12 +109,15 @@ export const About: React.FC = () => {
           <div className="flex-1 space-y-8">
             <div>
               <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">About OITS Dhaka</h2>
-              <h3 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
+              <HeadingTag className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white leading-tight mb-4">
                 Partnering with startups and enterprises to build the future.
-              </h3>
+              </HeadingTag>
+              <p className="text-slate-500 dark:text-slate-400 font-medium italic">
+                Get to know the team and values driving OITS Dhaka. We are dedicated to innovation, integrity, and delivering excellence in every project we undertake.
+              </p>
             </div>
             
-            <p className="text-slate-600 text-lg leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
               We are a team of passionate developers, designers, and strategists dedicated to delivering digital solutions that make a difference. At OITS Dhaka, we don't just write code; we solve complex business problems through innovation.
             </p>
 
@@ -125,21 +125,21 @@ export const About: React.FC = () => {
               {['Agile Methodology', '24/7 Support', 'Dedicated Teams', 'Top-tier Security'].map((item) => (
                 <div key={item} className="flex items-center gap-3">
                   <CheckCircle2 className="text-brand-green w-5 h-5 flex-shrink-0" />
-                  <span className="font-medium text-slate-800">{item}</span>
+                  <span className="font-medium text-slate-800 dark:text-slate-200">{item}</span>
                 </div>
               ))}
             </div>
 
             <div className="pt-4">
-               <div className="h-px w-full bg-slate-200 mb-8"></div>
+               <div className="h-px w-full bg-slate-200 dark:bg-slate-800 mb-8"></div>
                <div className="flex gap-12">
                  <div>
-                   <p className="text-3xl font-bold text-slate-900">50+</p>
-                   <p className="text-sm text-slate-500 mt-1">Experts</p>
+                   <p className="text-3xl font-bold text-slate-900 dark:text-white">50+</p>
+                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Experts</p>
                  </div>
                  <div>
-                   <p className="text-3xl font-bold text-slate-900">98%</p>
-                   <p className="text-sm text-slate-500 mt-1">Client Retention</p>
+                   <p className="text-3xl font-bold text-slate-900 dark:text-white">98%</p>
+                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Client Retention</p>
                  </div>
                </div>
             </div>
@@ -147,17 +147,17 @@ export const About: React.FC = () => {
         </div>
 
         {/* Mission & Vision */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
-          <div className="bg-slate-50 p-10 rounded-3xl border border-slate-100 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
-             <div className="w-12 h-12 bg-brand-blue/10 text-brand-blue rounded-xl flex items-center justify-center mb-6">
+        <div ref={missionRef} className={`grid grid-cols-1 md:grid-cols-2 gap-8 mb-24 transition-all duration-1000 ease-out transform ${isMissionVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
+          <div className="bg-slate-50 dark:bg-slate-900 p-10 rounded-3xl border border-slate-100 dark:border-slate-800 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg">
+             <div className="w-12 h-12 bg-brand-blue/10 dark:bg-brand-blue/20 text-brand-blue rounded-xl flex items-center justify-center mb-6">
                 <Target size={24} />
              </div>
-             <h3 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h3>
-             <p className="text-slate-600 leading-relaxed">
+             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Our Mission</h3>
+             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                To empower businesses globally by delivering innovative, reliable, and scalable software solutions that drive tangible growth and efficiency.
              </p>
           </div>
-          <div className="bg-slate-900 p-10 rounded-3xl text-white transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl shadow-blue-900/20">
+          <div className="bg-slate-900 dark:bg-slate-800 p-10 rounded-3xl text-white transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl shadow-blue-900/20">
              <div className="w-12 h-12 bg-brand-blue text-white rounded-xl flex items-center justify-center mb-6">
                 <Eye size={24} />
              </div>
@@ -169,42 +169,46 @@ export const About: React.FC = () => {
         </div>
 
         {/* Core Values */}
-        <div className="mb-32">
+        <div ref={valuesRef} className={`mb-32 transition-all duration-1000 ease-out delay-200 transform ${isValuesVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Our Culture</h2>
-            <h3 className="text-3xl font-bold text-slate-900">Core Values that drive us.</h3>
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-white">Core Values that drive us.</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {CORE_VALUES.map((value, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl transition-all text-center hover:-translate-y-2 duration-300">
-                <div className="w-16 h-16 mx-auto bg-slate-50 rounded-full flex items-center justify-center text-brand-blue mb-6 group-hover:bg-brand-blue group-hover:text-white transition-colors">
+              <div 
+                key={idx} 
+                className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-xl dark:hover:shadow-blue-900/10 transition-all text-center hover:-translate-y-2 duration-300 group"
+                style={{ transitionDelay: `${idx * 150}ms` }}
+              >
+                <div className="w-16 h-16 mx-auto bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-brand-blue mb-6 group-hover:bg-brand-blue group-hover:text-white transition-colors">
                   {valueIconMap[value.icon]}
                 </div>
-                <h4 className="text-lg font-bold text-slate-900 mb-2">{value.title}</h4>
-                <p className="text-sm text-slate-600">{value.description}</p>
+                <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{value.title}</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">{value.description}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Team Section (Carousel Layout) */}
-        <div ref={teamRef} className="relative">
+        <div ref={teamRef} className={`relative transition-all duration-1000 ease-out transform ${isTeamVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="flex items-end justify-between mb-16 px-4">
              <div className="max-w-3xl">
                 <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">Our Team</h2>
-                <h3 className="text-3xl font-bold text-slate-900">Meet the experts behind our success.</h3>
+                <h3 className="text-3xl font-bold text-slate-900 dark:text-white">Meet the experts behind our success.</h3>
              </div>
              <div className="flex gap-2">
                <button 
                  onClick={prevSlide}
-                 className="p-3 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-600 transition-colors"
+                 className="p-3 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors"
                  aria-label="Previous team member"
                >
                  <ChevronLeft size={20} />
                </button>
                <button 
                  onClick={nextSlide}
-                 className="p-3 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-600 transition-colors"
+                 className="p-3 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors"
                  aria-label="Next team member"
                >
                  <ChevronRight size={20} />
@@ -217,14 +221,14 @@ export const About: React.FC = () => {
                className="flex transition-transform duration-500 ease-in-out"
                style={{ transform: `translateX(-${currentTeamIndex * (100 / itemsPerSlide)}%)` }}
              >
-                {TEAM_MEMBERS.map((member, index) => (
+                {TEAM_MEMBERS.map((member) => (
                   <div 
                     key={member.id} 
                     className="flex-shrink-0 px-4"
                     style={{ width: `${100 / itemsPerSlide}%` }}
                   >
-                    <div className="group text-center p-6 bg-slate-50 border border-slate-100 rounded-3xl hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-                      <div className="relative w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                    <div className="group text-center p-6 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl hover:shadow-xl dark:hover:shadow-blue-900/10 hover:-translate-y-2 transition-all duration-300 h-full">
+                      <div className="relative w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white dark:border-slate-800 shadow-lg">
                         <img 
                           src={member.image} 
                           alt={`${member.name}, ${member.role} at ${COMPANY_NAME}`}
@@ -232,9 +236,9 @@ export const About: React.FC = () => {
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         />
                       </div>
-                      <h4 className="text-xl font-bold text-slate-900">{member.name}</h4>
+                      <h4 className="text-xl font-bold text-slate-900 dark:text-white">{member.name}</h4>
                       <p className="text-brand-blue font-medium mb-3">{member.role}</p>
-                      <p className="text-slate-600 text-sm max-w-xs mx-auto line-clamp-3">{member.bio}</p>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm max-w-xs mx-auto line-clamp-3">{member.bio}</p>
                     </div>
                   </div>
                 ))}
