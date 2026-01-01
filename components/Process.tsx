@@ -17,6 +17,7 @@ export const Process: React.FC = () => {
   const location = useLocation();
   const isPage = location.pathname === '/process';
   const HeadingTag = isPage ? 'h1' : 'h3';
+  const sectionLabel = isPage ? 'Our Process' : 'How We Work';
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -49,7 +50,7 @@ export const Process: React.FC = () => {
     <section ref={sectionRef} id={SectionId.PROCESS} className="py-24 pt-32 bg-slate-50 border-t border-slate-200 min-h-screen">
       <div className="container mx-auto px-6">
         <div className={`text-center max-w-3xl mx-auto mb-20 ${getFadeInClass(0)}`}>
-          <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">How We Work</h2>
+          <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">{sectionLabel}</h2>
           <HeadingTag className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
             A proven process for success.
           </HeadingTag>

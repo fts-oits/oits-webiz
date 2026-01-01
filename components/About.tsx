@@ -28,6 +28,7 @@ export const About: React.FC = () => {
   const location = useLocation();
   const isPage = location.pathname === '/about';
   const HeadingTag = isPage ? 'h1' : 'h3';
+  const sectionLabel = isPage ? 'About Us' : 'About OITS Dhaka';
 
   // Responsive Carousel Logic
   useEffect(() => {
@@ -108,7 +109,7 @@ export const About: React.FC = () => {
 
           <div className="flex-1 space-y-8">
             <div>
-              <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">About OITS Dhaka</h2>
+              <h2 className="text-sm font-bold text-brand-blue uppercase tracking-widest mb-3">{sectionLabel}</h2>
               <HeadingTag className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white leading-tight mb-4">
                 Partnering with startups and enterprises to build the future.
               </HeadingTag>
