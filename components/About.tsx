@@ -164,8 +164,8 @@ export const About: React.FC = () => {
             {TEAM.map((member, index) => (
               <div 
                 key={member.name}
-                className={`group relative bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-700 ease-out ${isTeamVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                style={{ transitionDelay: `${100 + (index * 150)}ms` }}
+                className={`group relative bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-700 ease-out transform ${isTeamVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+                style={{ transitionDelay: `${index * 150}ms` }}
               >
                 <div className="aspect-[4/5] overflow-hidden bg-slate-200 dark:bg-slate-700">
                   <img 

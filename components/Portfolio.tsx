@@ -748,7 +748,7 @@ export const Portfolio: React.FC = () => {
     setIsFilterAnimating(true);
     setTimeout(() => {
       setActiveCategory(cat);
-      setActiveTag(ALL_TAG); 
+      // Removed resetting activeTag to allow for cross-filtering
       setVisibleCount(6);
       requestAnimationFrame(() => {
         setIsFilterAnimating(false);
@@ -771,16 +771,21 @@ export const Portfolio: React.FC = () => {
   const categories = [ALL_CATEGORY, ...Array.from(new Set(PROJECTS.map(p => p.category)))];
   const allTags = [ALL_TAG, ...Array.from(new Set(PROJECTS.flatMap(p => p.technologies || []))).sort()];
 
-  // Dynamic counts based on current filters
-  const getCategoryCount = (cat: string) => cat === ALL_CATEGORY ? PROJECTS.length : PROJECTS.filter(p => p.category === cat).length;
+  // Enhanced dynamic counts that respect both filters bi-directionally
+  const getCategoryCount = (cat: string) => {
+     return PROJECTS.filter(p => {
+       const matchCat = cat === ALL_CATEGORY || p.category === cat;
+       const matchTag = activeTag === ALL_TAG || (p.technologies && p.technologies.includes(activeTag));
+       return matchCat && matchTag;
+     }).length;
+  };
   
   const getTagCount = (tag: string) => {
-    const categoryProjects = activeCategory === ALL_CATEGORY 
-      ? PROJECTS 
-      : PROJECTS.filter(p => p.category === activeCategory);
-    
-    if (tag === ALL_TAG) return categoryProjects.length;
-    return categoryProjects.filter(p => p.technologies && p.technologies.includes(tag)).length;
+    return PROJECTS.filter(p => {
+       const matchCat = activeCategory === ALL_CATEGORY || p.category === activeCategory;
+       const matchTag = tag === ALL_TAG || (p.technologies && p.technologies.includes(tag));
+       return matchCat && matchTag;
+    }).length;
   };
 
   const filteredProjects = PROJECTS.filter(p => {
@@ -823,7 +828,7 @@ export const Portfolio: React.FC = () => {
               }`}
             >
               {cat} 
-              <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ${
+              <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full transition-colors duration-300 ${
                 activeCategory === cat 
                   ? 'bg-white/20 text-white' 
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
@@ -851,7 +856,7 @@ export const Portfolio: React.FC = () => {
                 }`}
               >
                 {tag} 
-                <span className="text-[10px] opacity-70">
+                <span className={`text-[10px] opacity-70 transition-colors duration-200 ${getTagCount(tag) === 0 ? 'text-slate-300 dark:text-slate-600' : ''}`}>
                    {getTagCount(tag)}
                 </span>
               </button>
@@ -873,7 +878,7 @@ export const Portfolio: React.FC = () => {
             {displayedProjects.length === 0 && (
               <div className="col-span-full flex flex-col items-center justify-center text-slate-400 py-12">
                  <div className="w-16 h-16 bg-slate-100 dark:bg-slate-900 rounded-full flex items-center justify-center mb-4"><Code2 className="w-8 h-8 text-slate-300" /></div>
-                 <p className="font-medium">No projects found.</p>
+                 <p className="font-medium">No projects found matching your criteria.</p>
                  <button onClick={() => { handleCategoryChange(ALL_CATEGORY); handleTagChange(ALL_TAG); }} className="mt-4 text-brand-blue text-sm hover:underline">Clear all filters</button>
               </div>
             )}
