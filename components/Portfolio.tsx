@@ -1,12 +1,33 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PROJECTS } from '../constants';
 import { SectionId } from '../types';
 
 export const Portfolio: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id={SectionId.PORTFOLIO} className="py-24 bg-slate-50">
+    <section ref={sectionRef} id={SectionId.PORTFOLIO} className="py-24 bg-slate-50">
       <div className="container mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className={`text-center max-w-3xl mx-auto mb-16 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-sm font-bold text-blue-600 uppercase tracking-widest mb-3">Featured Work</h2>
           <h3 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight mb-4">
             Showcasing our success stories.
@@ -17,8 +38,12 @@ export const Portfolio: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PROJECTS.map((project) => (
-            <div key={project.id} className="group bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300">
+          {PROJECTS.map((project, index) => (
+            <div 
+              key={project.id} 
+              className={`group bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+              style={{ transitionDelay: `${index * 150}ms` }}
+            >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img 
                   src={project.imageUrl} 
@@ -40,7 +65,7 @@ export const Portfolio: React.FC = () => {
           ))}
         </div>
         
-        <div className="mt-16 text-center">
+        <div className={`mt-16 text-center transition-all duration-700 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
            <a href="#" className="inline-flex items-center text-slate-900 font-semibold border-b-2 border-slate-900 hover:text-blue-600 hover:border-blue-600 transition-colors pb-1">
              View All Projects
            </a>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mail, MapPin, Phone, Send } from 'lucide-react';
 import { Button } from './ui/Button';
 import { ADDRESS, CONTACT_EMAIL } from '../constants';
@@ -7,6 +7,26 @@ import { SectionId } from '../types';
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success'>('idle');
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,56 +40,42 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <section id={SectionId.CONTACT} className="py-24 bg-slate-900 text-white">
+    <section ref={sectionRef} id={SectionId.CONTACT} className="py-24 bg-slate-900 text-white">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           
           <div className="space-y-8">
-            <div>
+            <div className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <h2 className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-3">Get in Touch</h2>
               <h3 className="text-3xl md:text-5xl font-bold leading-tight">
                 Let's build something <br/> <span className="text-blue-500">extraordinary</span> together.
               </h3>
             </div>
             
-            <p className="text-slate-400 text-lg max-w-md">
+            <p className={`text-slate-400 text-lg max-w-md transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               Have a project in mind? We'd love to hear from you. Send us a message and we'll get back to you within 24 hours.
             </p>
 
             <div className="space-y-6 pt-8">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-slate-800 rounded-lg">
-                  <Mail className="w-6 h-6 text-blue-400" />
+              {[
+                { icon: Mail, label: 'Email Us', value: CONTACT_EMAIL },
+                { icon: MapPin, label: 'Visit Us', value: ADDRESS },
+                { icon: Phone, label: 'Call Us', value: '+880 1234 567890' }
+              ].map((item, idx) => (
+                <div key={item.label} className={`flex items-start gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: `${200 + (idx * 100)}ms` }}>
+                  <div className="p-3 bg-slate-800 rounded-lg">
+                    <item.icon className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-400 mb-1">{item.label}</p>
+                    <p className="text-lg font-medium">{item.value}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm text-slate-400 mb-1">Email Us</p>
-                  <p className="text-lg font-medium">{CONTACT_EMAIL}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-slate-800 rounded-lg">
-                  <MapPin className="w-6 h-6 text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-400 mb-1">Visit Us</p>
-                  <p className="text-lg font-medium">{ADDRESS}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-slate-800 rounded-lg">
-                  <Phone className="w-6 h-6 text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-400 mb-1">Call Us</p>
-                  <p className="text-lg font-medium">+880 1234 567890</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
-          <div className="bg-slate-800/50 p-8 md:p-10 rounded-3xl border border-slate-700">
+          <div className={`bg-slate-800/50 p-8 md:p-10 rounded-3xl border border-slate-700 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
              <form onSubmit={handleSubmit} className="space-y-6">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <div className="space-y-2">

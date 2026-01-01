@@ -19,7 +19,7 @@ export const Header: React.FC = () => {
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/80 backdrop-blur-md border-b border-slate-200 py-3' : 'bg-transparent py-5'
+        isScrolled ? 'bg-white/90 backdrop-blur-md border-b border-slate-200 py-3 shadow-sm' : 'bg-transparent py-5'
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
@@ -31,19 +31,21 @@ export const Header: React.FC = () => {
         </a>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-2">
           {NAV_ITEMS.map((item) => (
             <a 
               key={item.label} 
               href={item.href}
-              className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+              className="px-4 py-2 rounded-full text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300"
             >
               {item.label}
             </a>
           ))}
-          <Button variant="primary" size="sm" onClick={() => window.location.href=`#${SectionId.CONTACT}`}>
-            Get Started
-          </Button>
+          <div className="ml-4">
+            <Button variant="primary" size="sm" onClick={() => window.location.href=`#${SectionId.CONTACT}`}>
+              Get Started
+            </Button>
+          </div>
         </nav>
 
         {/* Mobile Toggle */}
@@ -58,12 +60,12 @@ export const Header: React.FC = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 md:hidden p-6 shadow-xl animate-in slide-in-from-top-2">
-          <nav className="flex flex-col gap-4">
+          <nav className="flex flex-col gap-2">
             {NAV_ITEMS.map((item) => (
               <a 
                 key={item.label} 
                 href={item.href}
-                className="text-lg font-medium text-slate-800"
+                className="px-4 py-3 rounded-lg text-lg font-medium text-slate-800 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.label}

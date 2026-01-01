@@ -1,14 +1,129 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Play } from 'lucide-react';
 import { Button } from './ui/Button';
 import { TAGLINE } from '../constants';
 import { SectionId } from '../types';
 
 export const Hero: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Entrance Animation Observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Particle Effect
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let particles: Particle[] = [];
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    class Particle {
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      color: string;
+
+      constructor() {
+        this.x = Math.random() * (canvas?.width || 0);
+        this.y = Math.random() * (canvas?.height || 0);
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+        // Brand colors: Blue-500 (#3b82f6) and Slate-400 (#94a3b8) with low opacity
+        this.color = Math.random() > 0.5 ? 'rgba(59, 130, 246, 0.2)' : 'rgba(148, 163, 184, 0.2)';
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.size > 0.2) this.size -= 0.01; // subtle pulse or shrink effect optional, keeping simple movement here
+        
+        // Wrap around screen
+        if (canvas) {
+           if (this.x > canvas.width) this.x = 0;
+           if (this.x < 0) this.x = canvas.width;
+           if (this.y > canvas.height) this.y = 0;
+           if (this.y < 0) this.y = canvas.height;
+        }
+      }
+
+      draw() {
+        if (!ctx) return;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const init = () => {
+      particles = [];
+      const numberOfParticles = Math.floor(window.innerWidth / 15); // Density
+      for (let i = 0; i < numberOfParticles; i++) {
+        particles.push(new Particle());
+      }
+    };
+
+    const animate = () => {
+      if (!canvas || !ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+      }
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      init();
+    });
+
+    resizeCanvas();
+    init();
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
   return (
-    <section id={SectionId.HOME} className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+    <section ref={heroRef} id={SectionId.HOME} className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden min-h-[90vh] flex items-center">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
+        <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
         <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-100 rounded-full blur-[100px] opacity-60 animate-float" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-50 rounded-full blur-[120px] opacity-60" />
       </div>
@@ -17,22 +132,26 @@ export const Hero: React.FC = () => {
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           
           <div className="flex-1 space-y-8 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wide">
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wide transition-all duration-1000 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
               Available for new projects
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
+            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] transition-all duration-1000 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               We Craft <br className="hidden md:block"/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Digital Excellence</span>
             </h1>
             
-            <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            <p className={`text-lg md:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               {TAGLINE}. We build robust software solutions that drive business growth, combining technical expertise with stunning design.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-              <Button size="lg" className="group" onClick={() => window.location.href=`#${SectionId.PORTFOLIO}`}>
+            <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <Button 
+                size="lg" 
+                className="group transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30" 
+                onClick={() => window.location.href=`#${SectionId.PORTFOLIO}`}
+              >
                 View Our Work
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -43,7 +162,7 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex-1 w-full max-w-xl lg:max-w-none">
+          <div className={`flex-1 w-full max-w-xl lg:max-w-none transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
             <div className="relative">
               {/* Decorative Card Stack Effect */}
               <div className="absolute top-4 -right-4 w-full h-full bg-slate-200 rounded-2xl -rotate-2"></div>
