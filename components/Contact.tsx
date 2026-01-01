@@ -45,14 +45,14 @@ export const Contact: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           
           <div className="space-y-8">
-            <div className={`transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className={`transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <h2 className="text-sm font-bold text-blue-400 uppercase tracking-widest mb-3">Get in Touch</h2>
               <h3 className="text-3xl md:text-5xl font-bold leading-tight">
                 Let's build something <br/> <span className="text-blue-500">extraordinary</span> together.
               </h3>
             </div>
             
-            <p className={`text-slate-400 text-lg max-w-md transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <p className={`text-slate-400 text-lg max-w-md transition-all duration-1000 delay-100 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               Have a project in mind? We'd love to hear from you. Send us a message and we'll get back to you within 24 hours.
             </p>
 
@@ -62,7 +62,7 @@ export const Contact: React.FC = () => {
                 { icon: MapPin, label: 'Visit Us', value: ADDRESS },
                 { icon: Phone, label: 'Call Us', value: '+880 1234 567890' }
               ].map((item, idx) => (
-                <div key={item.label} className={`flex items-start gap-4 transition-all duration-700 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`} style={{ transitionDelay: `${200 + (idx * 100)}ms` }}>
+                <div key={item.label} className={`flex items-start gap-4 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`} style={{ transitionDelay: `${200 + (idx * 100)}ms` }}>
                   <div className="p-3 bg-slate-800 rounded-lg">
                     <item.icon className="w-6 h-6 text-blue-400" />
                   </div>
@@ -75,10 +75,10 @@ export const Contact: React.FC = () => {
             </div>
           </div>
 
-          <div className={`bg-slate-800/50 p-8 md:p-10 rounded-3xl border border-slate-700 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <div className={`bg-slate-800/50 p-8 md:p-10 rounded-3xl border border-slate-700 transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
              <form onSubmit={handleSubmit} className="space-y-6">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <div className="space-y-2">
+                 <div className={`space-y-2 transition-all duration-700 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                    <label htmlFor="name" className="text-sm font-medium text-slate-300">Name</label>
                    <input 
                       type="text" 
@@ -90,7 +90,7 @@ export const Contact: React.FC = () => {
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
                    />
                  </div>
-                 <div className="space-y-2">
+                 <div className={`space-y-2 transition-all duration-700 delay-600 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                    <label htmlFor="email" className="text-sm font-medium text-slate-300">Email</label>
                    <input 
                       type="email" 
@@ -104,7 +104,7 @@ export const Contact: React.FC = () => {
                  </div>
                </div>
                
-               <div className="space-y-2">
+               <div className={`space-y-2 transition-all duration-700 delay-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                  <label htmlFor="message" className="text-sm font-medium text-slate-300">Message</label>
                  <textarea 
                     id="message"
@@ -117,19 +117,21 @@ export const Contact: React.FC = () => {
                  />
                </div>
 
-               <Button 
-                 type="submit" 
-                 variant="primary" 
-                 size="lg" 
-                 className="w-full bg-blue-600 hover:bg-blue-700 border-none"
-                 disabled={status === 'sending'}
-               >
-                 {status === 'sending' ? 'Sending...' : status === 'success' ? 'Message Sent!' : (
-                   <span className="flex items-center">
-                     Send Message <Send className="ml-2 w-4 h-4" />
-                   </span>
-                 )}
-               </Button>
+               <div className={`transition-all duration-700 delay-800 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                 <Button 
+                   type="submit" 
+                   variant="primary" 
+                   size="lg" 
+                   className="w-full bg-blue-600 hover:bg-blue-700 border-none"
+                   disabled={status === 'sending'}
+                 >
+                   {status === 'sending' ? 'Sending...' : status === 'success' ? 'Message Sent!' : (
+                     <span className="flex items-center">
+                       Send Message <Send className="ml-2 w-4 h-4" />
+                     </span>
+                   )}
+                 </Button>
+               </div>
              </form>
           </div>
 
