@@ -21,6 +21,23 @@ export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMobileMenuOpen(false);
+    }
+  };
+
+  const scrollToContact = () => {
+    const contactSection = document.getElementById(SectionId.CONTACT);
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -30,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
       }`}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2 group">
+        <a href="#" className="flex items-center gap-2 group" onClick={(e) => handleNavClick(e, `#${SectionId.HOME}`)}>
           <div className="w-10 h-10 bg-slate-900 dark:bg-white rounded-xl flex items-center justify-center text-white dark:text-slate-900 shadow-lg transition-transform group-hover:scale-105">
             <Terminal size={20} />
           </div>
@@ -43,6 +60,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
             <a 
               key={item.label} 
               href={item.href}
+              onClick={(e) => handleNavClick(e, item.href)}
               className="px-4 py-2 rounded-full text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 transition-all duration-300"
             >
               {item.label}
@@ -60,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
           </div>
 
           <div className="ml-2">
-            <Button variant="primary" size="sm" onClick={() => window.location.href=`#${SectionId.CONTACT}`}>
+            <Button variant="primary" size="sm" onClick={scrollToContact}>
               Get Started
             </Button>
           </div>
@@ -94,13 +112,13 @@ export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
               <a 
                 key={item.label} 
                 href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
                 className="px-4 py-3 rounded-lg text-lg font-medium text-slate-800 dark:text-slate-100 hover:bg-blue-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.label}
               </a>
             ))}
-            <Button className="w-full mt-4" onClick={() => setIsMobileMenuOpen(false)}>
+            <Button className="w-full mt-4" onClick={scrollToContact}>
               Get Started
             </Button>
           </nav>

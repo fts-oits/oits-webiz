@@ -51,24 +51,34 @@ export const Hero: React.FC = () => {
       speedX: number;
       speedY: number;
       color: string;
+      alpha: number;
+      targetAlpha: number;
 
       constructor() {
         this.x = Math.random() * (canvas?.width || 0);
         this.y = Math.random() * (canvas?.height || 0);
-        this.size = Math.random() * 2 + 0.5; // Smaller size for subtlety (0.5 to 2.5)
-        // Slower speed for calm, subtle movement
+        // Smaller size for subtlety (0.5 to 2.0)
+        this.size = Math.random() * 1.5 + 0.5; 
+        // Very slow speed for calm, subtle movement
         this.speedX = Math.random() * 0.2 - 0.1;
         this.speedY = Math.random() * 0.2 - 0.1;
-        // Strictly Brand colors: Blue-500 (#3b82f6) and Indigo-500 (#6366f1) with low opacity
-        this.color = Math.random() > 0.5 ? 'rgba(59, 130, 246, 0.15)' : 'rgba(99, 102, 241, 0.15)';
+        // Strictly Brand colors: Blue-500 (#3b82f6) and Indigo-500 (#6366f1)
+        const isBlue = Math.random() > 0.5;
+        this.color = isBlue ? '59, 130, 246' : '99, 102, 241';
+        this.alpha = Math.random() * 0.3 + 0.1;
+        this.targetAlpha = this.alpha;
       }
 
       update() {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Very slow decay to keep particles around longer
-        if (this.size > 0.2) this.size -= 0.002;
+        // Pulse effect
+        if (Math.abs(this.alpha - this.targetAlpha) < 0.01) {
+             this.targetAlpha = Math.random() * 0.3 + 0.1;
+        } else {
+             this.alpha += (this.targetAlpha - this.alpha) * 0.01;
+        }
         
         // Wrap around screen
         if (canvas) {
@@ -81,7 +91,7 @@ export const Hero: React.FC = () => {
 
       draw() {
         if (!ctx) return;
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -90,7 +100,7 @@ export const Hero: React.FC = () => {
 
     const init = () => {
       particles = [];
-      const numberOfParticles = Math.floor(window.innerWidth / 20); // Balanced density
+      const numberOfParticles = Math.floor(window.innerWidth / 15); // Balanced density
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
       }
@@ -121,20 +131,36 @@ export const Hero: React.FC = () => {
     };
   }, []);
 
+  const scrollToContact = () => {
+    const contactSection = document.getElementById(SectionId.CONTACT);
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section ref={heroRef} id={SectionId.HOME} className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden min-h-[90vh] flex items-center">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
+        {/* Blurred Background Image Layer */}
+        <div 
+            className="absolute inset-0 bg-cover bg-center opacity-10 dark:opacity-20 blur-sm scale-110"
+            style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2070")' }}
+            aria-hidden="true"
+        />
+        {/* Overlay to blend image with theme background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-slate-50/70 to-slate-50/90 dark:from-slate-950/80 dark:via-slate-950/70 dark:to-slate-950/90" />
+
         <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-100 rounded-full blur-[100px] opacity-60 animate-float" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-50 rounded-full blur-[120px] opacity-60" />
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-[100px] opacity-60 animate-float" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-50/50 rounded-full blur-[120px] opacity-60" />
       </div>
 
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           
-          <div className="flex-1 space-y-8 text-center lg:text-left">
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wide transition-all duration-1000 delay-100 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className="flex-1 space-y-8 text-center lg:text-left relative z-10">
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wide transition-all duration-1000 delay-100 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
               Available for new projects
             </div>
@@ -153,12 +179,12 @@ export const Hero: React.FC = () => {
                 size="lg" 
                 variant="primary"
                 className="group relative overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-600/40" 
-                onClick={() => window.location.href=`#${SectionId.CONTACT}`}
+                onClick={scrollToContact}
               >
                 Get Started
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button variant="outline" size="lg" className="group">
+              <Button variant="outline" size="lg" className="group bg-white/50 backdrop-blur-sm hover:bg-white/80">
                 <Play className="mr-2 w-4 h-4 fill-slate-900" />
                 How We Work
               </Button>
@@ -168,8 +194,8 @@ export const Hero: React.FC = () => {
           <div className={`flex-1 w-full max-w-xl lg:max-w-none transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
             <div className="relative">
               {/* Decorative Card Stack Effect */}
-              <div className="absolute top-4 -right-4 w-full h-full bg-slate-200 rounded-2xl -rotate-2"></div>
-              <div className="absolute top-2 -right-2 w-full h-full bg-slate-800 rounded-2xl -rotate-1 opacity-10"></div>
+              <div className="absolute top-4 -right-4 w-full h-full bg-slate-200/50 rounded-2xl -rotate-2 backdrop-blur-sm"></div>
+              <div className="absolute top-2 -right-2 w-full h-full bg-slate-800/10 rounded-2xl -rotate-1 opacity-10"></div>
               
               <div className="relative bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden aspect-[4/3] group">
                 <img 

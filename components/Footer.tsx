@@ -1,6 +1,7 @@
 import React from 'react';
 import { Terminal, Github, Linkedin, Twitter, Facebook, Sun, Moon } from 'lucide-react';
 import { COMPANY_NAME, NAV_ITEMS } from '../constants';
+import { SectionId } from '../types';
 
 interface FooterProps {
   theme: 'light' | 'dark';
@@ -24,13 +25,21 @@ const SocialLink = ({ href, icon: Icon, label }: { href: string; icon: any; labe
 );
 
 export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <footer className="bg-slate-950 text-slate-300 py-16 border-t border-slate-800">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           
           <div className="space-y-6">
-            <a href="#" className="flex items-center gap-2 text-white">
+            <a href={`#${SectionId.HOME}`} className="flex items-center gap-2 text-white" onClick={(e) => handleNavClick(e, `#${SectionId.HOME}`)}>
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <Terminal size={16} className="text-white" />
               </div>
@@ -63,7 +72,7 @@ export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
             <ul className="space-y-4">
               {NAV_ITEMS.map((item) => (
                 <li key={item.label}>
-                  <a href={item.href} className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">{item.label}</a>
+                  <a href={item.href} onClick={(e) => handleNavClick(e, item.href)} className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">{item.label}</a>
                 </li>
               ))}
             </ul>
@@ -72,10 +81,10 @@ export const Footer: React.FC<FooterProps> = ({ theme, toggleTheme }) => {
           <div>
             <h4 className="text-white font-bold mb-6">Services</h4>
             <ul className="space-y-4">
-              <li><a href="#" className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">Web Development</a></li>
-              <li><a href="#" className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">Mobile Apps</a></li>
-              <li><a href="#" className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">UI/UX Design</a></li>
-              <li><a href="#" className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">Cloud Solutions</a></li>
+              <li><a href={`#${SectionId.SERVICES}`} onClick={(e) => handleNavClick(e, `#${SectionId.SERVICES}`)} className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">Web Development</a></li>
+              <li><a href={`#${SectionId.SERVICES}`} onClick={(e) => handleNavClick(e, `#${SectionId.SERVICES}`)} className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">Mobile Apps</a></li>
+              <li><a href={`#${SectionId.SERVICES}`} onClick={(e) => handleNavClick(e, `#${SectionId.SERVICES}`)} className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">UI/UX Design</a></li>
+              <li><a href={`#${SectionId.SERVICES}`} onClick={(e) => handleNavClick(e, `#${SectionId.SERVICES}`)} className="hover:text-blue-500 transition-colors text-slate-400 hover:text-blue-400">Cloud Solutions</a></li>
             </ul>
           </div>
 

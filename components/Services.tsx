@@ -62,11 +62,11 @@ export const Services: React.FC = () => {
           {SERVICES.map((service, index) => (
             <div 
               key={service.id} 
-              className={`group relative bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 hover:shadow-2xl dark:hover:shadow-blue-900/20 transition-all duration-700 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-200 dark:hover:border-blue-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`group relative bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-105 hover:border-blue-400 dark:hover:border-blue-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
               <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                <ArrowUpRight className="w-6 h-6 text-blue-500 dark:text-blue-400" />
+                <ArrowUpRight className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
 
               <div className="w-12 h-12 shrink-0 bg-white dark:bg-slate-700 rounded-2xl flex items-center justify-center text-slate-900 dark:text-white shadow-sm mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 group-hover:animate-subtle-bounce">
@@ -78,7 +78,7 @@ export const Services: React.FC = () => {
 
               <div className="flex flex-wrap gap-2">
                 {service.features.map((feature, idx) => (
-                  <span key={idx} className="px-2.5 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 group-hover:border-blue-200 dark:group-hover:border-blue-800 transition-colors">
+                  <span key={idx} className="px-2.5 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 group-hover:border-blue-300 dark:group-hover:border-blue-700 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors">
                     {feature}
                   </span>
                 ))}
