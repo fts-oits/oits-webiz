@@ -75,7 +75,7 @@ export const About: React.FC = () => {
 
           <div className="flex-1 space-y-12">
             {/* Mission & Vision Subsection */}
-            <div className={`space-y-6 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`space-y-6 transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <div>
                 <div className="flex items-center gap-2 mb-3">
                    <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -92,7 +92,7 @@ export const About: React.FC = () => {
             </div>
 
             {/* Core Values Subsection */}
-            <div className={`transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`transition-all duration-1000 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                <div className="flex items-center gap-2 mb-6">
                    <Heart className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                    <h4 className="text-lg font-bold text-slate-900 dark:text-white">Core Values</h4>

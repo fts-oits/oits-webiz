@@ -25,7 +25,9 @@ interface CustomVideoPlayerProps {
 
 const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl, poster, onClose }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
@@ -39,18 +41,37 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     const updateTime = () => setCurrentTime(video.currentTime);
     const updateDuration = () => setDuration(video.duration);
     const onEnded = () => setIsPlaying(false);
+    
+    // Loading states
+    const onLoadStart = () => setIsLoading(true);
+    const onWaiting = () => setIsLoading(true);
+    const onCanPlay = () => setIsLoading(false);
+    const onPlaying = () => setIsLoading(false);
 
     video.addEventListener('timeupdate', updateTime);
     video.addEventListener('loadedmetadata', updateDuration);
     video.addEventListener('ended', onEnded);
+    video.addEventListener('loadstart', onLoadStart);
+    video.addEventListener('waiting', onWaiting);
+    video.addEventListener('canplay', onCanPlay);
+    video.addEventListener('playing', onPlaying);
 
     // Auto-play when mounted
     video.play().catch(err => console.error("Autoplay failed:", err));
+    
+    // Focus container for keyboard support
+    if (containerRef.current) {
+      containerRef.current.focus();
+    }
 
     return () => {
       video.removeEventListener('timeupdate', updateTime);
       video.removeEventListener('loadedmetadata', updateDuration);
       video.removeEventListener('ended', onEnded);
+      video.removeEventListener('loadstart', onLoadStart);
+      video.removeEventListener('waiting', onWaiting);
+      video.removeEventListener('canplay', onCanPlay);
+      video.removeEventListener('playing', onPlaying);
     };
   }, []);
 
@@ -96,8 +117,60 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    switch (e.key) {
+      case ' ':
+      case 'k':
+      case 'K':
+        e.preventDefault();
+        togglePlay();
+        break;
+      case 'm':
+      case 'M':
+        e.preventDefault();
+        toggleMute();
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        if (videoRef.current) videoRef.current.currentTime += 5;
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        if (videoRef.current) videoRef.current.currentTime -= 5;
+        break;
+      case 'Escape':
+        // Let event bubble up to modal
+        break;
+    }
+  };
+
   return (
-    <div className="relative w-full h-full bg-black group overflow-hidden flex flex-col justify-center">
+    <div 
+      ref={containerRef}
+      className="relative w-full h-full bg-black group overflow-hidden flex flex-col justify-center outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500/50"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="region"
+      aria-label="Video Player"
+    >
+      {/* Loading Overlay with Blurred Poster */}
+      {isLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-900 overflow-hidden pointer-events-none">
+            {poster && (
+                <div className="absolute inset-0 w-full h-full">
+                    <img 
+                      src={poster} 
+                      alt="" 
+                      className="w-full h-full object-cover blur-xl opacity-60 scale-110" 
+                      aria-hidden="true"
+                    />
+                    <div className="absolute inset-0 bg-black/30" />
+                </div>
+            )}
+            <div className="w-14 h-14 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin z-20 shadow-xl"></div>
+        </div>
+      )}
+
       <video
         ref={videoRef}
         src={src}
@@ -111,65 +184,80 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
         Your browser does not support the video tag.
       </video>
 
-      {/* Controls Overlay - Smooth transition, large touch targets */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-4 pb-4 pt-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-4 z-20 pointer-events-none group-hover:pointer-events-auto">
-        {/* Progress Bar - Taller for touch */}
-        <input
-          type="range"
-          min="0"
-          max={duration || 0}
-          value={currentTime}
-          onChange={handleSeek}
-          className="w-full h-2 bg-white/30 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:h-2.5 transition-all"
-        />
+      {/* Controls Overlay */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-6 pb-6 pt-16 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity duration-300 flex flex-col gap-4 z-20">
+        
+        {/* Progress Bar */}
+        <div className="relative group/progress">
+          <input
+            type="range"
+            min="0"
+            max={duration || 0}
+            value={currentTime}
+            onChange={handleSeek}
+            className="w-full h-1.5 bg-white/30 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:h-2.5 transition-all focus:outline-none focus:ring-2 focus:ring-blue-400"
+            aria-label="Seek video"
+            aria-valuemin={0}
+            aria-valuemax={duration || 0}
+            aria-valuenow={currentTime}
+            aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
+          />
+        </div>
 
         <div className="flex items-center justify-between text-white">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             <button 
               onClick={togglePlay} 
-              className="p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none"
+              className="p-3 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus:bg-white/10 focus:ring-2 focus:ring-white/50"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
             </button>
 
-            <div className="flex items-center gap-3 group/vol">
+            <div className="flex items-center gap-2 group/vol">
               <button 
                 onClick={toggleMute} 
-                className="p-2 hover:bg-white/10 rounded-full transition-colors focus:outline-none"
+                className="p-3 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus:bg-white/10 focus:ring-2 focus:ring-white/50"
                 aria-label={isMuted ? "Unmute" : "Mute"}
               >
                 {isMuted || volume === 0 ? <VolumeX size={24} /> : <Volume2 size={24} />}
               </button>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={isMuted ? 0 : volume}
-                onChange={handleVolumeChange}
-                className="w-0 overflow-hidden group-hover/vol:w-24 transition-all duration-300 h-1.5 bg-white/30 rounded-lg accent-white"
-              />
+              <div className="w-0 overflow-hidden group-hover/vol:w-24 focus-within:w-24 transition-all duration-300 flex items-center">
+                 <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={isMuted ? 0 : volume}
+                  onChange={handleVolumeChange}
+                  className="w-24 h-1.5 bg-white/30 rounded-lg accent-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-white"
+                  aria-label="Volume"
+                  aria-valuenow={isMuted ? 0 : volume * 100}
+                />
+              </div>
             </div>
 
-            <span className="text-sm font-mono font-medium opacity-80 select-none hidden sm:block">
+            <span className="text-sm font-mono font-medium opacity-80 select-none hidden sm:block ml-2">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {captionsUrl && (
               <button
                 onClick={() => setCaptionsEnabled(!captionsEnabled)}
-                className={`p-2 rounded-full transition-colors focus:outline-none ${captionsEnabled ? 'text-blue-400 bg-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
+                className={`p-3 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 ${captionsEnabled ? 'text-blue-400 bg-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
                 title={captionsEnabled ? "Disable Captions" : "Enable Captions"}
+                aria-label={captionsEnabled ? "Disable Captions" : "Enable Captions"}
+                aria-pressed={captionsEnabled}
               >
                 <Subtitles size={24} />
               </button>
             )}
             <button
               onClick={onClose}
-              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-sm font-bold transition-all active:scale-95"
+              className="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-sm font-bold transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
+              aria-label="Exit video player"
             >
               <ArrowDown size={16} className="rotate-90" /> Exit
             </button>
@@ -178,10 +266,10 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
       </div>
 
       {/* Big Play Button Overlay (when paused) */}
-      {!isPlaying && (
+      {!isPlaying && !isLoading && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-black/20">
-          <div className="w-20 h-20 bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-white/90 border border-white/20 shadow-xl">
-            <Play size={40} fill="currentColor" className="ml-2" />
+          <div className="w-24 h-24 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white/90 border border-white/20 shadow-xl transform transition-transform hover:scale-105">
+            <Play size={48} fill="currentColor" className="ml-2" />
           </div>
         </div>
       )}
@@ -251,7 +339,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
     <>
       <div className={backdropClass} onClick={handleClose} />
       <div className={modalContainerClass}>
-        <div className={modalContentClass}>
+        <div className={modalContentClass} role="dialog" aria-modal="true" aria-labelledby="modal-title">
           
           <div ref={contentRef} className="overflow-y-auto custom-scrollbar scroll-smooth">
             
@@ -275,7 +363,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                   
                   <button 
                     onClick={handleClose}
-                    className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors z-30"
+                    className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors z-30 focus:outline-none focus:ring-2 focus:ring-white"
                     aria-label="Close modal"
                   >
                     <X size={24} />
@@ -285,14 +373,15 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                     <span className="inline-block px-3 py-1 bg-blue-600 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 shadow-sm border border-blue-500/50">
                       {activeProject.category}
                     </span>
-                    <h3 className="text-3xl md:text-5xl font-bold mb-2 tracking-tight">{activeProject.title}</h3>
+                    <h3 id="modal-title" className="text-3xl md:text-5xl font-bold mb-2 tracking-tight">{activeProject.title}</h3>
                   </div>
 
                   {activeProject.demoVideoUrl && (
                     <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
                        <button 
                          onClick={() => setIsPlayingVideo(true)}
-                         className="pointer-events-auto flex items-center gap-2 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 rounded-full text-white font-bold transition-all hover:scale-105 group/play shadow-xl"
+                         className="pointer-events-auto flex items-center gap-2 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 rounded-full text-white font-bold transition-all hover:scale-105 group/play shadow-xl focus:outline-none focus:ring-2 focus:ring-white"
+                         aria-label="Watch Demo Video"
                        >
                          <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 group-hover/play:scale-110 transition-transform">
                            <Play size={16} fill="currentColor" />
@@ -533,8 +622,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
         {project.demoVideoUrl && shouldLoadVideo && isHovered && (
             <button 
                 onClick={(e) => { e.stopPropagation(); setIsMuted(!isMuted); }}
-                className="absolute top-4 right-4 z-20 p-2 bg-black/60 hover:bg-black/80 backdrop-blur-md rounded-full text-white transition-all hover:scale-110 animate-fade-in"
+                className="absolute top-4 right-4 z-20 p-2 bg-black/60 hover:bg-black/80 backdrop-blur-md rounded-full text-white transition-all hover:scale-110 animate-fade-in focus:outline-none focus:ring-2 focus:ring-white"
                 title={isMuted ? "Unmute" : "Mute"}
+                aria-label={isMuted ? "Unmute video" : "Mute video"}
             >
                 {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
             </button>
@@ -545,7 +635,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
             
             {/* View Case Study Button */}
             <button 
-              className="bg-white text-slate-900 px-5 py-2.5 rounded-full font-bold text-sm shadow-xl hover:bg-blue-600 hover:text-white flex items-center gap-2 transition-colors border border-transparent hover:border-blue-600/20"
+              className="bg-white text-slate-900 px-5 py-2.5 rounded-full font-bold text-sm shadow-xl hover:bg-blue-600 hover:text-white flex items-center gap-2 transition-colors border border-transparent hover:border-blue-600/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
               onClick={(e) => { e.stopPropagation(); onClick(); }}
             >
               View Case Study <ArrowUpRight size={16} />
@@ -553,7 +643,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
 
             {project.demoVideoUrl && (
               <button 
-                className="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-xl hover:bg-blue-700 flex items-center gap-2 transition-colors border border-white/10"
+                className="bg-blue-600 text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-xl hover:bg-blue-700 flex items-center gap-2 transition-colors border border-white/10 focus:outline-none focus:ring-2 focus:ring-white"
                 onClick={(e) => { e.stopPropagation(); onViewDemo(); }}
               >
                 Watch Demo <MonitorPlay size={16} />
