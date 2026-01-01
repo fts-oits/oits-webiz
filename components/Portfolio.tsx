@@ -412,6 +412,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                   <img 
                     src={activeProject.imageUrl} 
                     alt={activeProject.title} 
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-90 group-hover:opacity-100"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
@@ -519,6 +521,8 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
                           <img 
                             src={relProject.imageUrl} 
                             alt={relProject.title}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                           />
                           <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-10 backdrop-blur-[1px]">
@@ -652,7 +656,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
           <img 
             src={project.imageUrl} 
             alt={project.title} 
-            loading="lazy" 
+            loading="lazy"
+            decoding="async" 
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         </div>

@@ -177,11 +177,11 @@ export const Hero: React.FC = () => {
             <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <Button 
                 size="lg" 
-                variant="primary"
+                variant="secondary"
                 className="group relative overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-600/40" 
                 onClick={scrollToContact}
               >
-                Get Started
+                Request a Demo
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
               <Button variant="outline" size="lg" className="group bg-white/50 backdrop-blur-sm hover:bg-white/80">

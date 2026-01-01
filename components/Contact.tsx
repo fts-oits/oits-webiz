@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, AlertCircle } from 'lucide-react';
 import { Button } from './ui/Button';
 import { ADDRESS, CONTACT_EMAIL } from '../constants';
 import { SectionId } from '../types';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [touched, setTouched] = useState({ name: false, email: false, message: false });
+  const [errors, setErrors] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'sending' | 'success'>('idle');
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -28,16 +30,64 @@ export const Contact: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  const validate = (field: string, value: string) => {
+    switch (field) {
+      case 'name':
+        return value.trim().length < 2 ? 'Name must be at least 2 characters.' : '';
+      case 'email':
+        return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? 'Please enter a valid email address.' : '';
+      case 'message':
+        return value.trim().length < 10 ? 'Message must be at least 10 characters.' : '';
+      default:
+        return '';
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+    
+    // Validate immediately if already touched
+    if (touched[id as keyof typeof touched]) {
+      setErrors(prev => ({ ...prev, [id]: validate(id, value) }));
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setTouched(prev => ({ ...prev, [id]: true }));
+    setErrors(prev => ({ ...prev, [id]: validate(id, value) }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate all fields
+    const newErrors = {
+      name: validate('name', formData.name),
+      email: validate('email', formData.email),
+      message: validate('message', formData.message)
+    };
+    
+    setErrors(newErrors);
+    setTouched({ name: true, email: true, message: true });
+
+    if (Object.values(newErrors).some(err => err !== '')) {
+      return;
+    }
+
     setStatus('sending');
     // Simulate API call
     setTimeout(() => {
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
+      setTouched({ name: false, email: false, message: false });
       setTimeout(() => setStatus('idle'), 3000);
     }, 1500);
   };
+
+  const isFormInvalid = Object.values(errors).some(err => err !== '') || 
+                        !formData.name || !formData.email || !formData.message;
 
   return (
     <section ref={sectionRef} id={SectionId.CONTACT} className="py-24 bg-slate-900 text-white">
@@ -76,13 +126,15 @@ export const Contact: React.FC = () => {
           </div>
 
           <div className={`bg-slate-800/50 p-8 md:p-10 rounded-3xl border border-slate-700 transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-             <form onSubmit={handleSubmit} className="space-y-6">
+             <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  
                  <div className={`group relative transition-all duration-500 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                    <label 
                       htmlFor="name" 
-                      className={`block text-sm font-medium text-blue-400 mb-2 transition-all duration-500 ease-in-out transform ${
+                      className={`block text-sm font-medium mb-2 transition-all duration-500 ease-in-out transform ${
+                         errors.name ? 'text-red-400' : 'text-blue-400'
+                      } ${
                          formData.name ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 group-focus-within:opacity-100 group-focus-within:translate-y-0'
                       }`}
                    >
@@ -92,17 +144,29 @@ export const Contact: React.FC = () => {
                       type="text" 
                       id="name"
                       required
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 focus:shadow-lg focus:-translate-y-0.5 transition-all duration-300 ease-out"
+                      className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:shadow-lg focus:-translate-y-0.5 transition-all duration-300 ease-out ${
+                        errors.name && touched.name 
+                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50' 
+                          : 'border-slate-700 focus:border-blue-500 focus:ring-blue-500/50'
+                      }`}
                       placeholder="John Doe"
                       value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                    />
+                   {errors.name && touched.name && (
+                     <p className="mt-1 text-xs text-red-400 flex items-center gap-1 animate-fade-in">
+                       <AlertCircle size={12} /> {errors.name}
+                     </p>
+                   )}
                  </div>
 
                  <div className={`group relative transition-all duration-500 delay-400 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                    <label 
                       htmlFor="email" 
-                      className={`block text-sm font-medium text-blue-400 mb-2 transition-all duration-500 ease-in-out transform ${
+                      className={`block text-sm font-medium mb-2 transition-all duration-500 ease-in-out transform ${
+                         errors.email ? 'text-red-400' : 'text-blue-400'
+                      } ${
                          formData.email ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 group-focus-within:opacity-100 group-focus-within:translate-y-0'
                       }`}
                    >
@@ -112,18 +176,30 @@ export const Contact: React.FC = () => {
                       type="email" 
                       id="email"
                       required
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 focus:shadow-lg focus:-translate-y-0.5 transition-all duration-300 ease-out"
+                      className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:shadow-lg focus:-translate-y-0.5 transition-all duration-300 ease-out ${
+                        errors.email && touched.email
+                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50' 
+                          : 'border-slate-700 focus:border-blue-500 focus:ring-blue-500/50'
+                      }`}
                       placeholder="john@example.com"
                       value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                    />
+                   {errors.email && touched.email && (
+                     <p className="mt-1 text-xs text-red-400 flex items-center gap-1 animate-fade-in">
+                       <AlertCircle size={12} /> {errors.email}
+                     </p>
+                   )}
                  </div>
                </div>
                
                <div className={`group relative transition-all duration-500 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                  <label 
                     htmlFor="message" 
-                    className={`block text-sm font-medium text-blue-400 mb-2 transition-all duration-500 ease-in-out transform ${
+                    className={`block text-sm font-medium mb-2 transition-all duration-500 ease-in-out transform ${
+                       errors.message ? 'text-red-400' : 'text-blue-400'
+                    } ${
                        formData.message ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 group-focus-within:opacity-100 group-focus-within:translate-y-0'
                     }`}
                  >
@@ -133,11 +209,21 @@ export const Contact: React.FC = () => {
                     id="message"
                     required
                     rows={4}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 focus:shadow-lg focus:-translate-y-0.5 transition-all duration-300 ease-out resize-none"
+                    className={`w-full bg-slate-900 border rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:shadow-lg focus:-translate-y-0.5 transition-all duration-300 ease-out resize-none ${
+                        errors.message && touched.message
+                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50' 
+                          : 'border-slate-700 focus:border-blue-500 focus:ring-blue-500/50'
+                    }`}
                     placeholder="Tell us about your project..."
                     value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                  />
+                 {errors.message && touched.message && (
+                     <p className="mt-1 text-xs text-red-400 flex items-center gap-1 animate-fade-in">
+                       <AlertCircle size={12} /> {errors.message}
+                     </p>
+                   )}
                </div>
 
                <div className={`transition-all duration-500 delay-600 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
@@ -145,8 +231,8 @@ export const Contact: React.FC = () => {
                    type="submit" 
                    variant="primary" 
                    size="lg" 
-                   className="w-full bg-blue-600 hover:bg-blue-700 border-none shadow-lg shadow-blue-900/20 active:scale-95 transition-transform"
-                   disabled={status === 'sending'}
+                   className="w-full bg-blue-600 hover:bg-blue-700 border-none shadow-lg shadow-blue-900/20 active:scale-95 transition-transform disabled:opacity-70 disabled:cursor-not-allowed"
+                   disabled={status === 'sending' || isFormInvalid}
                  >
                    {status === 'sending' ? 'Sending...' : status === 'success' ? 'Message Sent!' : (
                      <span className="flex items-center">
