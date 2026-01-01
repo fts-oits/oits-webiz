@@ -68,14 +68,15 @@ export const Hero: React.FC = () => {
       constructor() {
         this.x = Math.random() * (canvas?.width || 0);
         this.y = Math.random() * (canvas?.height || 0);
-        this.size = Math.random() * 2 + 1; // Size between 1 and 3
-        // Slower speed for calm, subtle movement
-        this.speedX = Math.random() * 0.3 - 0.15;
-        this.speedY = Math.random() * 0.3 - 0.15;
-        // Strictly Brand colors: Blue-500 (#3b82f6) and Indigo-500 (#6366f1)
+        this.size = Math.random() * 2 + 1; 
+        // Refined speed for slower, more subtle movement
+        this.speedX = Math.random() * 0.2 - 0.1;
+        this.speedY = Math.random() * 0.2 - 0.1;
+        
         const isBlue = Math.random() > 0.5;
         this.color = isBlue ? '59, 130, 246' : '99, 102, 241';
-        this.alpha = Math.random() * 0.3 + 0.1;
+        // Lower alpha for subtlety
+        this.alpha = Math.random() * 0.2 + 0.05;
         this.targetAlpha = this.alpha;
       }
 
@@ -83,9 +84,9 @@ export const Hero: React.FC = () => {
         this.x += this.speedX;
         this.y += this.speedY;
 
-        // Pulse effect
+        // Subtle Pulse effect
         if (Math.abs(this.alpha - this.targetAlpha) < 0.01) {
-             this.targetAlpha = Math.random() * 0.3 + 0.1;
+             this.targetAlpha = Math.random() * 0.2 + 0.05;
         } else {
              this.alpha += (this.targetAlpha - this.alpha) * 0.01;
         }
@@ -110,7 +111,8 @@ export const Hero: React.FC = () => {
 
     const init = () => {
       particles = [];
-      const numberOfParticles = Math.floor(window.innerWidth / 15); // Slightly higher density but subtle
+      // Reduced density for cleaner look
+      const numberOfParticles = Math.floor(window.innerWidth / 20); 
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
       }
@@ -146,9 +148,9 @@ export const Hero: React.FC = () => {
       {/* Background Elements with Parallax */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
         
-        {/* Parallax Layer 1: Background Image (Moves slowly down) */}
+        {/* Parallax Layer 1: Blurred Background Image (IDE/Code Theme) */}
         <div 
-            className="absolute inset-0 bg-cover bg-center opacity-10 dark:opacity-20 blur-sm scale-110 will-change-transform"
+            className="absolute inset-0 bg-cover bg-center opacity-20 dark:opacity-30 blur-sm scale-110 will-change-transform"
             style={{ 
                 backgroundImage: 'url("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2070")',
                 transform: `translateY(${scrollY * 0.2}px) scale(1.1)`
@@ -157,7 +159,7 @@ export const Hero: React.FC = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-slate-50/70 to-slate-50/90 dark:from-slate-950/80 dark:via-slate-950/70 dark:to-slate-950/90" />
 
-        {/* Parallax Layer 2: Particles (Move slightly) */}
+        {/* Parallax Layer 2: Refined Particles */}
         <div className="absolute inset-0 will-change-transform" style={{ transform: `translateY(${scrollY * 0.1}px)` }}>
             <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
         </div>
