@@ -68,17 +68,17 @@ export const Hero: React.FC = () => {
       constructor() {
         this.x = Math.random() * (canvas?.width || 0);
         this.y = Math.random() * (canvas?.height || 0);
-        // Smaller size for subtlety
-        this.size = Math.random() * 1.5 + 0.5; 
-        // Very slow movement
-        this.speedX = Math.random() * 0.1 - 0.05;
-        this.speedY = Math.random() * 0.1 - 0.05;
+        // Small size for subtlety
+        this.size = Math.random() * 2 + 0.5; 
+        // Slow movement
+        this.speedX = Math.random() * 0.2 - 0.1;
+        this.speedY = Math.random() * 0.2 - 0.1;
         
         // Brand colors: Blue-500 and Indigo-500
         const isBlue = Math.random() > 0.5;
         this.color = isBlue ? '59, 130, 246' : '99, 102, 241';
-        // Lower alpha for subtlety
-        this.alpha = Math.random() * 0.2 + 0.05;
+        // Low alpha for subtlety
+        this.alpha = Math.random() * 0.3 + 0.1;
         this.targetAlpha = this.alpha;
       }
 
@@ -87,10 +87,10 @@ export const Hero: React.FC = () => {
         this.y += this.speedY;
 
         // Subtle Pulse effect
-        if (Math.abs(this.alpha - this.targetAlpha) < 0.005) {
-             this.targetAlpha = Math.random() * 0.2 + 0.05;
+        if (Math.abs(this.alpha - this.targetAlpha) < 0.01) {
+             this.targetAlpha = Math.random() * 0.3 + 0.1;
         } else {
-             this.alpha += (this.targetAlpha - this.alpha) * 0.005;
+             this.alpha += (this.targetAlpha - this.alpha) * 0.01;
         }
         
         // Wrap around screen
@@ -113,7 +113,6 @@ export const Hero: React.FC = () => {
 
     const init = () => {
       particles = [];
-      // Reduced density
       const numberOfParticles = Math.floor(window.innerWidth / 15); 
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
@@ -182,28 +181,28 @@ export const Hero: React.FC = () => {
           
           <div className="flex-1 space-y-8 text-center lg:text-left relative z-10">
             {/* Entrance Animation: Badge */}
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wide transition-all duration-1000 delay-100 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wide transition-all duration-1000 delay-100 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
               Available for new projects
             </div>
             
             {/* Entrance Animation: Tagline/Heading */}
-            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] transition-all duration-1000 delay-200 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] transition-all duration-1000 delay-200 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               We Craft <br className="hidden md:block"/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Digital Excellence</span>
             </h1>
             
             {/* Entrance Animation: Description */}
-            <p className={`text-lg md:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed transition-all duration-1000 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+            <p className={`text-lg md:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed transition-all duration-1000 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               {TAGLINE}. We build robust software solutions that drive business growth, combining technical expertise with stunning design.
             </p>
 
             {/* Entrance Animation: Buttons */}
-            <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <Button 
                 size="lg" 
                 variant="primary"
-                className="group relative overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-600/40" 
+                className="group relative overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-600/40" 
                 onClick={() => window.location.href=`#${SectionId.CONTACT}`}
               >
                 Request a Demo

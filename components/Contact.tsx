@@ -82,8 +82,8 @@ export const Contact: React.FC = () => {
                  <div className={`group relative transition-all duration-500 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                    <label 
                       htmlFor="name" 
-                      className={`block text-sm font-medium text-blue-400 mb-2 transition-all duration-500 ease-in-out transform ${
-                         formData.name ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 group-focus-within:opacity-100 group-focus-within:translate-y-0'
+                      className={`block text-sm font-medium text-blue-400 mb-2 transition-all duration-300 ease-out transform ${
+                         formData.name ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 group-focus-within:opacity-100 group-focus-within:translate-y-0'
                       }`}
                    >
                       Name
@@ -102,8 +102,8 @@ export const Contact: React.FC = () => {
                  <div className={`group relative transition-all duration-500 delay-400 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                    <label 
                       htmlFor="email" 
-                      className={`block text-sm font-medium text-blue-400 mb-2 transition-all duration-500 ease-in-out transform ${
-                         formData.email ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 group-focus-within:opacity-100 group-focus-within:translate-y-0'
+                      className={`block text-sm font-medium text-blue-400 mb-2 transition-all duration-300 ease-out transform ${
+                         formData.email ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 group-focus-within:opacity-100 group-focus-within:translate-y-0'
                       }`}
                    >
                       Email
@@ -123,8 +123,8 @@ export const Contact: React.FC = () => {
                <div className={`group relative transition-all duration-500 delay-500 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                  <label 
                     htmlFor="message" 
-                    className={`block text-sm font-medium text-blue-400 mb-2 transition-all duration-500 ease-in-out transform ${
-                       formData.message ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 group-focus-within:opacity-100 group-focus-within:translate-y-0'
+                    className={`block text-sm font-medium text-blue-400 mb-2 transition-all duration-300 ease-out transform ${
+                       formData.message ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1 group-focus-within:opacity-100 group-focus-within:translate-y-0'
                     }`}
                  >
                     Message
