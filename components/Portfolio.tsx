@@ -78,13 +78,15 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     };
   }, []);
 
-  // Handle Captions Toggle
+  // Handle Captions Logic
   useEffect(() => {
     const video = videoRef.current;
     if (video && video.textTracks && video.textTracks.length > 0) {
-      video.textTracks[0].mode = captionsEnabled ? 'showing' : 'hidden';
+      // Find the track we added
+      const track = video.textTracks[0];
+      track.mode = captionsEnabled ? 'showing' : 'hidden';
     }
-  }, [captionsEnabled]);
+  }, [captionsEnabled, captionsUrl]);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -120,12 +122,16 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     }
   };
 
-  const handleMouseMove = () => {
+  const resetControlsTimeout = () => {
     setShowControls(true);
     if (controlsTimeoutRef.current) window.clearTimeout(controlsTimeoutRef.current);
     if (isPlaying) {
-      controlsTimeoutRef.current = window.setTimeout(() => setShowControls(false), 2000);
+      controlsTimeoutRef.current = window.setTimeout(() => setShowControls(false), 2500);
     }
+  };
+
+  const handleInteraction = () => {
+    resetControlsTimeout();
   };
 
   const handleMouseLeave = () => {
@@ -134,9 +140,20 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     }
   };
 
+  // Ensure controls stay visible if focus is within container
+  const handleFocus = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) window.clearTimeout(controlsTimeoutRef.current);
+  };
+
+  const handleBlur = () => {
+      // Only hide if focus leaves the container entirely
+      if(isPlaying) resetControlsTimeout();
+  };
+
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    // Reset controls visibility on key press
-    handleMouseMove();
+    handleInteraction();
     
     switch(e.key) {
       case ' ':
@@ -193,16 +210,17 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-full bg-black group overflow-hidden flex flex-col justify-center outline-none"
-      onMouseMove={handleMouseMove}
+      className="relative w-full h-full bg-black group overflow-hidden flex flex-col justify-center outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500"
+      onMouseMove={handleInteraction}
       onMouseLeave={handleMouseLeave}
       onKeyDown={handleKeyDown}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
       tabIndex={0}
       role="region"
       aria-label="Video Player"
     >
       {/* Blurred Background for Ambient Loading */}
-      {/* We keep this visible until video is fully loaded to provide a nice visual cue */}
       <div 
         className={`absolute inset-0 bg-cover bg-center z-0 transition-opacity duration-1000 ${isVideoLoaded ? 'opacity-0' : 'opacity-100'}`}
         style={{ 
@@ -223,19 +241,19 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
       <video
         ref={videoRef}
         src={src}
-        poster={poster} // Keeps original poster logic as fallback
+        poster={poster} 
         className={`relative z-10 w-full h-full object-contain transition-opacity duration-700 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
         onClick={togglePlay}
         playsInline
         crossOrigin="anonymous"
       >
-        {captionsUrl && <track kind="captions" src={captionsUrl} srcLang="en" label="English" default={false} />}
+        {captionsUrl && <track kind="captions" src={captionsUrl} srcLang="en" label="English" default={captionsEnabled} />}
         Your browser does not support the video tag.
       </video>
 
       {/* Controls Overlay */}
       <div 
-        className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-4 pb-4 pt-16 transition-opacity duration-300 z-20 flex flex-col gap-4 ${showControls || !isPlaying ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent px-4 pb-4 pt-20 transition-all duration-300 ease-in-out z-20 flex flex-col gap-4 ${showControls || !isPlaying ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}
       >
         {/* Progress Bar */}
         <input
@@ -247,31 +265,31 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
           onKeyDown={stopPropagation}
           aria-label="Seek video"
           aria-valuemin={0}
-          aria-valuemax={duration || 100}
+          aria-valuemax={duration || 0}
           aria-valuenow={currentTime}
           aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
-          className="w-full h-2 bg-white/30 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:h-2.5 transition-all focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full h-1.5 bg-white/30 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:h-2.5 transition-all focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
         <div className="flex items-center justify-between text-white">
           <div className="flex items-center gap-4 sm:gap-6">
             <button 
               onClick={togglePlay} 
-              className="p-3 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+              className="p-2 hover:bg-white/20 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
               aria-label={isPlaying ? "Pause" : "Play"}
-              aria-pressed={isPlaying}
+              title={isPlaying ? "Pause (Space)" : "Play (Space)"}
             >
-              {isPlaying ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" />}
+              {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
             </button>
 
             <div className="flex items-center gap-3 group/vol">
               <button 
                 onClick={toggleMute} 
-                className="p-3 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+                className="p-2 hover:bg-white/20 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                 aria-label={isMuted ? "Unmute" : "Mute"}
-                aria-pressed={isMuted}
+                title={isMuted ? "Unmute (M)" : "Mute (M)"}
               >
-                {isMuted || volume === 0 ? <VolumeX size={28} /> : <Volume2 size={28} />}
+                {isMuted || volume === 0 ? <VolumeX size={24} /> : <Volume2 size={24} />}
               </button>
               <input
                 type="range"
@@ -289,29 +307,29 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
               />
             </div>
 
-            <span className="text-sm font-mono font-medium opacity-80 select-none hidden sm:block" aria-hidden="true">
+            <span className="text-xs sm:text-sm font-mono font-medium opacity-80 select-none hidden sm:block">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {captionsUrl && (
               <button
                 onClick={() => setCaptionsEnabled(!captionsEnabled)}
-                className={`p-3 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${captionsEnabled ? 'text-blue-400 bg-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
-                title={captionsEnabled ? "Disable Captions" : "Enable Captions"}
+                className={`p-2 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 ${captionsEnabled ? 'text-blue-400 bg-white/20' : 'text-white/70 hover:bg-white/20 hover:text-white'}`}
+                title={captionsEnabled ? "Disable Captions (C)" : "Enable Captions (C)"}
                 aria-label={captionsEnabled ? "Disable Captions" : "Enable Captions"}
                 aria-pressed={captionsEnabled}
               >
-                <Subtitles size={28} />
+                <Subtitles size={24} />
               </button>
             )}
             <button
               onClick={onClose}
-              className="flex items-center gap-2 px-6 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-sm font-bold transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+              className="flex items-center gap-2 px-4 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-xs sm:text-sm font-bold transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
               aria-label="Exit full screen video"
             >
-              <ArrowDown size={18} className="rotate-90" /> <span className="hidden sm:inline">Exit</span>
+              <ArrowDown size={16} className="rotate-90" /> <span className="hidden sm:inline">Exit</span>
             </button>
           </div>
         </div>
@@ -353,14 +371,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
       setIsPlayingVideo(autoPlay && !!project.demoVideoUrl);
       document.body.style.overflow = 'hidden';
       if (contentRef.current) contentRef.current.scrollTop = 0;
-      // Focus management would go here in a full app
     }
     return () => { document.body.style.overflow = 'unset'; };
   }, [project, autoPlay]);
 
   const handleClose = () => {
     setIsClosing(true);
-    // Ensure animation plays out before unmounting
+    // Matches the duration-300 transition class
     setTimeout(() => {
       setIsVisible(false);
       onClose();
@@ -383,10 +400,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
     p => p.category === activeProject.category && p.id !== activeProject.id
   ).slice(0, 3);
 
-  // Transition classes
-  const backdropClass = `fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] transition-opacity duration-300 ease-out ${isClosing ? 'opacity-0' : 'opacity-100'}`;
+  // Smooth fade-out transition classes
+  const backdropClass = `fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] transition-opacity duration-300 ease-in-out ${isClosing ? 'opacity-0' : 'opacity-100'}`;
   const modalContainerClass = `fixed inset-0 z-[101] flex items-center justify-center p-4 sm:p-6 pointer-events-none`;
-  const modalContentClass = `relative w-full max-w-5xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pointer-events-auto transform origin-center transition-all duration-300 ease-out ${
+  const modalContentClass = `relative w-full max-w-5xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pointer-events-auto transform origin-center transition-all duration-300 ease-in-out ${
     isClosing ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
   }`;
 
@@ -565,11 +582,12 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
 // --- Project Card Component ---
 interface ProjectCardProps {
   project: Project;
+  index: number;
   onClick: () => void;
   onViewDemo: () => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick, onViewDemo }) => {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -599,6 +617,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
       className={`group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-2xl dark:hover:shadow-blue-900/10 transition-all duration-700 ease-out transform ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
+      style={{ transitionDelay: `${index * 100}ms` }}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-slate-200 dark:bg-slate-800 cursor-pointer" onClick={onClick}>
         <img 
@@ -672,7 +691,6 @@ export const Portfolio: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isFilterAnimating, setIsFilterAnimating] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  // Using generic window check instead of router location to avoid routing dependency issues
   const isPage = typeof window !== 'undefined' && window.location.pathname === '/portfolio';
   const HeadingTag = isPage ? 'h1' : 'h3';
 
@@ -774,10 +792,10 @@ export const Portfolio: React.FC = () => {
               onClick={() => handleCategoryChange(cat)}
               aria-label={`Filter by category ${cat}, ${getCategoryCount(cat)} projects available`}
               aria-pressed={activeCategory === cat}
-              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 transform flex items-center gap-2 ${
+              className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${
                 activeCategory === cat
-                  ? 'bg-slate-900 text-white shadow-lg scale-105 ring-2 ring-slate-900 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900'
-                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-105'
+                  ? 'bg-slate-900 text-white shadow-lg ring-2 ring-slate-900 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900 scale-105'
+                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
               {cat} 
@@ -802,7 +820,7 @@ export const Portfolio: React.FC = () => {
                 onClick={() => handleTagChange(tag)}
                 aria-label={`Filter by technology ${tag}, ${getTagCount(tag)} projects available`}
                 aria-pressed={activeTag === tag}
-                className={`px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 whitespace-nowrap flex items-center gap-1 ${
+                className={`px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 hover:scale-105 whitespace-nowrap flex items-center gap-1 ${
                   activeTag === tag
                     ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 shadow-sm'
                     : 'bg-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
@@ -820,9 +838,10 @@ export const Portfolio: React.FC = () => {
         {/* Grid with Fade Transition */}
         <div className={`transition-opacity duration-300 ease-in-out ${isFilterAnimating ? 'opacity-0 scale-[0.98]' : 'opacity-100 scale-100'}`}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
-            {displayedProjects.map((project) => (
+            {displayedProjects.map((project, index) => (
               <ProjectCard 
                 key={project.id} 
+                index={index}
                 project={project} 
                 onClick={() => setSelectedProjectState({ project, autoPlay: false })} 
                 onViewDemo={() => setSelectedProjectState({ project, autoPlay: true })}
