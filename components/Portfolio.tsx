@@ -181,6 +181,11 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
     }
   };
 
+  // Prevent arrow key events on inputs from bubbling up to container
+  const stopPropagation = (e: React.KeyboardEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <div 
       ref={containerRef}
@@ -233,9 +238,10 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
           max={duration || 0}
           value={currentTime}
           onChange={handleSeek}
+          onKeyDown={stopPropagation}
           aria-label="Seek video"
           aria-valuemin={0}
-          aria-valuemax={duration}
+          aria-valuemax={duration || 100}
           aria-valuenow={currentTime}
           aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
           className="w-full h-2 bg-white/30 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:h-2.5 transition-all focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -247,6 +253,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
               onClick={togglePlay} 
               className="p-3 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
               aria-label={isPlaying ? "Pause" : "Play"}
+              aria-pressed={isPlaying}
             >
               {isPlaying ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" />}
             </button>
@@ -256,6 +263,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
                 onClick={toggleMute} 
                 className="p-3 hover:bg-white/10 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
                 aria-label={isMuted ? "Unmute" : "Mute"}
+                aria-pressed={isMuted}
               >
                 {isMuted || volume === 0 ? <VolumeX size={28} /> : <Volume2 size={28} />}
               </button>
@@ -266,6 +274,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({ src, captionsUrl,
                 step="0.05"
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
+                onKeyDown={stopPropagation}
                 aria-label="Volume"
                 aria-valuemin={0}
                 aria-valuemax={1}
