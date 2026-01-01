@@ -149,10 +149,10 @@ export const Hero: React.FC = () => {
             <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <Button 
                 size="lg" 
-                className="group transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30" 
-                onClick={() => window.location.href=`#${SectionId.PORTFOLIO}`}
+                className="group transform transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/30" 
+                onClick={() => window.location.href=`#${SectionId.CONTACT}`}
               >
-                View Our Work
+                Get Started
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
               <Button variant="outline" size="lg" className="group">

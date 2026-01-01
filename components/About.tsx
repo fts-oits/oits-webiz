@@ -1,6 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CheckCircle2, Target, Heart } from 'lucide-react';
+import { CheckCircle2, Target, Heart, Users } from 'lucide-react';
 import { SectionId } from '../types';
+
+const TEAM = [
+  {
+    name: 'Alex Morgan',
+    role: 'CEO & Founder',
+    image: 'https://picsum.photos/400/400?random=20',
+  },
+  {
+    name: 'Sarah Chen',
+    role: 'Lead Architect',
+    image: 'https://picsum.photos/400/400?random=21',
+  },
+  {
+    name: 'James Wilson',
+    role: 'Head of Design',
+    image: 'https://picsum.photos/400/400?random=22',
+  },
+  {
+    name: 'Maria Garcia',
+    role: 'Project Manager',
+    image: 'https://picsum.photos/400/400?random=23',
+  },
+];
 
 export const About: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -27,14 +50,14 @@ export const About: React.FC = () => {
   return (
     <section ref={sectionRef} id={SectionId.ABOUT} className="py-24 bg-white dark:bg-slate-900 transition-colors duration-300">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row items-center gap-16">
+        <div className="flex flex-col lg:flex-row items-center gap-16 mb-24">
           
           <div className={`flex-1 w-full relative transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
-             <div className="relative aspect-square rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 shadow-2xl">
+             <div className="relative aspect-square rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 shadow-2xl group">
                 <img 
                   src="https://picsum.photos/800/800?random=15" 
                   alt="Team collaboration" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent flex items-end p-8">
                   <div className="text-white">
@@ -103,8 +126,44 @@ export const About: React.FC = () => {
                </div>
             </div>
           </div>
-
         </div>
+
+        {/* Team Section */}
+        <div className={`transition-all duration-1000 delay-300 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Users className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">Our Team</h2>
+            </div>
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-white">Meet the minds behind the magic.</h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {TEAM.map((member, index) => (
+              <div 
+                key={member.name}
+                className={`group relative bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+                style={{ transitionDelay: `${500 + (index * 150)}ms` }}
+              >
+                <div className="aspect-[4/5] overflow-hidden bg-slate-200 dark:bg-slate-700">
+                  <img 
+                    src={member.image} 
+                    alt={member.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                  <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-lg">
+                    <h4 className="font-bold text-slate-900 dark:text-white text-lg">{member.name}</h4>
+                    <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">{member.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </section>
   );

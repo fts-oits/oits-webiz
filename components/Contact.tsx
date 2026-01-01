@@ -84,7 +84,7 @@ export const Contact: React.FC = () => {
                       type="text" 
                       id="name"
                       required
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 focus:shadow-lg focus:-translate-y-0.5 transition-all duration-300 ease-out"
                       placeholder="John Doe"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -96,7 +96,7 @@ export const Contact: React.FC = () => {
                       type="email" 
                       id="email"
                       required
-                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 focus:shadow-lg focus:-translate-y-0.5 transition-all duration-300 ease-out"
                       placeholder="john@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -110,7 +110,7 @@ export const Contact: React.FC = () => {
                     id="message"
                     required
                     rows={4}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-colors resize-none"
+                    className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 focus:shadow-lg focus:-translate-y-0.5 transition-all duration-300 ease-out resize-none"
                     placeholder="Tell us about your project..."
                     value={formData.message}
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
@@ -122,7 +122,7 @@ export const Contact: React.FC = () => {
                    type="submit" 
                    variant="primary" 
                    size="lg" 
-                   className="w-full bg-blue-600 hover:bg-blue-700 border-none"
+                   className="w-full bg-blue-600 hover:bg-blue-700 border-none shadow-lg shadow-blue-900/20 active:scale-95 transition-transform"
                    disabled={status === 'sending'}
                  >
                    {status === 'sending' ? 'Sending...' : status === 'success' ? 'Message Sent!' : (

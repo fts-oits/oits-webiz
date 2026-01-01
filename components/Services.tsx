@@ -61,7 +61,7 @@ export const Services: React.FC = () => {
                 <ArrowUpRight className="w-6 h-6 text-slate-400" />
               </div>
 
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-900 shadow-sm mb-6 group-hover:bg-slate-900 group-hover:text-white transition-colors">
+              <div className="w-12 h-12 shrink-0 bg-white rounded-2xl flex items-center justify-center text-slate-900 shadow-sm mb-6 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3">
                 {iconMap[service.icon]}
               </div>
 

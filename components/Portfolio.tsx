@@ -425,27 +425,51 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo }) => {
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [parallaxOffset, setParallaxOffset] = useState(0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.1 }
     );
     if (cardRef.current) observer.observe(cardRef.current);
-    return () => { if (cardRef.current) observer.unobserve(cardRef.current); };
+    return () => { if (cardRef.current) observer.disconnect(); };
   }, []);
+
+  // Parallax Effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!cardRef.current || !isVisible) return;
+      
+      const rect = cardRef.current.getBoundingClientRect();
+      const viewHeight = window.innerHeight;
+      
+      // Calculate position relative to viewport
+      // 0 = top of viewport, 1 = bottom of viewport
+      const progress = (rect.top + rect.height / 2) / viewHeight;
+      
+      // Adjust speed differential (factor) for more pronounced effect
+      const speed = 40; 
+      const offset = (progress - 0.5) * speed;
+      
+      setParallaxOffset(offset);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial calc
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isVisible]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -475,8 +499,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
       onMouseLeave={handleMouseLeave}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-slate-200 dark:bg-slate-800 cursor-pointer" onClick={onClick}>
-        <div ref={wrapperRef} className="absolute inset-0 h-[120%] -top-[10%] w-full will-change-transform">
-          <img src={project.imageUrl} alt={project.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"/>
+        {/* Parallax Image Container */}
+        <div 
+          className="absolute inset-0 h-[120%] -top-[10%] w-full will-change-transform"
+          style={{ transform: `translateY(${parallaxOffset}px)` }}
+        >
+          <img 
+            src={project.imageUrl} 
+            alt={project.title} 
+            loading="lazy" 
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
         </div>
         
         {project.demoVideoUrl && shouldLoadVideo && (
@@ -487,6 +520,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, onViewDemo 
                 muted={isMuted}
                 loop
                 playsInline
+                poster={project.imageUrl}
             />
         )}
         
