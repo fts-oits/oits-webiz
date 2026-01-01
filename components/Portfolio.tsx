@@ -415,142 +415,146 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, autoPlay = false, 
           
           <div ref={contentRef} className="overflow-y-auto custom-scrollbar scroll-smooth">
             
-            {/* Media Area */}
-            <div className={`relative w-full shrink-0 bg-slate-900 ${isPlayingVideo ? 'aspect-video' : 'h-64 md:h-96'}`}>
-               {isPlayingVideo && activeProject.demoVideoUrl ? (
-                 <CustomVideoPlayer 
-                    src={activeProject.demoVideoUrl}
-                    captionsUrl={activeProject.captionsUrl}
-                    poster={activeProject.imageUrl}
-                    onClose={() => setIsPlayingVideo(false)}
-                 />
-               ) : (
-                 <div className="relative w-full h-full group">
-                  <img 
-                    src={activeProject.imageUrl} 
-                    alt={activeProject.title} 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-90 group-hover:opacity-100"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
-                  
-                  <button 
-                    ref={closeButtonRef}
-                    onClick={handleClose}
-                    className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors z-30 focus:outline-none focus:ring-2 focus:ring-white"
-                    aria-label="Close modal"
-                  >
-                    <X size={24} />
-                  </button>
+            {/* Added key for entrance animation when switching projects */}
+            <div key={activeProject.id} className="animate-fade-in">
+              {/* Media Area */}
+              <div className={`relative w-full shrink-0 bg-slate-900 ${isPlayingVideo ? 'aspect-video' : 'h-64 md:h-96'}`}>
+                 {isPlayingVideo && activeProject.demoVideoUrl ? (
+                   <CustomVideoPlayer 
+                      src={activeProject.demoVideoUrl}
+                      captionsUrl={activeProject.captionsUrl}
+                      poster={activeProject.imageUrl}
+                      onClose={() => setIsPlayingVideo(false)}
+                   />
+                 ) : (
+                   <div className="relative w-full h-full group">
+                    <img 
+                      src={activeProject.imageUrl} 
+                      alt={activeProject.title} 
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent" />
+                    
+                    <button 
+                      ref={closeButtonRef}
+                      onClick={handleClose}
+                      className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors z-30 focus:outline-none focus:ring-2 focus:ring-white"
+                      aria-label="Close modal"
+                    >
+                      <X size={24} />
+                    </button>
 
-                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white z-20 pointer-events-none">
-                    <span className="inline-block px-3 py-1 bg-blue-600 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 shadow-sm border border-blue-500/50">
-                      {activeProject.category}
-                    </span>
-                    <h3 id="modal-title" className="text-3xl md:text-5xl font-bold mb-2 tracking-tight">{activeProject.title}</h3>
-                  </div>
-
-                  {activeProject.demoVideoUrl && (
-                    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-                       <button 
-                         onClick={() => setIsPlayingVideo(true)}
-                         className="pointer-events-auto flex items-center gap-2 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 rounded-full text-white font-bold transition-all hover:scale-105 hover:animate-pulse group/play shadow-xl focus:outline-none focus:ring-2 focus:ring-white"
-                         aria-label="Watch demo video"
-                       >
-                         <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 group-hover/play:scale-110 transition-transform">
-                           <Play size={16} fill="currentColor" />
-                         </div>
-                         Watch Demo
-                       </button>
+                    <div className="absolute bottom-0 left-0 right-0 p-8 text-white z-20 pointer-events-none">
+                      <span className="inline-block px-3 py-1 bg-blue-600 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 shadow-sm border border-blue-500/50">
+                        {activeProject.category}
+                      </span>
+                      <h3 id="modal-title" className="text-3xl md:text-5xl font-bold mb-2 tracking-tight">{activeProject.title}</h3>
                     </div>
-                  )}
-                 </div>
-               )}
-            </div>
 
-            <div className="p-8 md:p-12">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                
-                <div className="md:col-span-2 space-y-8">
-                  <div>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Project Overview</h4>
-                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">
-                      {activeProject.fullDescription || activeProject.description}
-                    </p>
-                  </div>
-                  
-                  {activeProject.technologies && (
-                    <div>
-                      <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                        <Code2 size={20} className="text-blue-500" />
-                        Technologies Used
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {activeProject.technologies.map((tech) => (
-                          <span key={tech} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium border border-slate-200 dark:border-slate-700 hover:border-blue-300 transition-colors cursor-default">
-                            {tech}
-                          </span>
-                        ))}
+                    {activeProject.demoVideoUrl && (
+                      <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                         <button 
+                           onClick={() => setIsPlayingVideo(true)}
+                           className="pointer-events-auto flex items-center gap-2 px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-md border border-white/40 rounded-full text-white font-bold transition-all hover:scale-105 hover:animate-pulse group/play shadow-xl focus:outline-none focus:ring-2 focus:ring-white"
+                           aria-label="Watch demo video"
+                         >
+                           <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 group-hover/play:scale-110 transition-transform">
+                             <Play size={16} fill="currentColor" />
+                           </div>
+                           Watch Demo
+                         </button>
                       </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-6">
-                   <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 sticky top-6">
-                      <h4 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">At a Glance</h4>
-                      <ul className="space-y-4 text-sm">
-                        <li className="flex flex-col pb-4 border-b border-slate-200 dark:border-slate-700 last:border-0 last:pb-0">
-                          <span className="text-slate-500 dark:text-slate-400 mb-1">Client</span>
-                          <span className="font-semibold text-slate-900 dark:text-white">Confidential Partner</span>
-                        </li>
-                        <li className="flex flex-col pb-4 border-b border-slate-200 dark:border-slate-700 last:border-0 last:pb-0">
-                          <span className="text-slate-500 dark:text-slate-400 mb-1">Timeline</span>
-                          <span className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                             <Calendar size={14} className="text-blue-500"/> 3 Months
-                          </span>
-                        </li>
-                        <li className="flex flex-col pb-4 border-b border-slate-200 dark:border-slate-700 last:border-0 last:pb-0">
-                          <span className="text-slate-500 dark:text-slate-400 mb-1">Services</span>
-                          <span className="font-semibold text-slate-900 dark:text-white">{activeProject.category}</span>
-                        </li>
-                      </ul>
-                      
-                      <Button className="w-full mt-8 flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20 group" variant="primary" onClick={() => window.open(activeProject.link || '#', '_blank')}>
-                        Visit Live Site <ExternalLink size={16} className="group-hover:translate-x-1 transition-transform" />
-                      </Button>
+                    )}
                    </div>
-                </div>
+                 )}
               </div>
 
-              {relatedProjects.length > 0 && (
-                <div className="mt-16 pt-10 border-t border-slate-100 dark:border-slate-800">
-                  <h4 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Related Projects</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    {relatedProjects.map((relProject) => (
-                      <div 
-                        key={relProject.id} 
-                        className="group cursor-pointer"
-                        onClick={() => onProjectSelect(relProject)}
-                      >
-                        <div className="relative aspect-video rounded-xl overflow-hidden mb-3 border border-slate-100 dark:border-slate-700">
-                          <img 
-                            src={relProject.imageUrl} 
-                            alt={relProject.title}
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                          />
-                          <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-10 backdrop-blur-[1px]">
-                            <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 bg-white text-slate-900 px-4 py-2 rounded-full font-bold text-xs shadow-xl flex items-center gap-1">
-                              View Project <ArrowUpRight size={14} />
-                            </div>
-                          </div>
+              <div className="p-8 md:p-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                  
+                  <div className="md:col-span-2 space-y-8">
+                    <div>
+                      <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Project Overview</h4>
+                      <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-lg">
+                        {activeProject.fullDescription || activeProject.description}
+                      </p>
+                    </div>
+                    
+                    {activeProject.technologies && (
+                      <div>
+                        <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                          <Code2 size={20} className="text-blue-500" />
+                          Technologies Used
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {activeProject.technologies.map((tech) => (
+                            <span key={tech} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium border border-slate-200 dark:border-slate-700 hover:border-blue-300 transition-colors cursor-default">
+                              {tech}
+                            </span>
+                          ))}
                         </div>
-                        <h5 className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">{relProject.title}</h5>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">{relProject.category}</p>
                       </div>
-                    ))}
+                    )}
+                  </div>
+
+                  <div className="space-y-6">
+                     <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 sticky top-6">
+                        <h4 className="font-bold text-slate-900 dark:text-white mb-6 text-lg">At a Glance</h4>
+                        <ul className="space-y-4 text-sm">
+                          <li className="flex flex-col pb-4 border-b border-slate-200 dark:border-slate-700 last:border-0 last:pb-0">
+                            <span className="text-slate-500 dark:text-slate-400 mb-1">Client</span>
+                            <span className="font-semibold text-slate-900 dark:text-white">Confidential Partner</span>
+                          </li>
+                          <li className="flex flex-col pb-4 border-b border-slate-200 dark:border-slate-700 last:border-0 last:pb-0">
+                            <span className="text-slate-500 dark:text-slate-400 mb-1">Timeline</span>
+                            <span className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                               <Calendar size={14} className="text-blue-500"/> 3 Months
+                            </span>
+                          </li>
+                          <li className="flex flex-col pb-4 border-b border-slate-200 dark:border-slate-700 last:border-0 last:pb-0">
+                            <span className="text-slate-500 dark:text-slate-400 mb-1">Services</span>
+                            <span className="font-semibold text-slate-900 dark:text-white">{activeProject.category}</span>
+                          </li>
+                        </ul>
+                        
+                        <Button className="w-full mt-8 flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20 group" variant="primary" onClick={() => window.open(activeProject.link || '#', '_blank')}>
+                          Visit Live Site <ExternalLink size={16} className="group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                     </div>
                   </div>
                 </div>
-              )}
+
+                {relatedProjects.length > 0 && (
+                  <div className="mt-16 pt-10 border-t border-slate-100 dark:border-slate-800">
+                    <h4 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Related Projects</h4>
+                    <p className="text-slate-600 dark:text-slate-400 mb-8">Explore other {activeProject.category} solutions we've built.</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      {relatedProjects.map((relProject) => (
+                        <div 
+                          key={relProject.id} 
+                          className="group cursor-pointer"
+                          onClick={() => onProjectSelect(relProject)}
+                        >
+                          <div className="relative aspect-video rounded-xl overflow-hidden mb-3 border border-slate-100 dark:border-slate-700">
+                            <img 
+                              src={relProject.imageUrl} 
+                              alt={relProject.title}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                            />
+                            <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center z-10 backdrop-blur-[1px]">
+                              <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 bg-white text-slate-900 px-4 py-2 rounded-full font-bold text-xs shadow-xl flex items-center gap-1">
+                                View Project <ArrowUpRight size={14} />
+                              </div>
+                            </div>
+                          </div>
+                          <h5 className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">{relProject.title}</h5>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">{relProject.category}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

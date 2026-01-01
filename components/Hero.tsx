@@ -68,17 +68,17 @@ export const Hero: React.FC = () => {
       constructor() {
         this.x = Math.random() * (canvas?.width || 0);
         this.y = Math.random() * (canvas?.height || 0);
-        // Small size for subtlety
-        this.size = Math.random() * 2 + 0.5; 
-        // Slow movement
-        this.speedX = Math.random() * 0.2 - 0.1;
-        this.speedY = Math.random() * 0.2 - 0.1;
+        // Small size for subtlety (0.5 to 2.0)
+        this.size = Math.random() * 1.5 + 0.5; 
+        // Slow movement for less distraction
+        this.speedX = Math.random() * 0.15 - 0.075;
+        this.speedY = Math.random() * 0.15 - 0.075;
         
-        // Brand colors: Blue-500 and Indigo-500
+        // Brand colors: Blue-500 (59, 130, 246) and Indigo-500 (99, 102, 241)
         const isBlue = Math.random() > 0.5;
         this.color = isBlue ? '59, 130, 246' : '99, 102, 241';
         // Low alpha for subtlety
-        this.alpha = Math.random() * 0.3 + 0.1;
+        this.alpha = Math.random() * 0.4 + 0.1;
         this.targetAlpha = this.alpha;
       }
 
@@ -88,9 +88,9 @@ export const Hero: React.FC = () => {
 
         // Subtle Pulse effect
         if (Math.abs(this.alpha - this.targetAlpha) < 0.01) {
-             this.targetAlpha = Math.random() * 0.3 + 0.1;
+             this.targetAlpha = Math.random() * 0.4 + 0.1;
         } else {
-             this.alpha += (this.targetAlpha - this.alpha) * 0.01;
+             this.alpha += (this.targetAlpha - this.alpha) * 0.02;
         }
         
         // Wrap around screen
@@ -113,7 +113,8 @@ export const Hero: React.FC = () => {
 
     const init = () => {
       particles = [];
-      const numberOfParticles = Math.floor(window.innerWidth / 15); 
+      // Adjust density
+      const numberOfParticles = Math.floor(window.innerWidth / 12); 
       for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
       }
@@ -151,7 +152,7 @@ export const Hero: React.FC = () => {
         
         {/* Parallax Layer 1: Blurred Background Image (IDE/Code Theme) */}
         <div 
-            className="absolute inset-0 bg-cover bg-center opacity-20 dark:opacity-30 blur-sm scale-110 will-change-transform"
+            className="absolute inset-0 bg-cover bg-center opacity-20 dark:opacity-30 blur-md scale-110 will-change-transform"
             style={{ 
                 backgroundImage: 'url("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2070")',
                 transform: `translateY(${scrollY * 0.2}px) scale(1.1)`
@@ -181,24 +182,24 @@ export const Hero: React.FC = () => {
           
           <div className="flex-1 space-y-8 text-center lg:text-left relative z-10">
             {/* Entrance Animation: Badge */}
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wide transition-all duration-[1200ms] delay-100 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wide transition-all duration-1000 delay-100 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
               Available for new projects
             </div>
             
-            {/* Entrance Animation: Tagline/Heading */}
-            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.1] transition-all duration-[1200ms] delay-200 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            {/* Entrance Animation: Tagline/Heading - Smoother fade-in & slide-up */}
+            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.1] transition-all duration-1000 delay-200 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               We Craft <br className="hidden md:block"/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Digital Excellence</span>
             </h1>
             
-            {/* Entrance Animation: Description */}
-            <p className={`text-lg md:text-xl text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed transition-all duration-[1200ms] delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            {/* Entrance Animation: Description - Subtle slide */}
+            <p className={`text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed transition-all duration-1000 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               {TAGLINE}. We build robust software solutions that drive business growth, combining technical expertise with stunning design.
             </p>
 
             {/* Entrance Animation: Buttons */}
-            <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-[1200ms] delay-500 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+            <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               <Button 
                 size="lg" 
                 variant="primary"
@@ -208,20 +209,20 @@ export const Hero: React.FC = () => {
                 Request a Demo
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button variant="outline" size="lg" className="group bg-white/50 backdrop-blur-sm hover:bg-white/80">
-                <Play className="mr-2 w-4 h-4 fill-slate-900" />
+              <Button variant="outline" size="lg" className="group bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm hover:bg-white/80 dark:hover:bg-slate-800">
+                <Play className="mr-2 w-4 h-4 fill-slate-900 dark:fill-white" />
                 How We Work
               </Button>
             </div>
           </div>
 
-          <div className={`flex-1 w-full max-w-xl lg:max-w-none transition-all duration-[1500ms] delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+          <div className={`flex-1 w-full max-w-xl lg:max-w-none transition-all duration-1000 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
             <div className="relative">
               {/* Decorative Card Stack Effect */}
-              <div className="absolute top-4 -right-4 w-full h-full bg-slate-200/50 rounded-2xl -rotate-2 backdrop-blur-sm"></div>
-              <div className="absolute top-2 -right-2 w-full h-full bg-slate-800/10 rounded-2xl -rotate-1 opacity-10"></div>
+              <div className="absolute top-4 -right-4 w-full h-full bg-slate-200/50 dark:bg-slate-700/30 rounded-2xl -rotate-2 backdrop-blur-sm"></div>
+              <div className="absolute top-2 -right-2 w-full h-full bg-slate-800/10 dark:bg-slate-900/50 rounded-2xl -rotate-1 opacity-10"></div>
               
-              <div className="relative bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden aspect-[4/3] group">
+              <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden aspect-[4/3] group">
                 <img 
                   src="https://picsum.photos/800/600?random=10" 
                   alt="Dashboard Preview"
@@ -231,14 +232,14 @@ export const Hero: React.FC = () => {
                 {/* Floating Elements mimicking UI components */}
                 <div className="absolute bottom-6 left-6 right-6 p-4 glass-panel rounded-xl shadow-lg transform transition-all duration-500 translate-y-2 group-hover:translate-y-0">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M2 12h20"/></svg>
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-slate-900">Project Delivery</p>
-                      <p className="text-xs text-slate-500">On Time, Every Time</p>
+                      <p className="text-sm font-bold text-slate-900 dark:text-white">Project Delivery</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-300">On Time, Every Time</p>
                     </div>
-                    <div className="ml-auto text-green-600 font-bold text-sm">+24%</div>
+                    <div className="ml-auto text-green-600 dark:text-green-400 font-bold text-sm">+24%</div>
                   </div>
                 </div>
               </div>
