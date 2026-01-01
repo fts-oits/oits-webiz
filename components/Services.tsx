@@ -46,7 +46,7 @@ export const Services: React.FC = () => {
       <div className="container mx-auto px-6">
         
         {/* Services Header & Grid */}
-        <div className={`flex flex-col md:flex-row justify-between items-end mb-16 gap-6 transition-all duration-700 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`flex flex-col md:flex-row justify-between items-end mb-16 gap-6 transition-all duration-1000 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="max-w-2xl">
             <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3">Our Expertise</h2>
             <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white leading-tight">
@@ -62,23 +62,23 @@ export const Services: React.FC = () => {
           {SERVICES.map((service, index) => (
             <div 
               key={service.id} 
-              className={`group relative bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 hover:shadow-xl dark:hover:shadow-blue-900/10 transition-all duration-500 ease-out hover:-translate-y-1 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+              className={`group relative bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 hover:shadow-2xl dark:hover:shadow-blue-900/20 transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.02] hover:border-blue-200 dark:hover:border-blue-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
               <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                <ArrowUpRight className="w-6 h-6 text-slate-400" />
+                <ArrowUpRight className="w-6 h-6 text-blue-500 dark:text-blue-400" />
               </div>
 
-              <div className="w-12 h-12 shrink-0 bg-white dark:bg-slate-700 rounded-2xl flex items-center justify-center text-slate-900 dark:text-white shadow-sm mb-6 group-hover:bg-slate-900 group-hover:text-white dark:group-hover:bg-blue-600 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3">
+              <div className="w-12 h-12 shrink-0 bg-white dark:bg-slate-700 rounded-2xl flex items-center justify-center text-slate-900 dark:text-white shadow-sm mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3">
                 {iconMap[service.icon]}
               </div>
 
-              <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{service.title}</h4>
+              <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{service.title}</h4>
               <p className="text-slate-600 dark:text-slate-400 mb-6 text-sm leading-relaxed">{service.description}</p>
 
               <div className="flex flex-wrap gap-2">
                 {service.features.map((feature, idx) => (
-                  <span key={idx} className="px-2.5 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  <span key={idx} className="px-2.5 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 group-hover:border-blue-200 dark:group-hover:border-blue-800 transition-colors">
                     {feature}
                   </span>
                 ))}
@@ -133,17 +133,17 @@ export const Services: React.FC = () => {
                     {domain.skills.map((skill, idx) => (
                       <div 
                         key={skill} 
-                        className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-800 transition-colors group"
+                        className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-800 transition-colors group cursor-default hover:bg-white dark:hover:bg-slate-800"
                       >
-                         <div className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-blue-500 transition-colors shadow-sm">
+                         <div className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-blue-500 transition-colors shadow-sm border border-slate-100 dark:border-slate-700">
                             <Terminal size={16} />
                          </div>
-                         <span className="font-semibold text-slate-700 dark:text-slate-200">{skill}</span>
+                         <span className="font-semibold text-slate-700 dark:text-slate-200 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{skill}</span>
                       </div>
                     ))}
                     
                     {/* Decorative Add-on */}
-                    <div className="col-span-1 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center p-4 text-slate-400 text-sm font-medium">
+                    <div className="col-span-1 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center p-4 text-slate-400 text-sm font-medium hover:border-blue-300 dark:hover:border-blue-700 transition-colors cursor-default">
                        And more...
                     </div>
                   </div>

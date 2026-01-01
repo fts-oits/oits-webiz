@@ -97,7 +97,7 @@ export const About: React.FC = () => {
 
           <div className="flex-1 space-y-12">
             {/* Mission & Vision Subsection */}
-            <div className={`space-y-6 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+            <div className={`space-y-6 transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <div>
                 <div className="flex items-center gap-2 mb-3">
                    <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -114,7 +114,7 @@ export const About: React.FC = () => {
             </div>
 
             {/* Core Values Subsection */}
-            <div className={`transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+            <div className={`transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                <div className="flex items-center gap-2 mb-6">
                    <Heart className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                    <h4 className="text-lg font-bold text-slate-900 dark:text-white">Core Values</h4>
@@ -134,7 +134,7 @@ export const About: React.FC = () => {
                </div>
             </div>
 
-            <div className={`pt-4 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+            <div className={`pt-4 transition-all duration-700 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                <div className="h-px w-full bg-slate-200 dark:bg-slate-800 mb-8"></div>
                <div className="flex gap-12">
                  <div>
@@ -165,7 +165,7 @@ export const About: React.FC = () => {
               <div 
                 key={member.name}
                 className={`group relative bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-700 ease-out transform ${isTeamVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                style={{ transitionDelay: `${index * 150}ms` }}
+                style={{ transitionDelay: `${index * 200}ms` }}
               >
                 <div className="aspect-[4/5] overflow-hidden bg-slate-200 dark:bg-slate-700">
                   <img 
