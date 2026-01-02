@@ -1,16 +1,42 @@
+
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight, Play, Terminal as TerminalIcon } from 'lucide-react';
 import { Button } from './ui/Button';
-import { TAGLINE } from '../constants';
+import { TAGLINE, COMPANY_NAME } from '../constants';
 import { SectionId } from '../types';
+
+const CODE_SNIPPET = `// OITS Dhaka Project Config
+const project = {
+  client: "Innovative Startup",
+  goals: ["Scalability", "Security"],
+  techStack: ["React", "Next.js", "AWS"],
+  status: "Ready for Launch"
+};
+
+async function deploy() {
+  console.log("Initializing Engineering...");
+  await project.initialize();
+  return "Excellence Delivered.";
+}`;
 
 export const Hero: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [typedCode, setTypedCode] = useState("");
   const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Entrance Animation Observer
+  // Typewriter effect
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      setTypedCode(CODE_SNIPPET.slice(0, i));
+      i++;
+      if (i > CODE_SNIPPET.length) clearInterval(interval);
+    }, 20);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -22,226 +48,97 @@ export const Hero: React.FC = () => {
       { threshold: 0.1 }
     );
 
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-    }
-
+    if (heroRef.current) observer.observe(heroRef.current);
     return () => observer.disconnect();
   }, []);
 
-  // Parallax Effect
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
+    const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Particle Effect
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let particles: Particle[] = [];
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    class Particle {
-      x: number;
-      y: number;
-      size: number;
-      speedX: number;
-      speedY: number;
-      color: string;
-      alpha: number;
-      targetAlpha: number;
-
-      constructor() {
-        this.x = Math.random() * (canvas?.width || 0);
-        this.y = Math.random() * (canvas?.height || 0);
-        // Small size for subtlety (0.5 to 2.0)
-        this.size = Math.random() * 1.5 + 0.5; 
-        // Slow movement for less distraction
-        this.speedX = Math.random() * 0.15 - 0.075;
-        this.speedY = Math.random() * 0.15 - 0.075;
-        
-        // Brand colors: Blue-500 (59, 130, 246) and Indigo-500 (99, 102, 241)
-        const isBlue = Math.random() > 0.5;
-        this.color = isBlue ? '59, 130, 246' : '99, 102, 241';
-        // Low alpha for subtlety
-        this.alpha = Math.random() * 0.4 + 0.1;
-        this.targetAlpha = this.alpha;
-      }
-
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        // Subtle Pulse effect
-        if (Math.abs(this.alpha - this.targetAlpha) < 0.01) {
-             this.targetAlpha = Math.random() * 0.4 + 0.1;
-        } else {
-             this.alpha += (this.targetAlpha - this.alpha) * 0.02;
-        }
-        
-        // Wrap around screen
-        if (canvas) {
-           if (this.x > canvas.width) this.x = 0;
-           if (this.x < 0) this.x = canvas.width;
-           if (this.y > canvas.height) this.y = 0;
-           if (this.y < 0) this.y = canvas.height;
-        }
-      }
-
-      draw() {
-        if (!ctx) return;
-        ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    const init = () => {
-      particles = [];
-      // Adjust density
-      const numberOfParticles = Math.floor(window.innerWidth / 12); 
-      for (let i = 0; i < numberOfParticles; i++) {
-        particles.push(new Particle());
-      }
-    };
-
-    const animate = () => {
-      if (!canvas || !ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-      }
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      init();
-    });
-
-    resizeCanvas();
-    init();
-    animate();
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
-
   return (
     <section ref={heroRef} id={SectionId.HOME} className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden min-h-[90vh] flex items-center">
-      {/* Background Elements with Parallax */}
+      {/* Background Parallax Layers */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
-        
-        {/* Parallax Layer 1: Blurred Background Image (IDE/Code Theme) */}
         <div 
-            className="absolute inset-0 bg-cover bg-center opacity-20 dark:opacity-30 blur-md scale-110 will-change-transform"
+            className="absolute inset-0 bg-cover bg-center opacity-10 dark:opacity-20 blur-sm scale-110"
             style={{ 
                 backgroundImage: 'url("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2070")',
-                transform: `translateY(${scrollY * 0.2}px) scale(1.1)`
+                transform: `translateY(${scrollY * 0.2}px)`
             }}
             aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-slate-50/70 to-slate-50/90 dark:from-slate-950/80 dark:via-slate-950/70 dark:to-slate-950/90" />
-
-        {/* Parallax Layer 2: Refined Particles */}
-        <div className="absolute inset-0 will-change-transform" style={{ transform: `translateY(${scrollY * 0.1}px)` }}>
-            <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none" />
-        </div>
-
-        {/* Parallax Layer 3: Blobs (Move up/opposite to create depth) */}
-        <div 
-            className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-[100px] opacity-60 animate-float will-change-transform" 
-            style={{ transform: `translateY(${scrollY * -0.15}px)` }}
-        />
-        <div 
-            className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-50/50 rounded-full blur-[120px] opacity-60 will-change-transform" 
-            style={{ transform: `translateY(${scrollY * -0.1}px)` }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50 dark:from-slate-950 via-slate-50/90 dark:via-slate-950/90 to-slate-50 dark:to-slate-950" />
       </div>
 
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
           
-          <div className="flex-1 space-y-8 text-center lg:text-left relative z-10">
-            {/* Entrance Animation: Badge */}
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wide transition-all duration-1000 delay-100 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-              Available for new projects
+          <div className="flex-1 space-y-8 text-center lg:text-left">
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest transition-all duration-700 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+              Engineering Excellence
             </div>
             
-            {/* Entrance Animation: Tagline/Heading - Smoother fade-in & slide-up */}
-            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.1] transition-all duration-1000 delay-200 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              We Craft <br className="hidden md:block"/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Digital Excellence</span>
+            <h1 className={`text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.05] transition-all duration-1000 delay-200 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              Turning Code into <br className="hidden md:block"/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">Business Growth</span>
             </h1>
             
-            {/* Entrance Animation: Description - Subtle slide */}
-            <p className={`text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed transition-all duration-1000 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-              {TAGLINE}. We build robust software solutions that drive business growth, combining technical expertise with stunning design.
+            <p className={`text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed transition-all duration-1000 delay-300 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+              {TAGLINE}. At {COMPANY_NAME}, we specialize in building high-performance software that solves complex problems and delights users.
             </p>
 
-            {/* Entrance Animation: Buttons */}
-            <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-500 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+            <div className={`flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start transition-all duration-1000 delay-400 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
               <Button 
                 size="lg" 
                 variant="primary"
-                className="group relative overflow-hidden transform transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-600/40" 
-                onClick={() => window.location.href=`#${SectionId.CONTACT}`}
+                aria-label="Start a new project with us"
+                className="group transform transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/20"
+                onClick={() => document.getElementById(SectionId.CONTACT)?.scrollIntoView({ behavior: 'smooth' })}
               >
-                Request a Demo
+                Start a Project
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button variant="outline" size="lg" className="group bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm hover:bg-white/80 dark:hover:bg-slate-800">
-                <Play className="mr-2 w-4 h-4 fill-slate-900 dark:fill-white" />
-                How We Work
+              <Button variant="outline" size="lg" className="group" aria-label="Explore our process">
+                View Portfolio
               </Button>
             </div>
           </div>
 
-          <div className={`flex-1 w-full max-w-xl lg:max-w-none transition-all duration-1000 delay-300 ease-out transform ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+          <div className={`flex-1 w-full max-w-2xl transition-all duration-1000 delay-500 transform ${isVisible ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-12 scale-95'}`}>
             <div className="relative">
-              {/* Decorative Card Stack Effect */}
-              <div className="absolute top-4 -right-4 w-full h-full bg-slate-200/50 dark:bg-slate-700/30 rounded-2xl -rotate-2 backdrop-blur-sm"></div>
-              <div className="absolute top-2 -right-2 w-full h-full bg-slate-800/10 dark:bg-slate-900/50 rounded-2xl -rotate-1 opacity-10"></div>
-              
-              <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl overflow-hidden aspect-[4/3] group">
-                <img 
-                  src="https://picsum.photos/800/600?random=10" 
-                  alt="Dashboard Preview"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                
-                {/* Floating Elements mimicking UI components */}
-                <div className="absolute bottom-6 left-6 right-6 p-4 glass-panel rounded-xl shadow-lg transform transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M2 12h20"/></svg>
+              {/* Coding Terminal Banner */}
+              <div className="absolute -top-12 -left-8 md:-left-16 w-full max-w-sm z-20 hidden md:block animate-float">
+                <div className="bg-slate-950/90 backdrop-blur-xl rounded-xl border border-slate-800 shadow-2xl overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-2 bg-slate-900/50 border-b border-slate-800">
+                    <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
                     </div>
-                    <div>
-                      <p className="text-sm font-bold text-slate-900 dark:text-white">Project Delivery</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-300">On Time, Every Time</p>
+                    <div className="flex items-center gap-2 text-[10px] text-slate-500 font-mono">
+                      <TerminalIcon size={10} /> project.ts
                     </div>
-                    <div className="ml-auto text-green-600 dark:text-green-400 font-bold text-sm">+24%</div>
+                  </div>
+                  <div className="p-4 font-mono text-[11px] leading-relaxed text-blue-400 h-48 overflow-hidden whitespace-pre">
+                    {typedCode}
+                    <span className="w-1.5 h-4 bg-blue-500 inline-block align-middle ml-1 animate-pulse"></span>
                   </div>
                 </div>
+              </div>
+
+              {/* Main Visual */}
+              <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-2xl overflow-hidden aspect-[4/3]">
+                <img 
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=1200" 
+                  alt="Modern Software Development"
+                  loading="lazy"
+                  className="w-full h-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-transparent pointer-events-none" />
               </div>
             </div>
           </div>

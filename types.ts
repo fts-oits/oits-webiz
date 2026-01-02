@@ -1,3 +1,4 @@
+
 export interface Service {
   id: string;
   title: string;
@@ -41,17 +42,6 @@ export interface NavItem {
   href: string;
 }
 
-export interface CoreValue {
-  title: string;
-  description: string;
-  icon: string;
-}
-
-export interface Industry {
-  name: string;
-  icon: string;
-}
-
 export interface ProcessStep {
   id: string;
   number: string;
@@ -69,8 +59,8 @@ export interface TechDomain {
 export enum SectionId {
   HOME = 'home',
   SERVICES = 'services',
+  PROCESS = 'process',
   ABOUT = 'about',
   PORTFOLIO = 'portfolio',
-  PROCESS = 'process',
   CONTACT = 'contact',
 }

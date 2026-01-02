@@ -1,96 +1,116 @@
-import { Service, Project, Testimonial, NavItem, SectionId, TechDomain } from './types';
+
+import { Service, Project, Testimonial, NavItem, SectionId, TechDomain, ProcessStep } from './types';
 
 export const COMPANY_NAME = "OITS Dhaka";
-export const TAGLINE = "Transforming Visions into Digital Reality";
+export const TAGLINE = "Empowering Businesses Through Advanced Engineering";
 export const CONTACT_EMAIL = "info@oitsdhaka.com";
 export const ADDRESS = "House # 42, Road # 2/A, Block # Z, Dhaka 1209, Bangladesh";
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: `#${SectionId.HOME}` },
   { label: 'Services', href: `#${SectionId.SERVICES}` },
-  { label: 'About', href: `#${SectionId.ABOUT}` },
+  { label: 'Workflow', href: `#${SectionId.PROCESS}` },
   { label: 'Portfolio', href: `#${SectionId.PORTFOLIO}` },
+  { label: 'About', href: `#${SectionId.ABOUT}` },
   { label: 'Contact', href: `#${SectionId.CONTACT}` },
+];
+
+export const PROCESS_STEPS: ProcessStep[] = [
+  {
+    id: 'discovery',
+    number: '01',
+    title: 'Discovery & Strategy',
+    description: 'We dive deep into your business goals, target audience, and market landscape to define a clear roadmap.',
+    icon: 'Search',
+  },
+  {
+    id: 'design',
+    number: '02',
+    title: 'Design & Prototyping',
+    description: 'Our design team creates intuitive, user-centric interfaces and interactive prototypes for early validation.',
+    icon: 'Layers',
+  },
+  {
+    id: 'development',
+    number: '03',
+    title: 'Agile Development',
+    description: 'Using high-performance tech stacks, we build your solution in sprints, ensuring transparency and quality.',
+    icon: 'Code',
+  },
+  {
+    id: 'testing',
+    number: '04',
+    title: 'Quality Assurance',
+    description: 'Rigorous manual and automated testing ensures your product is bug-free, secure, and ready for scale.',
+    icon: 'ShieldCheck',
+  },
+  {
+    id: 'deployment',
+    number: '05',
+    title: 'Launch & Evolution',
+    description: 'We handle the deployment and provide ongoing support to scale your product based on user feedback.',
+    icon: 'Rocket',
+  },
 ];
 
 export const SERVICES: Service[] = [
   {
     id: 'web-dev',
-    title: 'Web Application Development',
-    description: 'Scalable, high-performance web solutions tailored to your business needs using cutting-edge technologies.',
+    title: 'Enterprise Web Solutions',
+    description: 'Scalable, high-performance web applications built for business logic and seamless integration.',
     icon: 'Globe',
-    features: ['Custom Web Apps', 'SaaS Platforms', 'E-commerce Solutions', 'Progressive Web Apps'],
+    features: ['React & Next.js Experts', 'SaaS Architecture', 'E-commerce Engine', 'Custom CMS'],
   },
   {
     id: 'mobile-dev',
-    title: 'Mobile App Development',
-    description: 'Native and cross-platform mobile applications that provide seamless user experiences on iOS and Android.',
+    title: 'Native Mobile Apps',
+    description: 'High-fidelity iOS and Android applications that deliver native-grade performance and fluid UX.',
     icon: 'Smartphone',
-    features: ['iOS Development', 'Android Development', 'React Native', 'Flutter'],
+    features: ['iOS (Swift)', 'Android (Kotlin)', 'React Native', 'Flutter'],
   },
   {
-    id: 'ui-ux',
-    title: 'UI/UX Design',
-    description: 'Human-centered design that ensures your product is intuitive, accessible, and visually stunning.',
-    icon: 'PenTool',
-    features: ['User Research', 'Wireframing', 'Prototyping', 'Design Systems'],
+    id: 'dedicated-teams',
+    title: 'Dedicated Teams',
+    description: 'Expand your engineering capacity with our highly skilled full-time developers and designers.',
+    icon: 'Users',
+    features: ['Staff Augmentation', 'Project Management', 'Full-stack Experts', 'Agile Setup'],
   },
   {
     id: 'cloud',
-    title: 'Cloud & DevOps',
-    description: 'Streamline your deployment pipeline and ensure high availability with our cloud infrastructure expertise.',
+    title: 'Cloud & Infrastructure',
+    description: 'Robust AWS/GCP infrastructure with automated CI/CD pipelines and high availability.',
     icon: 'Cloud',
-    features: ['AWS/Azure/GCP', 'CI/CD Pipelines', 'Docker & Kubernetes', 'Serverless Architecture'],
+    features: ['AWS / GCP / Azure', 'DevOps Automation', 'Cybersecurity', 'Database Tuning'],
   },
 ];
 
 export const PROJECTS: Project[] = [
   {
     id: '1',
-    title: 'FinTech Dashboard',
-    category: 'Web Application',
-    imageUrl: 'https://picsum.photos/800/600?random=1',
-    description: 'A comprehensive financial analytics dashboard for a leading banking institution.',
-    fullDescription: 'We built a high-performance financial dashboard that processes millions of transactions in real-time. Features include predictive analytics, customizable reporting widgets, and bank-grade security protocols.',
-    technologies: ['React', 'TypeScript', 'Node.js', 'AWS'],
+    title: 'FinTech Analytics Hub',
+    category: 'Enterprise Software',
+    imageUrl: 'https://images.unsplash.com/photo-1551288049-bbbda5366fd9?auto=format&fit=crop&q=80&w=1000',
+    description: 'A comprehensive financial analytics dashboard for real-time market tracking.',
+    technologies: ['React', 'D3.js', 'Node.js', 'PostgreSQL'],
     demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-    captionsUrl: 'https://gist.githubusercontent.com/samdutton/ca37f3adaf4e23679950b80847045b3d/raw/e37bfb9d10e6f530f1d63d6998ff69094f71a47f/subtitle_en.vtt',
-    link: 'https://example.com/fintech'
   },
   {
     id: '2',
-    title: 'HealthCare Connect',
-    category: 'Mobile App',
-    imageUrl: 'https://picsum.photos/800/600?random=2',
-    description: 'Telemedicine platform connecting patients with doctors in real-time.',
-    fullDescription: 'A HIPAA-compliant mobile application that facilitates secure video consultations, prescription management, and appointment scheduling. Built with Flutter for a seamless cross-platform experience.',
+    title: 'Luma Healthcare App',
+    category: 'Mobile Application',
+    imageUrl: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=1000',
+    description: 'A HIPAA-compliant telemedicine platform with secure video conferencing.',
     technologies: ['Flutter', 'Firebase', 'WebRTC'],
     demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    captionsUrl: 'https://gist.githubusercontent.com/samdutton/ca37f3adaf4e23679950b80847045b3d/raw/e37bfb9d10e6f530f1d63d6998ff69094f71a47f/subtitle_en.vtt',
-    link: 'https://example.com/healthcare'
   },
   {
     id: '3',
-    title: 'E-Shop Global',
-    category: 'E-commerce',
-    imageUrl: 'https://picsum.photos/800/600?random=3',
-    description: 'Multi-vendor marketplace solution with integrated payment gateways.',
-    fullDescription: 'A robust multi-vendor marketplace supporting thousands of SKUs, real-time inventory tracking, and AI-driven product recommendations to boost sales.',
-    technologies: ['Next.js', 'GraphQL', 'Stripe', 'PostgreSQL'],
+    title: 'Global Logistics Engine',
+    category: 'Supply Chain',
+    imageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=1000',
+    description: 'AI-driven logistics platform managing complex global supply chains.',
+    technologies: ['Next.js', 'Python', 'AWS SageMaker'],
     demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    captionsUrl: 'https://gist.githubusercontent.com/samdutton/ca37f3adaf4e23679950b80847045b3d/raw/e37bfb9d10e6f530f1d63d6998ff69094f71a47f/subtitle_en.vtt',
-    link: 'https://example.com/eshop'
-  },
-  {
-    id: '4',
-    title: 'Smart Home Hub',
-    category: 'IoT',
-    imageUrl: 'https://picsum.photos/800/600?random=7',
-    description: 'Centralized control system for smart home devices with voice integration.',
-    fullDescription: 'An IoT dashboard that aggregates control for lights, thermostats, and security systems. Supports custom automation routines and energy usage monitoring.',
-    technologies: ['React Native', 'MQTT', 'Node.js'],
-    demoVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-    captionsUrl: 'https://gist.githubusercontent.com/samdutton/ca37f3adaf4e23679950b80847045b3d/raw/e37bfb9d10e6f530f1d63d6998ff69094f71a47f/subtitle_en.vtt',
   }
 ];
 
@@ -99,56 +119,38 @@ export const TESTIMONIALS: Testimonial[] = [
     id: 't1',
     name: 'Sarah Johnson',
     role: 'CTO',
-    company: 'TechFlow Inc.',
-    content: "OITS Dhaka transformed our legacy system into a modern, scalable cloud application. The team's expertise is unmatched.",
-    avatar: 'https://picsum.photos/100/100?random=4',
+    company: 'TechFlow Global',
+    content: "OITS Dhaka is not just a vendor; they are our technology partners. Their ability to translate complex requirements into clean code is exceptional.",
+    avatar: 'https://i.pravatar.cc/150?u=sarah',
   },
   {
     id: 't2',
-    name: 'Michael Chen',
+    name: 'Rahat Ahmed',
     role: 'Founder',
-    company: 'StartUp Alpha',
-    content: "Their dedication to quality and timely delivery helped us launch our MVP ahead of schedule. Highly recommended!",
-    avatar: 'https://picsum.photos/100/100?random=5',
-  },
-  {
-    id: 't3',
-    name: 'Emily Davis',
-    role: 'Product Manager',
-    company: 'InnovateX',
-    content: "The UI/UX design team really understood our vision and created an interface that our users absolutely love.",
-    avatar: 'https://picsum.photos/100/100?random=6',
+    company: 'Pathao (Demo)',
+    content: "The engineering discipline and communication standard maintained by OITS Dhaka helped us ship our MVP weeks ahead of schedule.",
+    avatar: 'https://i.pravatar.cc/150?u=rahat',
   },
 ];
 
 export const TECH_STACK = [
-  "React", "Next.js", "Node.js", "TypeScript", "Python", "AWS", "Docker", "Flutter", "PostgreSQL", "GraphQL", "Tailwind"
+  "React", "Next.js", "Node.js", "TypeScript", "Python", "AWS", "Docker", "Flutter", "PostgreSQL", "Go", "Kubernetes"
 ];
 
 export const TECH_DOMAINS: TechDomain[] = [
   {
     id: 'frontend',
     label: 'Frontend',
-    skills: ['React', 'Next.js', 'Vue.js', 'Angular', 'TypeScript', 'Tailwind CSS', 'Redux', 'Framer Motion']
+    skills: ['React', 'Next.js', 'Vue.js', 'TypeScript', 'Tailwind CSS', 'Three.js']
   },
   {
     id: 'backend',
     label: 'Backend',
-    skills: ['Node.js', 'Python', 'Go', 'Java', 'NestJS', 'Express', 'Django', 'GraphQL']
-  },
-  {
-    id: 'mobile',
-    label: 'Mobile',
-    skills: ['React Native', 'Flutter', 'iOS (Swift)', 'Android (Kotlin)', 'Expo']
-  },
-  {
-    id: 'database',
-    label: 'Database',
-    skills: ['PostgreSQL', 'MongoDB', 'Redis', 'MySQL', 'Firebase', 'DynamoDB', 'Supabase']
+    skills: ['Node.js', 'Python', 'Go', 'NestJS', 'PostgreSQL', 'Redis', 'GraphQL']
   },
   {
     id: 'cloud',
     label: 'Cloud & DevOps',
-    skills: ['AWS', 'Google Cloud', 'Azure', 'Docker', 'Kubernetes', 'Terraform', 'CI/CD Pipelines']
+    skills: ['AWS', 'Google Cloud', 'Docker', 'Kubernetes', 'Terraform', 'CI/CD']
   }
 ];
