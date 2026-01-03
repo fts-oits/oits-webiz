@@ -5,6 +5,44 @@ export const TAGLINE = "Transforming Visions into Digital Reality";
 export const CONTACT_EMAIL = "info@oitsdhaka.com";
 export const ADDRESS = "House # 42, Road # 2/A, Block # Z, Dhaka 1209, Bangladesh";
 
+export const PROCESS_STEPS = [
+  {
+    id: 'discovery',
+    icon: 'Search',
+    number: '01',
+    title: 'Discovery',
+    description: 'Understanding your goals, requirements, and target audience.',
+  },
+  {
+    id: 'design',
+    icon: 'Layers',
+    number: '02',
+    title: 'Design',
+    description: 'Creating wireframes, prototypes, and visual designs.',
+  },
+  {
+    id: 'development',
+    icon: 'Code',
+    number: '03',
+    title: 'Development',
+    description: 'Building your solution with clean, maintainable code.',
+  },
+  {
+    id: 'testing',
+    icon: 'ShieldCheck',
+    number: '04',
+    title: 'Testing',
+    description: 'Ensuring quality through rigorous testing and QA.',
+  },
+  {
+    id: 'deployment',
+    icon: 'Rocket',
+    number: '05',
+    title: 'Deployment',
+    description: 'Launching your project and providing ongoing support.',
+  },
+];
+
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Home', href: `#${SectionId.HOME}` },
   { label: 'Services', href: `#${SectionId.SERVICES}` },
