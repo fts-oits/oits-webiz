@@ -1,13 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { Marquee } from './components/Marquee';
 import { Services } from './components/Services';
+import { Process } from './components/Process';
 import { About } from './components/About';
 import { Portfolio } from './components/Portfolio';
 import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
+import { AiAssistant } from './components/AiAssistant';
 import { SectionId } from './types';
 import { COMPANY_NAME, TAGLINE } from './constants';
 
@@ -17,25 +20,24 @@ const SEO_DATA = {
     description: "Transforming ideas into digital reality with expert web and mobile development services in Dhaka."
   },
   [SectionId.SERVICES]: {
-    title: `Services - ${COMPANY_NAME}`,
-    description: "Explore our expert services in Web Development, Mobile Apps, UI/UX Design, and Cloud Solutions."
+    title: `Expert Services - ${COMPANY_NAME}`,
+    description: "From custom web apps to scalable enterprise cloud solutions."
+  },
+  [SectionId.PROCESS]: {
+    title: `Our Process - ${COMPANY_NAME}`,
+    description: "Discover our agile lifecycle for delivering world-class software."
   },
   [SectionId.ABOUT]: {
-    title: `About Us - ${COMPANY_NAME}`,
-    description: "Meet the expert team behind OITS Dhaka. We are dedicated to delivering digital excellence."
+    title: `Who We Are - ${COMPANY_NAME}`,
+    description: "A team of passionate engineers and designers dedicated to your success."
   },
   [SectionId.PORTFOLIO]: {
-    title: `Portfolio - ${COMPANY_NAME}`,
-    description: "Browse our success stories and case studies. See how we help businesses grow."
+    title: `Our Work - ${COMPANY_NAME}`,
+    description: "Explore the successful products we've built for global clients."
   },
   [SectionId.CONTACT]: {
-    title: `Contact Us - ${COMPANY_NAME}`,
-    description: "Get in touch with OITS Dhaka for your next software project. We are ready to build the future."
-  },
-  // Fallback for sections not explicitly in enum if any, or mapped incorrectly
-  'process': {
-    title: `Our Process - ${COMPANY_NAME}`,
-    description: "Discover our agile development methodology."
+    title: `Start Your Project - ${COMPANY_NAME}`,
+    description: "Contact OITS Dhaka for a consultation and free project estimate."
   }
 };
 
@@ -43,7 +45,6 @@ function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    // Check local storage or system preference
     const storedTheme = localStorage.getItem('theme');
     if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       setTheme('dark');
@@ -67,21 +68,16 @@ function App() {
             if (metaDesc) {
               metaDesc.setAttribute('content', seoInfo.description);
             }
-            
-            // Update URL hash without scrolling
-            if (window.history.replaceState) {
-               window.history.replaceState(null, '', `#${sectionId}`);
-            }
+            // CRITICAL: Removed history.replaceState to avoid SecurityError in sandboxed environments.
           }
         }
       });
     };
 
     const observer = new IntersectionObserver(observerCallback, {
-      threshold: 0.3 // Trigger when 30% of section is visible
+      threshold: 0.3
     });
 
-    // Observe all sections
     Object.values(SectionId).forEach((id) => {
       const element = document.getElementById(id);
       if (element) observer.observe(element);
@@ -102,18 +98,20 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100 transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100 transition-colors duration-300 relative">
       <Header theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Hero />
         <Marquee />
         <Services />
-        <About />
+        <Process />
         <Portfolio />
+        <About />
         <Testimonials />
         <Contact />
       </main>
       <Footer theme={theme} toggleTheme={toggleTheme} />
+      <AiAssistant />
     </div>
   );
 }
