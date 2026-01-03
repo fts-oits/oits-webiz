@@ -10,7 +10,7 @@ import { Portfolio } from './components/Portfolio';
 import { Testimonials } from './components/Testimonials';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import { AiAssistant } from './components/AiAssistant';
+import { AiAssistant } from './components/AiAssistant'
 import { SectionId } from './types';
 import { COMPANY_NAME, TAGLINE } from './constants';
 
@@ -46,7 +46,7 @@ function App() {
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme');
-    if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (storedTheme === 'dark' || (!storedTheme && globalThis.matchMedia('(prefers-color-scheme: dark)').matches)) {
       setTheme('dark');
       document.documentElement.classList.add('dark');
     } else {
