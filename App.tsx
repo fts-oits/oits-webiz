@@ -61,7 +61,7 @@ function App() {
         if (entry.isIntersecting) {
           const sectionId = entry.target.id;
           const seoInfo = SEO_DATA[sectionId as SectionId] || SEO_DATA[SectionId.HOME];
-          
+
           if (seoInfo) {
             document.title = seoInfo.title;
             const metaDesc = document.querySelector('meta[name="description"]');
